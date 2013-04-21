@@ -86,6 +86,11 @@ public:
      */
     static void renderEdges( int nCities, Point* cities );
 
+    /**
+     * Renders the edges of the best path found so far
+     */
+    static void renderBestPath( std::vector<int>& path );
+
     /** reference to the GLUT window */
     int _window;
 
@@ -94,6 +99,8 @@ public:
 
     /** Whether the system is paused */
     static bool _paused;
+
+    static bool _showBest;
 };
 
 #endif	/* PRESENTER_H */

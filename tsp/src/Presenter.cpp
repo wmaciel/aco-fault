@@ -16,6 +16,7 @@
 
 TSPColony Presenter::_colony;
 bool Presenter::_paused = true;
+bool Presenter::_showBest = false;
 
 Presenter::Presenter( int argc, char** argv )
 {
@@ -23,6 +24,7 @@ Presenter::Presenter( int argc, char** argv )
     initGL();
 
     _paused = true;
+    _showBest = false;
 }
 
 Presenter::~Presenter()
@@ -131,6 +133,10 @@ void Presenter::cb_keyboard( unsigned char key, int x, int y )
         printf("removing ant...\n");
         Presenter::_colony.removeAnt();
         break;
+
+    case 'b':
+        printf("toggle best path...\n");
+        Presenter::_showBest = !Presenter::_showBest;
     }
 }
 
@@ -168,9 +174,12 @@ void Presenter::render()
 
     int nCities = 0;
     Point* cities = 0;
+    std::vector<int> bestPath;
     Presenter::_colony.getCities( nCities, &cities );
+    Presenter::_colony.getBestPath( bestPath );
 
     renderEdges( nCities, cities );
+    renderBestPath( bestPath );
     renderCities( nCities, cities );
 
     glutSwapBuffers();
@@ -215,6 +224,29 @@ void Presenter::renderEdges( int nCities, Point* cities )
                 glVertex2f( cities[j].x, cities[j].y );
             }
         }
+    }
+    glEnd();
+}
+
+
+
+void Presenter::renderBestPath( std::vector<int>& path )
+{
+    if (!Presenter::_showBest) return;
+    
+    int size;
+    Point* coords;
+
+    Presenter::_colony.getCities( size, &coords );
+
+    glColor3f( 0.0f, 0.6f, 0.1f ); //dark green
+
+    size = path.size();
+    glBegin( GL_LINE_STRIP );
+    for (int i = 1; i < size; ++i)
+    {
+        glVertex2f( coords[path[i-1]].x, coords[path[i-1]].y );
+        glVertex2f( coords[path[i]].x, coords[path[i]].y );
     }
     glEnd();
 }

@@ -138,7 +138,7 @@ void TSPColony::update()
 void TSPColony::addCity( float x, float y )
 {
     _environment.insertCity( x, y );
-    _bestPathLength = 0;
+    _bestPathLength = FLT_MAX;
     _bestPath.clear();
 }
 
@@ -176,4 +176,11 @@ void TSPColony::computeShortestPath( int ant )
         _bestPath.clear();
         _bestPath = antPath;
     }
+}
+
+
+
+void TSPColony::getBestPath( std::vector<int>& path )
+{
+    path = _bestPath;
 }

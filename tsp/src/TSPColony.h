@@ -25,6 +25,7 @@ public:
     void printState();
     void update();
     void getCities( int& size, Point** cities );
+    void getBestPath( std::vector<int>& path );
     float getPheromone( int a, int b );
     float getMaximumPheromone();
 
