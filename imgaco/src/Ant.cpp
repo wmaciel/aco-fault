@@ -10,28 +10,28 @@
 
 #include "Ant.h"
 
-aco::Ant::Ant( int node )
+Ant::Ant( Point point )
 {
-    moveTo( node );
+    moveTo( point );
 }
 
 
 
-aco::Ant::~Ant()
+Ant::~Ant()
 {
 }
 
 
 
-void aco::Ant::moveTo( int node )
+void Ant::moveTo( Point point )
 {
-    _currentNode = node;
-    _visited.push_back( node );
+    _currentPosition = point;
+    _visited.push_back( point );
 }
 
 
 
-int aco::Ant::pick( std::vector<int>& nodes, std::vector<float>& probabilities )
+Point Ant::pick(std::vector<Point>& nodes, std::vector<float>& probabilities)
 {
     // roll a dice between [0.0, 1.0)
     float roll = rand()/(float)RAND_MAX;
@@ -49,56 +49,47 @@ int aco::Ant::pick( std::vector<int>& nodes, std::vector<float>& probabilities )
     }
 
     // This will happen when all the probabilities are zero
-    return -1;
+    Point error;
+    error.x = -1;
+    error.y = -1;
+    return error;
 }
 
 
 
-void aco::Ant::buildProbabilitiesVector( std::vector<int>& adjacent,
-                                         std::vector<float>& pheromones,
-                                         std::vector<float>& visibilities,
-                                         std::vector<float>& probabilities )
+void Ant::buildProbabilitiesVector( Environment& environment, std::vector<float> probabilities )
 {
+    std::vector<Point> adjacent;
+    environment.getAdjacent( _currentPosition, adjacent );
+
     int nNodes = adjacent.size();
     float totalWeight = 0;
 
     for (int i = 0; i < nNodes; ++i)
     {
-        // finds out which node are we talking about
-        int node = adjacent[i];
-
-        // if the node was already visited, the probability to go there is zero
-        if (visited( node ))
+        if (visited( adjacent[i] ))
         {
             probabilities.push_back( 0.0f );
         }
         else
         {
-            float edgeWeight = pow( pheromones[i], _pheromoneWeight ) *
-                               pow( visibilities[i], _visibilityWeight );
+            float pheromone = environment.getPheromone( adjacent[i] );
+            float visibility = environment.getVisibility( adjacent[i] );
+            float edgeWeight = pow( pheromone, _pheromoneWeight ) *
+                               pow( visibility, _visibilityWeight );
             totalWeight += edgeWeight;
             probabilities.push_back( edgeWeight );
         }
-    }
-
-    // if total weight is zero, the ant completed its tour
-    if (totalWeight == 0.0) return;
-
-    // normalizes the vector, so the probabilities sum 1.0
-    float normalizingFactor = 1.0f/totalWeight;
-    for (int i = 0; i < nNodes; ++i)
-    {
-        probabilities[i] *= normalizingFactor;
     }
 }
 
 
 
-bool aco::Ant::visited( int node )
+bool Ant::visited( Point point )
 {
     for (unsigned int i = 0; i < _visited.size(); ++i)
     {
-        if (node == _visited[i]) return true;
+        if (point.x == _visited[i].x && point.y == _visited[i].y) return true;
     }
 
     return false;

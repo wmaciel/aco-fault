@@ -11,6 +11,7 @@
 #include <vector>
 
 #include "image.h"
+#include "Point.h"
 
 
 class Environment
@@ -18,7 +19,7 @@ class Environment
 public:
 
     /** Constructor */
-    Environment( int height, int width, Image* image );
+    Environment( float initialPheromone, float evaporationRate, int height, int width, Image* image );
 
     /** Destructor */
     virtual ~Environment();
@@ -29,31 +30,37 @@ public:
     void clearFeromone();
 
     /**
-     * Returns the pheromone level in the edge leading from the node origin to
-     * destination
+     * Returns the pheromone level in the pixel
      */
-    float getPheromone( int origin, int destination );
+    float getPheromone( int x, int y );
+    float getPheromone( Point point );
 
     /**
-     * Deposit amount of pheromone in the edge from origin to destination
+     * Deposit amount of pheromone in the pixel
      */
-    void addPheromone( float amount, int origin, int destination );
+    void addPheromone( float amount, int x, int y );
+    void addPheromone( float amount, Point point );
 
     /**
      * Fetches the maximum value of pheromone in any part of the environment
-     * @return
      */
     float getMaximumPheromone();
 
     /**
-     * Returns the visibility of the node destination from origin
+     * Returns the visibility of the pixel
      */
-    float getVisibility( int origin, int destination );
+    float getVisibility( int x, int y );
+    float getVisibility( Point point );
 
     /**
      * Creates the negative feedback of pheromone evaporation
      */
     void evaporatePheromone();
+
+    /**
+     * Populates a vector with the position of the adjacent pixels
+     */
+    void getAdjacent( Point point, std::vector<Point>& adjacent );
 
 private:
 
