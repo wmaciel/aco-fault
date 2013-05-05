@@ -34,7 +34,7 @@ void Ant::moveTo( Point point )
 
 
 
-Point Ant::pick(std::vector<Point>& nodes, std::vector<float>& probabilities)
+Point Ant::pickWithProbability(std::vector<Point>& nodes, std::vector<float>& probabilities)
 {
     // roll a dice between [0.0, 1.0)
     float roll = rand()/(float)RAND_MAX;
@@ -60,24 +60,23 @@ Point Ant::pick(std::vector<Point>& nodes, std::vector<float>& probabilities)
 
 
 
-void Ant::buildProbabilitiesVector( Environment& environment, std::vector<float> probabilities )
+void Ant::buildProbabilitiesVector( Environment& environment, std::vector<float>& probabilities, std::vector<Point>& nodes )
 {
-    std::vector<Point> adjacent;
-    environment.getAdjacent( _currentPosition, adjacent );
+    environment.getAdjacent( _currentPosition, nodes );
 
-    int nNodes = adjacent.size();
+    int nNodes = nodes.size();
     float totalWeight = 0;
 
     for (int i = 0; i < nNodes; ++i)
     {
-        if (visited( adjacent[i] ))
+        if (visited( nodes[i] ))
         {
             probabilities.push_back( 0.0f );
         }
         else
         {
-            float pheromone = environment.getPheromone( adjacent[i] );
-            float visibility = environment.getVisibility( adjacent[i] );
+            float pheromone = environment.getPheromone( nodes[i] );
+            float visibility = environment.getVisibility( nodes[i] );
             float edgeWeight = pow( pheromone, _pheromoneWeight ) *
                                pow( visibility, _visibilityWeight );
             totalWeight += edgeWeight;
@@ -103,4 +102,15 @@ bool Ant::visited( Point point )
 Point Ant::getPosition()
 {
     return _currentPosition;
+}
+
+
+
+Point Ant::pick( Environment& environment )
+{
+    std::vector<float> probabilities;
+    std::vector<Point> adjacentNodes;
+    buildProbabilitiesVector( environment, probabilities, adjacentNodes );
+
+    return pickWithProbability( adjacentNodes, probabilities );
 }
