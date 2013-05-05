@@ -60,15 +60,18 @@ void Colony::addAnts( int n )
 
 void Colony::run( int nSteps )
 {
-    for (unsigned int i = 0; i < _ants.size(); ++i)
+    for (int step = 0; step < nSteps; ++step)
     {
-        Point destination = _ants[i].pick( *_environment );
-        _ants[i].moveTo( destination );
-
-        float visibility = _environment->getVisibility( destination );
-        if (visibility >= VISIBILITY_THRESHOLD_)
+        for (unsigned int i = 0; i < _ants.size(); ++i)
         {
-            _environment->addPheromone( visibility, destination );
+            Point destination = _ants[i].pick( *_environment );
+            _ants[i].moveTo( destination );
+
+            float visibility = _environment->getVisibility( destination );
+            if (visibility >= VISIBILITY_THRESHOLD_)
+            {
+                _environment->addPheromone( visibility, destination );
+            }
         }
     }
 }
