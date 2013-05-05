@@ -10,8 +10,11 @@
 
 #include "Ant.h"
 
+#define MEMORY_ 10
+
 Ant::Ant( Point point )
 {
+    _memorySize = MEMORY_;
     moveTo( point );
 }
 

@@ -74,6 +74,6 @@ protected:
     float _visibilityWeight;
 
     /** The number of places the ant remembers visiting */
-    int _memorySize;
+    unsigned int _memorySize;
 };
 #endif	/* ANT_H */
