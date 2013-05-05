@@ -12,6 +12,7 @@
 #define INITIAL_PHEROMONE_ 0.5f
 #define EVAPORATION_RATE_ 0.5f
 #define MEMORY_ 10
+#define VISIBILITY_THRESHOLD_ 0.5f
 
 Colony::Colony( Image* image, int nAnts )
 {
@@ -59,5 +60,15 @@ void Colony::addAnts( int n )
 
 void Colony::run( int nSteps )
 {
+    for (unsigned int i = 0; i < _ants.size(); ++i)
+    {
+        Point destination = _ants[i].pick( *_environment );
+        _ants[i].moveTo( destination );
 
+        float visibility = _environment->getVisibility( destination );
+        if (visibility >= VISIBILITY_THRESHOLD_)
+        {
+            _environment->addPheromone( visibility, destination );
+        }
+    }
 }
