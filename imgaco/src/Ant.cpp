@@ -97,3 +97,10 @@ bool Ant::visited( Point point )
 
     return false;
 }
+
+
+
+Point Ant::getPosition()
+{
+    return _currentPosition;
+}

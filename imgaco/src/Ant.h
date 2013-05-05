@@ -58,6 +58,11 @@ public:
      */
     virtual bool visited( Point point );
 
+    /**
+     * Fetches the current position of the ant
+     */
+    Point getPosition();
+
 protected:
     /** The position of the pixel the ant is currently in */
     Point _currentPosition;
