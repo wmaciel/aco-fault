@@ -11,10 +11,10 @@
 
 #define MAX(a, b)  (((a) > (b)) ? (a) : (b))
 
-Environment::Environment( float initialPheromone, float evaporationRate, int height, int width, Image* image ):
+Environment::Environment( float initialPheromone, float evaporationRate, Image* image ):
 _evaporationRate(evaporationRate), _initialPheromone(initialPheromone)
 {
-    construct( height, width );
+    construct( imgGetHeight( image ), imgGetWidth( image ) );
     computeImageMatrix( image );
     computeVisibilityMatrix();
     clearFeromone();

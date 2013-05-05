@@ -19,7 +19,7 @@ class Environment
 public:
 
     /** Constructor */
-    Environment( float initialPheromone, float evaporationRate, int height, int width, Image* image );
+    Environment( float initialPheromone, float evaporationRate, Image* image );
 
     /** Destructor */
     virtual ~Environment();
