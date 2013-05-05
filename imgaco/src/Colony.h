@@ -19,7 +19,6 @@ public:
     void addAnt();
     void addAnt( Point point );
     void addAnts( int n );
-    void removeAnt( Point& point );
     void run( int nSteps );
 
 private:

@@ -57,13 +57,6 @@ void Colony::addAnts( int n )
 
 
 
-void Colony::removeAnt( Point& point )
-{
-    
-}
-
-
-
 void Colony::run( int nSteps )
 {
 
