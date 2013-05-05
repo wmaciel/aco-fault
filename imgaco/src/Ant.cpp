@@ -10,11 +10,9 @@
 
 #include "Ant.h"
 
-#define MEMORY_ 10
-
-Ant::Ant( Point point )
+Ant::Ant( Point point, int memorySize )
 {
-    _memorySize = MEMORY_;
+    _memorySize = memorySize;
     moveTo( point );
 }
 
