@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   Colony.h
  * Author: keoma
  *
@@ -8,13 +8,23 @@
 #ifndef COLONY_H
 #define	COLONY_H
 
-class Colony {
+#include "Environment.h"
+#include "Ant.h"
+
+class Colony
+{
 public:
     Colony();
-    Colony(const Colony& orig);
     virtual ~Colony();
-private:
+    void addAnt();
+    void addAnt( Point point );
+    void addAnts( int n );
+    void removeAnt( Point& point );
+    void run( int nSteps );
 
+private:
+    Environment* _environment;
+    std::vector<Ant> _ants;
 };
 
 #endif	/* COLONY_H */
