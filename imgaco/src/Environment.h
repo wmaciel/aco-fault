@@ -62,6 +62,16 @@ public:
      */
     void getAdjacent( Point point, std::vector<Point>& adjacent );
 
+    /**
+     * Fetches the width of the environment
+     */
+    int getWidth();
+
+    /**
+     * Fetches de height of the environment
+     */
+    int getHeight();
+
 private:
 
     /**

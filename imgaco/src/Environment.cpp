@@ -197,3 +197,17 @@ void Environment::getAdjacent( Point point, std::vector<Point>& adjacent )
         }
     }
 }
+
+
+
+int Environment::getWidth()
+{
+    return _width;
+}
+
+
+
+int Environment::getHeight()
+{
+    return _height;
+}
