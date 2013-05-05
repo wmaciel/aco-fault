@@ -14,7 +14,7 @@
 class Colony
 {
 public:
-    Colony();
+    Colony( Image* image, int nAnts );
     virtual ~Colony();
     void addAnt();
     void addAnt( Point point );
