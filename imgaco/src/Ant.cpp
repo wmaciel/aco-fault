@@ -26,7 +26,9 @@ Ant::~Ant()
 void Ant::moveTo( Point point )
 {
     _currentPosition = point;
+
     _visited.push_back( point );
+    while (_visited.size() >= _memorySize) _visited.erase(_visited.begin());
 }
 
 

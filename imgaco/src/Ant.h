@@ -72,5 +72,8 @@ protected:
     /** The importance given to the visibility value when it is time to choose a
      * node to move*/
     float _visibilityWeight;
+
+    /** The number of places the ant remembers visiting */
+    int _memorySize;
 };
 #endif	/* ANT_H */
