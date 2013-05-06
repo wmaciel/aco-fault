@@ -39,4 +39,6 @@ public:
     float y;
 };
 
+bool operator== (Point p1, Point p2);
+
 #endif	/* POINT_H */
