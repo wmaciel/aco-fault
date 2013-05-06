@@ -10,8 +10,13 @@
 
 #include "Ant.h"
 
+#define _PHEROMONE_WEIGHT_ 1.0f
+#define _VISIBILITY_WEIGHT_ 1.0f
+
 Ant::Ant( Point point, int memorySize )
 {
+    _pheromoneWeight = _PHEROMONE_WEIGHT_;
+    _visibilityWeight = _VISIBILITY_WEIGHT_;
     _memorySize = memorySize;
     moveTo( point );
 }
