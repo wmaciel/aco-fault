@@ -156,7 +156,7 @@ float Environment::getMaximumPheromone()
 
 float Environment::getVisibility( int x, int y )
 {
-    return _visibilityMatrix[id(x,y)];
+    return _visibilityMatrix[id(x,y)] + 0.0001;
 }
 
 
