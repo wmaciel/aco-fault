@@ -8,6 +8,7 @@
 #include <stdlib.h>
 
 #include "Colony.h"
+#include "Point.h"
 
 #define INITIAL_PHEROMONE_ 0.5f
 #define EVAPORATION_RATE_ 0.01f
@@ -68,8 +69,11 @@ void Colony::run( int nSteps )
 
             if (destination.x < 0)
             {
-                destination.x = rand() % _environment->getWidth();
-                destination.y = rand() % _environment->getHeight();
+                do
+                {
+                    destination.x = rand() % _environment->getWidth();
+                    destination.y = rand() % _environment->getHeight();
+                }while (!available( destination, _ants[i] ));
             }
 
             _ants[i].moveTo( destination );
@@ -92,4 +96,17 @@ void Colony::run( int nSteps )
 Image* Colony::getPheromoneImage()
 {
     return _environment->getPheromoneImage();
+}
+
+
+
+bool Colony::available( Point point, Ant& ant )
+{
+    for (unsigned int i = 0; i < _ants.size(); ++i)
+    {
+        if (_ants[i].getPosition() == point) return false;
+        if (ant.visited( point )) return false;
+    }
+
+    return true;
 }

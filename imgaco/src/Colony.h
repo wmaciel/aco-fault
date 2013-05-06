@@ -21,6 +21,7 @@ public:
     void addAnts( int n );
     void run( int nSteps );
     Image* getPheromoneImage();
+    bool available( Point point, Ant& ant );
 
 private:
     Environment* _environment;
