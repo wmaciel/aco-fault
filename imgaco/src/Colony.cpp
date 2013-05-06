@@ -77,3 +77,10 @@ void Colony::run( int nSteps )
         _environment->evaporatePheromone();
     }
 }
+
+
+
+Image* Colony::getPheromoneImage()
+{
+    return _environment->getPheromoneImage();
+}

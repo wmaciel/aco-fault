@@ -211,3 +211,21 @@ int Environment::getHeight()
 {
     return _height;
 }
+
+
+
+Image* Environment::getPheromoneImage()
+{
+    Image* output = imgCreate( _width, _height, 1 );
+
+    for (int x = 0; x < _width; ++x)
+    {
+        for (int y = 0; y < _height; ++y)
+        {
+            float luminance = _pheromoneMatrix[id(x,y)];
+            imgSetPixel3f( output, x, y, luminance, luminance, luminance );
+        }
+    }
+
+    return output;
+}

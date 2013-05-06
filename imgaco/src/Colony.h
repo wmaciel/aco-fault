@@ -20,6 +20,7 @@ public:
     void addAnt( Point point );
     void addAnts( int n );
     void run( int nSteps );
+    Image* getPheromoneImage();
 
 private:
     Environment* _environment;
