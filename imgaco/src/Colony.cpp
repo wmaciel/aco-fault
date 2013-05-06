@@ -10,9 +10,9 @@
 #include "Colony.h"
 
 #define INITIAL_PHEROMONE_ 0.5f
-#define EVAPORATION_RATE_ 0.5f
+#define EVAPORATION_RATE_ 0.01f
 #define MEMORY_ 10
-#define VISIBILITY_THRESHOLD_ 0.5f
+#define VISIBILITY_THRESHOLD_ 0.1f
 
 Colony::Colony( Image* image, int nAnts )
 {
@@ -65,13 +65,22 @@ void Colony::run( int nSteps )
         for (unsigned int i = 0; i < _ants.size(); ++i)
         {
             Point destination = _ants[i].pick( *_environment );
+
+            if (destination.x < 0)
+            {
+                destination.x = rand() % _environment->getWidth();
+                destination.y = rand() % _environment->getHeight();
+            }
+
             _ants[i].moveTo( destination );
 
             float visibility = _environment->getVisibility( destination );
             if (visibility >= VISIBILITY_THRESHOLD_)
             {
                 _environment->addPheromone( visibility, destination );
+                //_environment->addPheromone( 1.0, destination );
             }
+            //_environment->addPheromone( 1.0, destination );
         }
 
         _environment->evaporatePheromone();
