@@ -73,5 +73,7 @@ void Colony::run( int nSteps )
                 _environment->addPheromone( visibility, destination );
             }
         }
+
+        _environment->evaporatePheromone();
     }
 }
