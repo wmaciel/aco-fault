@@ -6,6 +6,8 @@
  */
 
 #include <string.h>
+#include <float.h>
+#include <iostream>
 
 #include "Environment.h"
 
@@ -216,6 +218,8 @@ int Environment::getHeight()
 
 Image* Environment::getPheromoneImage()
 {
+    normalizePheromone();
+
     Image* output = imgCreate( _width, _height, 1 );
 
     for (int x = 0; x < _width; ++x)
@@ -224,8 +228,35 @@ Image* Environment::getPheromoneImage()
         {
             float luminance = _pheromoneMatrix[id(x,y)];
             imgSetPixel3f( output, x, y, luminance, luminance, luminance );
+//            if (luminance >= 0.1)
+//            {
+//                imgSetPixel3f( output, x, y, 1.0f, 1.0f, 1.0f );
+//            }
         }
     }
 
     return output;
+}
+
+
+
+void Environment::normalizePheromone()
+{
+    float max = 0;
+
+    int nElements = _height * _width;
+
+    for ( int i = 0; i < nElements; ++i )
+    {
+        if (max < _pheromoneMatrix[i])
+        {
+            max = _pheromoneMatrix[i];
+            std::cerr << "max: "<<max<<"\n";
+        }
+    }
+
+    for ( int i = 0; i < nElements; ++i )
+    {
+       _pheromoneMatrix[i] /= max;
+    }
 }

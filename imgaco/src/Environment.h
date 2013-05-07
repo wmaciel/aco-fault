@@ -99,6 +99,12 @@ private:
      */
     int id( int x, int y );
 
+    /**
+     * Divides every element of the matrix by the greatest value in the matrix
+     * @param matrix
+     */
+    void normalizePheromone();
+
     /** Height of the image */
     int _height;
 
