@@ -10,10 +10,10 @@
 #include "Colony.h"
 #include "Point.h"
 
-#define INITIAL_PHEROMONE_ 0.5f
-#define EVAPORATION_RATE_ 0.01f
+#define INITIAL_PHEROMONE_ 0.01f
+#define EVAPORATION_RATE_ 0.05f
 #define MEMORY_ 10
-#define VISIBILITY_THRESHOLD_ 0.1f
+#define VISIBILITY_THRESHOLD_ 0.08f
 
 Colony::Colony( Image* image, int nAnts )
 {
