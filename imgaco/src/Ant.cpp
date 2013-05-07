@@ -11,7 +11,7 @@
 #include "Ant.h"
 
 #define _PHEROMONE_WEIGHT_ 1.0f
-#define _VISIBILITY_WEIGHT_ 1.0f
+#define _VISIBILITY_WEIGHT_ 10.0f
 
 Ant::Ant( Point point, int memorySize )
 {
