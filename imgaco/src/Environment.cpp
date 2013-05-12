@@ -55,6 +55,7 @@ void Environment::computeImageMatrix( Image* image )
 {
     Image* gray = imgGrey( image );
 
+#pragma omp parallel for
     for (int x=0; x<_width; ++x)
     {
         for (int y=0; y<_height; ++y)
@@ -72,6 +73,7 @@ void Environment::computeImageMatrix( Image* image )
 
 void Environment::computeVisibilityMatrix()
 {
+#pragma omp parallel for
     for (int x=1; x<_width-1; ++x)
     {
         for (int y=1; y<_height-1; ++y)
@@ -91,6 +93,7 @@ void Environment::computeVisibilityMatrix()
 
 void Environment::clearFeromone()
 {
+#pragma omp parallel for
     for (int x=0; x<_width; ++x)
     {
         for (int y=0; y<_height; ++y)
@@ -172,6 +175,7 @@ float Environment::getVisibility( Point point )
 
 void Environment::evaporatePheromone()
 {
+#pragma omp parallel for
     for (int x=0; x<_width; ++x)
     {
         for (int y=0; y<_height; ++y)
@@ -227,6 +231,7 @@ Image* Environment::getPheromoneImage()
 
     Image* output = imgCreate( _width, _height, 1 );
 
+#pragma omp parallel for
     for (int x = 0; x < _width; ++x)
     {
         for (int y = 0; y < _height; ++y)
@@ -260,6 +265,7 @@ void Environment::normalizePheromone()
         }
     }
 
+#pragma omp parallel for
     for ( int i = 0; i < nElements; ++i )
     {
        _pheromoneMatrix[i] /= max;

@@ -91,12 +91,18 @@ void Ant::buildProbabilitiesVector( Environment& environment, std::vector<float>
 
 bool Ant::visited( Point point )
 {
+    bool visited = false;
+
+#pragma omp parallel for
     for (unsigned int i = 0; i < _visited.size(); ++i)
     {
-        if (point.x == _visited[i].x && point.y == _visited[i].y) return true;
+        if (point.x == _visited[i].x && point.y == _visited[i].y)
+        {
+            visited = true;
+        }
     }
 
-    return false;
+    return visited;
 }
 
 
