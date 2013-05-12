@@ -22,7 +22,11 @@ int main( int argc, char** argv )
         return 0;
     }
 
-    Colony colony( input, 1000 );
+    int nAnts = ( sqrt( imgGetWidth( input ) * imgGetHeight( input ) ) + 0.5f );
+
+    std::cerr << "Running with " << nAnts << " ants...\n";
+
+    Colony colony( input, nAnts );
     int nIterations = strtol( argv[3], NULL, 10 );
     colony.run( nIterations );
 

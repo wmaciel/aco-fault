@@ -13,8 +13,8 @@
 
 #define MAX(a, b)  (((a) > (b)) ? (a) : (b))
 
-Environment::Environment( float initialPheromone, float evaporationRate, Image* image ):
-_evaporationRate(evaporationRate), _initialPheromone(initialPheromone)
+Environment::Environment( float initialPheromone, float minimumPheromone, float evaporationRate, Image* image ):
+_evaporationRate(evaporationRate), _initialPheromone(initialPheromone), _minimumPheromone(minimumPheromone)
 {
     construct( imgGetHeight( image ), imgGetWidth( image ) );
     computeImageMatrix( image );
@@ -178,6 +178,11 @@ void Environment::evaporatePheromone()
         {
             int i = id( x, y );
             _pheromoneMatrix[i] *= ( 1 - _evaporationRate );
+
+             if (_pheromoneMatrix[i] < _minimumPheromone)
+            {
+                _pheromoneMatrix[i] = _minimumPheromone;
+            }
         }
     }
 }

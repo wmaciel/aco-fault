@@ -20,7 +20,7 @@ public:
      * Constructor
      * @param point The initial position of the ant. It MUST be a valid position.
      */
-    Ant( Point point, int memorySize );
+    Ant( Point point, int memorySize, float pheromoneWeight, float visibilityWeight );
 
     /**
      * Destructor

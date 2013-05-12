@@ -19,7 +19,7 @@ class Environment
 public:
 
     /** Constructor */
-    Environment( float initialPheromone, float evaporationRate, Image* image );
+    Environment( float initialPheromone, float minimumPheromone, float evaporationRate, Image* image );
 
     /** Destructor */
     virtual ~Environment();
@@ -125,6 +125,9 @@ private:
 
     /** The initial small value of the pheromone intensity */
     const float _initialPheromone;
+
+    /** Minimum value of the pheromone level, to avoid shutdown of search paths */
+    const float _minimumPheromone;
 };
 
 #endif	/* ENVIRONMENT_H */

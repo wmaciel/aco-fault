@@ -10,14 +10,17 @@
 #include "Colony.h"
 #include "Point.h"
 
-#define INITIAL_PHEROMONE_ 0.01f
+#define INITIAL_PHEROMONE_ 0.1f
 #define EVAPORATION_RATE_ 0.05f
-#define MEMORY_ 10
-#define VISIBILITY_THRESHOLD_ 0.08f
+#define MEMORY_ 100
+#define VISIBILITY_THRESHOLD_ 0.0f
+#define MINIMUM_PHEROMONE_ 0.01
+#define _PHEROMONE_WEIGHT_ 1.0f
+#define _VISIBILITY_WEIGHT_ 10.0f
 
 Colony::Colony( Image* image, int nAnts )
 {
-    _environment = new Environment( INITIAL_PHEROMONE_, EVAPORATION_RATE_, image );
+    _environment = new Environment( INITIAL_PHEROMONE_, MINIMUM_PHEROMONE_, EVAPORATION_RATE_, image );
 
     addAnts( nAnts );
 }
@@ -34,7 +37,7 @@ Colony::~Colony()
 
 void Colony::addAnt( Point point )
 {
-    _ants.push_back( Ant( point, MEMORY_ ) );
+    _ants.push_back( Ant( point, MEMORY_, _PHEROMONE_WEIGHT_, _VISIBILITY_WEIGHT_ ) );
 }
 
 
