@@ -227,9 +227,9 @@ int Environment::getHeight()
 
 Image* Environment::getPheromoneImage()
 {
-    normalizePheromone();
+    //normalizePheromone();
 
-    Image* output = imgCreate( _width, _height, 1 );
+    Image* output = imgCreate( _width, _height, 3 );
 
 #pragma omp parallel for
     for (int x = 0; x < _width; ++x)

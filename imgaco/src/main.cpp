@@ -22,7 +22,7 @@ int main( int argc, char** argv )
         return 0;
     }
 
-    int nAnts = 4*( sqrt( imgGetWidth( input ) * imgGetHeight( input ) ) + 0.5f );
+    int nAnts = 12*( sqrt( imgGetWidth( input ) * imgGetHeight( input ) ) + 0.5f );
 
     std::cerr << "Running with " << nAnts << " ants...\n";
 

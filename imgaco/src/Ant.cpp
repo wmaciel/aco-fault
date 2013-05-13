@@ -85,6 +85,11 @@ void Ant::buildProbabilitiesVector( Environment& environment, std::vector<float>
             probabilities.push_back( edgeWeight );
         }
     }
+
+    for (int i = 0; i<nNodes; ++i)
+    {
+        probabilities[i] /= totalWeight;
+    }
 }
 
 

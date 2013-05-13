@@ -6,6 +6,7 @@
  */
 
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "Colony.h"
 #include "Point.h"
@@ -14,7 +15,7 @@
 #define EVAPORATION_RATE_ 0.05f
 #define MEMORY_ 100
 #define VISIBILITY_THRESHOLD_ 0.08f
-#define MINIMUM_PHEROMONE_ 0.01
+#define MINIMUM_PHEROMONE_ 0.1f
 #define _PHEROMONE_WEIGHT_ 1.0f
 #define _VISIBILITY_WEIGHT_ 10.0f
 
@@ -100,6 +101,19 @@ void Colony::run( int nSteps )
         }
 
         _environment->evaporatePheromone();
+
+        char* filename = new char[15];
+        sprintf( filename, "test/%d.bmp", step );
+        Image* out = getPheromoneImage();
+
+        for (unsigned int i = 0; i < _ants.size(); ++i)
+        {
+            imgSetPixel3f( out, futureMoves[i].x, futureMoves[i].y, 1.0f, 0.0f, 0.0f );
+        }
+
+        imgWriteBMP( filename , out );
+        imgDestroy( out );
+        delete filename;
     }
 }
 
