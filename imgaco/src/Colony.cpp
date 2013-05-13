@@ -64,8 +64,11 @@ void Colony::addAnts( int n )
 
 void Colony::run( int nSteps )
 {
+    Point futureMoves[_ants.size()];
+
     for (int step = 0; step < nSteps; ++step)
     {
+        #pragma omp parallel for
         for (unsigned int i = 0; i < _ants.size(); ++i)
         {
             Point destination = _ants[i].pick( *_environment );
@@ -80,7 +83,13 @@ void Colony::run( int nSteps )
             }
 
             _ants[i].moveTo( destination );
+            futureMoves[i] = destination;
+        }
 
+        #pragma omp parallel for
+        for (unsigned int i = 0; i < _ants.size(); ++i)
+        {
+            Point destination = futureMoves[i];
             float visibility = _environment->getVisibility( destination );
             if (visibility >= VISIBILITY_THRESHOLD_)
             {
