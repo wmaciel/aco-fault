@@ -2,16 +2,8 @@
 #include <stdlib.h>
 #include "DirectionalField.h"
 
-int main()
+int main( int argc, char** argv )
 {
-//    float data[25] = {
-//        0.0,0.0,0.0,0.0,1.0,
-//        0.0,0.0,0.0,1.0,0.0,
-//        0.0,0.0,1.0,0.0,0.0,
-//        0.0,1.0,0.0,0.0,0.0,
-//        1.0,0.0,0.0,0.0,0.0
-//    };
-
 //    // fill data
     float* data = new float[64];
     for (int x = 0; x < 8; ++x)

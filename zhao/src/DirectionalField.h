@@ -37,6 +37,10 @@ public:
      */
     virtual ~DirectionalField();
 
+    float getXDirection( int x, int y );
+
+    float getYDirection( int x, int y );
+
     void debugPrint();
 
 private:
@@ -72,6 +76,8 @@ private:
     void buildCoherenceMatrix();
 
     void buildDirectionMatrices();
+
+    void normalizeDirections();
 
     float getHorizontalWindowedDerivative( int px, int py, int windowSize );
 

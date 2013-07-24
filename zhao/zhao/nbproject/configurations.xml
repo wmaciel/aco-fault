@@ -6,6 +6,8 @@
     <df root="../src" name="src">
       <in>DirectionalField.cpp</in>
       <in>DirectionalField.h</in>
+      <in>image.cpp</in>
+      <in>image.h</in>
       <in>main.cpp</in>
     </df>
     <logicalFolder name="ExternalFiles"
@@ -51,6 +53,10 @@
       </item>
       <item path="../src/DirectionalField.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="../src/image.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/image.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="../src/main.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
         </ccTool>
@@ -85,9 +91,11 @@
       </item>
       <item path="../src/DirectionalField.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="../src/image.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/image.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="../src/main.cpp" ex="false" tool="1" flavor2="0">
-        <ccTool>
-        </ccTool>
       </item>
     </conf>
   </confs>

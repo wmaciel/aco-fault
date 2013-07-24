@@ -6,6 +6,8 @@
     <df root="../src" name="src">
       <in>DirectionalField.cpp</in>
       <in>DirectionalField.h</in>
+      <in>image.cpp</in>
+      <in>image.h</in>
       <in>main.cpp</in>
     </df>
   </logicalFolder>

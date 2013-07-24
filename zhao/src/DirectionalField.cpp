@@ -31,6 +31,7 @@ DirectionalField::DirectionalField( float* data, int width, int height, int wind
     buildCrossedWindowedDerivativeMatrix( window );
     buildCoherenceMatrix();
     buildDirectionMatrices();
+    normalizeDirections();
 }
 
 
@@ -270,6 +271,49 @@ float DirectionalField::getCrossedWindowedDerivative( int px, int py, int window
     }
 
     return sum;
+}
+
+float DirectionalField::getXDirection( int x, int y )
+{
+    return _directionX[pixel(x,y)];
+}
+
+float DirectionalField::getYDirection( int x, int y )
+{
+    return _directionY[pixel(x,y)];
+}
+
+void DirectionalField::normalizeDirections()
+{
+    int size = _width*_height;
+
+    for (int i = 0; i < size; ++i)
+    {
+        if (_directionX[i] < 0)
+        {
+            _directionX[i] *= -1;
+            _directionY[i] *= -1;
+        }
+    }
+
+    float maxLenght2 = _directionX[0] * _directionX[0] + _directionY[0] * _directionY[0];
+
+    for (int i = 0; i < size; ++i)
+    {
+        float lenght2 = _directionX[i] * _directionX[i] + _directionY[i] * _directionY[i];
+        if (lenght2 > maxLenght2)
+        {
+            maxLenght2 = lenght2;
+        }
+    }
+
+    float maxLenght = sqrt( maxLenght2 );
+
+    for (int i = 0; i < size; ++i)
+    {
+        _directionX[i] /= maxLenght;
+        _directionY[i] /= maxLenght;
+    }
 }
 
 void DirectionalField::debugPrint()
