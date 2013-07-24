@@ -78,7 +78,7 @@ void Ant::buildProbabilitiesVector( Environment& environment, std::vector<float>
         else
         {
             float pheromone = environment.getPheromone( nodes[i] );
-            float visibility = environment.getVisibility( nodes[i] );
+            float visibility = environment.getVisibility( _currentPosition, nodes[i] );
             float edgeWeight = pow( pheromone, _pheromoneWeight ) *
                                pow( visibility, _visibilityWeight );
             totalWeight += edgeWeight;

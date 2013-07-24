@@ -4,16 +4,8 @@
     <df root="../build" name="build">
     </df>
     <df root="../src" name="src">
-      <in>Ant.cpp</in>
-      <in>Ant.h</in>
-      <in>Colony.cpp</in>
-      <in>Colony.h</in>
-      <in>Environment.cpp</in>
-      <in>Environment.h</in>
-      <in>Point.cpp</in>
-      <in>Point.h</in>
-      <in>image.cpp</in>
-      <in>image.h</in>
+      <in>DirectionalField.cpp</in>
+      <in>DirectionalField.h</in>
       <in>main.cpp</in>
     </df>
     <logicalFolder name="ExternalFiles"
@@ -44,7 +36,7 @@
           <buildCommandWorkingDir>../build</buildCommandWorkingDir>
           <buildCommand>make</buildCommand>
           <cleanCommand>make clean</cleanCommand>
-          <executablePath>../bin/release/acoedge</executablePath>
+          <executablePath>../bin/release/zhao</executablePath>
           <ccTool>
             <incDir>
               <pElem>../build</pElem>
@@ -55,29 +47,13 @@
           </ccTool>
         </makeTool>
       </makefileType>
-      <item path="../src/Ant.cpp" ex="false" tool="1" flavor2="4">
+      <item path="../src/DirectionalField.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/DirectionalField.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../src/main.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
         </ccTool>
-      </item>
-      <item path="../src/Ant.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../src/Colony.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../src/Colony.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../src/Environment.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../src/Environment.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../src/Point.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../src/Point.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../src/image.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../src/image.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../src/main.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
     <conf name="Debug" type="0">
@@ -93,8 +69,8 @@
         <makeTool>
           <buildCommandWorkingDir>../build</buildCommandWorkingDir>
           <buildCommand>make DBG=Yes</buildCommand>
-          <cleanCommand>make clean DBG=Yes</cleanCommand>
-          <executablePath>../bin/debug/acoedge</executablePath>
+          <cleanCommand>make DBG=Yes clean</cleanCommand>
+          <executablePath>../bin/debug/zhao</executablePath>
           <ccTool>
             <incDir>
               <pElem>../build</pElem>
@@ -105,27 +81,13 @@
           </ccTool>
         </makeTool>
       </makefileType>
-      <item path="../src/Ant.cpp" ex="false" tool="1" flavor2="0">
+      <item path="../src/DirectionalField.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="../src/Ant.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../src/Colony.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../src/Colony.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../src/Environment.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../src/Environment.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../src/Point.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../src/Point.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../src/image.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../src/image.h" ex="false" tool="3" flavor2="0">
+      <item path="../src/DirectionalField.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../src/main.cpp" ex="false" tool="1" flavor2="0">
+        <ccTool>
+        </ccTool>
       </item>
     </conf>
   </confs>

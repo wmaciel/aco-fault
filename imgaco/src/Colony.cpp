@@ -15,7 +15,7 @@
 #define EVAPORATION_RATE_ 0.05f
 #define MEMORY_ 100
 #define VISIBILITY_THRESHOLD_ 0.08f
-#define MINIMUM_PHEROMONE_ 0.1f
+#define MINIMUM_PHEROMONE_ 0.01f
 #define _PHEROMONE_WEIGHT_ 1.0f
 #define _VISIBILITY_WEIGHT_ 10.0f
 
@@ -91,7 +91,7 @@ void Colony::run( int nSteps )
         for (unsigned int i = 0; i < _ants.size(); ++i)
         {
             Point destination = futureMoves[i];
-            float visibility = _environment->getVisibility( destination );
+            float visibility = _environment->getVisibility( _ants[i].getPosition(), destination );
             if (visibility >= VISIBILITY_THRESHOLD_)
             {
                 _environment->addPheromone( visibility, destination );
@@ -102,8 +102,8 @@ void Colony::run( int nSteps )
 
         _environment->evaporatePheromone();
 
-        char* filename = new char[15];
-        sprintf( filename, "test/%d.bmp", step );
+        char* filename = new char[50];
+        sprintf( filename, "testVolume/img%04d.bmp", step );
         Image* out = getPheromoneImage();
 
         for (unsigned int i = 0; i < _ants.size(); ++i)

@@ -18,7 +18,6 @@ _evaporationRate(evaporationRate), _initialPheromone(initialPheromone), _minimum
 {
     construct( imgGetHeight( image ), imgGetWidth( image ) );
     computeImageMatrix( image );
-    computeVisibilityMatrix();
     clearFeromone();
 }
 
@@ -28,7 +27,6 @@ Environment::~Environment()
 {
     delete[] _imageMatrix;
     delete[] _pheromoneMatrix;
-    delete[] _visibilityMatrix;
 }
 
 
@@ -42,11 +40,9 @@ void Environment::construct( int height, int width )
 
     _imageMatrix = new float[size];
     _pheromoneMatrix = new float[size];
-    _visibilityMatrix = new float[size];
 
     memset( _imageMatrix,      0, sizeof(float)*size );
     memset( _pheromoneMatrix,  0, sizeof(float)*size );
-    memset( _visibilityMatrix, 0, sizeof(float)*size );
 }
 
 
@@ -71,26 +67,6 @@ void Environment::computeImageMatrix( Image* image )
 
 
 
-void Environment::computeVisibilityMatrix()
-{
-#pragma omp parallel for
-    for (int x=1; x<_width-1; ++x)
-    {
-        for (int y=1; y<_height-1; ++y)
-        {
-            float leftRight = fabs( _imageMatrix[id(x-1,y)]   - _imageMatrix[id(x+1,y)] );
-            float upDown    = fabs( _imageMatrix[id(x,y-1)]   - _imageMatrix[id(x,y+1)] );
-            float diagonal1 = fabs( _imageMatrix[id(x-1,y-1)] - _imageMatrix[id(x+1,y+1)] );
-            float diagonal2 = fabs( _imageMatrix[id(x-1,y+1)] - _imageMatrix[id(x+1,y-1)] );
-            float max = MAX( leftRight, MAX( upDown, MAX( diagonal1, diagonal2 ) ) );
-
-            _visibilityMatrix[id(x,y)] = max;
-        }
-    }
-}
-
-
-
 void Environment::clearFeromone()
 {
 #pragma omp parallel for
@@ -108,6 +84,8 @@ void Environment::clearFeromone()
 
 int Environment::id( int x, int y )
 {
+    if (x < 0 || y < 0) return 0;
+
     return x + _width * y;
 }
 
@@ -159,16 +137,27 @@ float Environment::getMaximumPheromone()
 
 
 
-float Environment::getVisibility( int x, int y )
+float Environment::getVisibility( int xo, int yo, int xd, int yd )
 {
-    return _visibilityMatrix[id(x,y)] + 0.0001;
+    float w  = _imageMatrix[id(xd-1, yd  )] - _imageMatrix[id(xo, yo)];
+    float e  = _imageMatrix[id(xd+1, yd  )] - _imageMatrix[id(xo, yo)];
+    float n  = _imageMatrix[id(xd  , yd+1)] - _imageMatrix[id(xo, yo)];
+    float s  = _imageMatrix[id(xd  , yd-1)] - _imageMatrix[id(xo, yo)];
+    float ne = _imageMatrix[id(xd+1, yd+1)] - _imageMatrix[id(xo, yo)];
+    float nw = _imageMatrix[id(xd-1, yd+1)] - _imageMatrix[id(xo, yo)];
+    float se = _imageMatrix[id(xd+1, yd-1)] - _imageMatrix[id(xo, yo)];
+    float sw = _imageMatrix[id(xd-1, yd-1)] - _imageMatrix[id(xo, yo)];
+
+    float max = _minimumPheromone + MAX(w,MAX(e,MAX(n,MAX(s,MAX(ne,MAX(nw,MAX(se,sw)))))));
+
+    return max;
 }
 
 
 
-float Environment::getVisibility( Point point )
+float Environment::getVisibility( Point origin, Point destination )
 {
-    return getVisibility( point.x, point.y );
+    return getVisibility( origin.x, origin.y, destination.x, destination.y );
 }
 
 

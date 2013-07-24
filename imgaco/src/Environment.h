@@ -49,8 +49,8 @@ public:
     /**
      * Returns the visibility of the pixel
      */
-    float getVisibility( int x, int y );
-    float getVisibility( Point point );
+    float getVisibility( int xa, int ya, int xb, int yb );
+    float getVisibility( Point origin, Point destination );
 
     /**
      * Creates the negative feedback of pheromone evaporation
@@ -84,11 +84,6 @@ private:
     void construct( int height, int width );
 
     /**
-     * Computes the visibility values of each element in _visibilityMatrix
-     */
-    void computeVisibilityMatrix();
-
-    /**
      * Copies the given image to _imageMatrix
      * @param image Input image
      */
@@ -116,9 +111,6 @@ private:
 
     /** Amount of pheromones in edge between nodes */
     float* _pheromoneMatrix;
-
-    /** Euclidean distances between nodes */
-    float* _visibilityMatrix;
 
     /** The rate of evaporation of the pheromones */
     const float _evaporationRate;

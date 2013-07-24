@@ -2,28 +2,10 @@
 <configurationDescriptor version="89">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <df root="../build" name="build">
-      <df name="testCamera">
-      </df>
-      <df name="testEmperor">
-      </df>
-      <df name="testGoldhill">
-      </df>
-      <df name="testLena">
-      </df>
-      <df name="testVolume">
-      </df>
     </df>
     <df root="../src" name="src">
-      <in>Ant.cpp</in>
-      <in>Ant.h</in>
-      <in>Colony.cpp</in>
-      <in>Colony.h</in>
-      <in>Environment.cpp</in>
-      <in>Environment.h</in>
-      <in>Point.cpp</in>
-      <in>Point.h</in>
-      <in>image.cpp</in>
-      <in>image.h</in>
+      <in>DirectionalField.cpp</in>
+      <in>DirectionalField.h</in>
       <in>main.cpp</in>
     </df>
   </logicalFolder>
@@ -108,18 +90,9 @@
       </nativedebugger>
       <runprofile version="9">
         <runcommandpicklist>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" shapes.bmp shapes.out.bmp 400</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" penguin.bmp penguin.out.bmp 400</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" lena.bmp lena.out.bmp 400</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" lena.bmp lena.out.bmp 5000</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" emperor.bmp emperor.out.bmp 1000</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" lena.bmp lena.out.bmp 1000</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" goldhill.bmp goldhill.out.bmp 1000</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" crosses.bmp crosses.out.bmp 1000</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" camera.bmp camera.out.bmp 1000</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" volume.bmp volume.out.bmp 1000</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}"</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>"${OUTPUT_PATH}" volume.bmp volume.out.bmp 1000</runcommand>
+        <runcommand>"${OUTPUT_PATH}"</runcommand>
         <rundir>../build</rundir>
         <buildfirst>false</buildfirst>
         <terminal-type>0</terminal-type>
