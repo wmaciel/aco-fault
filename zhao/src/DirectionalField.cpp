@@ -100,13 +100,13 @@ float DirectionalField::coherence( int pixel )
 {
     float gxxMinusGyy = _gxxMatrix[pixel] - _gyyMatrix[pixel];
     float hxy = gxxMinusGyy * gxxMinusGyy + 4 * _gxyMatrix[pixel] * _gxyMatrix[pixel];
-    
+
     float divisor = ( _gxxMatrix[pixel] + _gyyMatrix[pixel] );
     if (divisor == 0.0f)
     {
         return 0.0f;
     }
-    
+
     return sqrt( hxy ) / divisor;
 }
 
@@ -115,7 +115,7 @@ void DirectionalField::direction( int pixel, float& dirX, float& dirY )
     float gxxMinusGyy = _gxxMatrix[pixel] - _gyyMatrix[pixel];
     float hxy = gxxMinusGyy * gxxMinusGyy + 4 * _gxyMatrix[pixel] * _gxyMatrix[pixel];
 
-    dirX = 0.5 * ( _gxxMatrix[pixel] - _gyyMatrix[pixel] - sqrt( hxy ) );
+    dirX = 0.5 * ( _gxxMatrix[pixel] - _gyyMatrix[pixel] ) - 0.5 * sqrt( hxy );
     dirY = _gxyMatrix[pixel];
 }
 
@@ -300,27 +300,31 @@ void DirectionalField::normalizeDirections()
 {
     int size = _width*_height;
 
-    for (int i = 0; i < size; ++i)
-    {
-        if (_directionX[i] < 0)
-        {
-            _directionX[i] *= -1;
-            _directionY[i] *= -1;
-        }
-    }
+//    for (int i = 0; i < size; ++i)
+//    {
+//        if (_directionY[i] < 0)
+//        {
+//            _directionX[i] *= -1;
+//            _directionY[i] *= -1;
+//        }
+//    }
 
     for (int i = 0; i < size; ++i)
     {
         float lenght = sqrt( _directionX[i] * _directionX[i] + _directionY[i] * _directionY[i] );
-        _directionX[i] /= lenght;
-        _directionY[i] /= lenght;
+
+        if (lenght > 0.0f)
+        {
+            _directionX[i] /= lenght;
+            _directionY[i] /= lenght;
+        }
     }
 }
 
 void DirectionalField::normalizeCoherence()
 {
     int size = _width * _height;
-    
+
     float min = _coherence[0];
     for (int i = 0; i < size; ++i)
     {
@@ -329,7 +333,7 @@ void DirectionalField::normalizeCoherence()
             min = _coherence[i];
         }
     }
-    
+
     if (min < 0)
     {
         for (int i = 0; i < size; ++i)
@@ -337,7 +341,7 @@ void DirectionalField::normalizeCoherence()
             _coherence[i] += min;
         }
     }
-    
+
     float max = _coherence[0];
     for (int i = 0; i < size; ++i)
     {
@@ -346,7 +350,12 @@ void DirectionalField::normalizeCoherence()
             max = _coherence[i];
         }
     }
-    
+
+    if (max == 0)
+    {
+        return;
+    }
+
     for (int i = 0; i < size; ++i)
     {
         _coherence[i] /= max;
@@ -356,9 +365,9 @@ void DirectionalField::normalizeCoherence()
 void DirectionalField::debugPrint()
 {
     printf( "gx:\n" );
-    for (int y = 0; y < _width; ++y)
+    for (int y = 0; y < _height; ++y)
     {
-        for (int x = 0; x < _height; ++x)
+        for (int x = 0; x < _width; ++x)
         {
             printf("%.2f\t", _gxMatrix[pixel(x,y)]);
         }
@@ -366,9 +375,9 @@ void DirectionalField::debugPrint()
     }
 
     printf( "gy:\n" );
-    for (int y = 0; y < _width; ++y)
+    for (int y = 0; y < _height; ++y)
     {
-        for (int x = 0; x < _height; ++x)
+        for (int x = 0; x < _width; ++x)
         {
             printf("%.2f\t", _gyMatrix[pixel(x,y)]);
         }
@@ -376,9 +385,9 @@ void DirectionalField::debugPrint()
     }
 
     printf( "gxx:\n" );
-    for (int y = 0; y < _width; ++y)
+    for (int y = 0; y < _height; ++y)
     {
-        for (int x = 0; x < _height; ++x)
+        for (int x = 0; x < _width; ++x)
         {
             printf("%.2f\t", _gxxMatrix[pixel(x,y)]);
         }
@@ -386,9 +395,9 @@ void DirectionalField::debugPrint()
     }
 
     printf( "gyy:\n" );
-    for (int y = 0; y < _width; ++y)
+    for (int y = 0; y < _height; ++y)
     {
-        for (int x = 0; x < _height; ++x)
+        for (int x = 0; x < _width; ++x)
         {
             printf("%.2f\t", _gyyMatrix[pixel(x,y)]);
         }
@@ -396,9 +405,9 @@ void DirectionalField::debugPrint()
     }
 
     printf( "gxy:\n" );
-    for (int y = 0; y < _width; ++y)
+    for (int y = 0; y < _height; ++y)
     {
-        for (int x = 0; x < _height; ++x)
+        for (int x = 0; x < _width; ++x)
         {
             printf("%.2f\t", _gxyMatrix[pixel(x,y)]);
         }
@@ -406,19 +415,19 @@ void DirectionalField::debugPrint()
     }
 
     printf( "direction:\n" );
-    for (int y = 0; y < _width; ++y)
+    for (int y = 0; y < _height; ++y)
     {
-        for (int x = 0; x < _height; ++x)
+        for (int x = 0; x < _width; ++x)
         {
             printf("(%.2f, %.2f)\t", _directionX[pixel(x,y)], _directionY[pixel(x,y)]);
         }
         printf("\n");
     }
-    
+
     printf( "coherence:\n" );
-    for (int y = 0; y < _width; ++y)
+    for (int y = 0; y < _height; ++y)
     {
-        for (int x = 0; x < _height; ++x)
+        for (int x = 0; x < _width; ++x)
         {
             printf("%.3f\t", _coherence[pixel(x,y)]);
         }
