@@ -42,7 +42,7 @@ void testImage( char* fileIn, char* fileDir, char* fileCoh )
     float* data = imgGetData( grey );
     int width = imgGetWidth(grey);
     int height = imgGetHeight(grey);
-    DirectionalField* field = new DirectionalField( data, width, height, 10 );
+    DirectionalField* field = new DirectionalField( data, width, height, 8 );
 
     Image* dir = imgCreate( width, height, 3 );
     Image* coh = imgCreate( width, height, 3 );
@@ -60,13 +60,20 @@ void testImage( char* fileIn, char* fileDir, char* fileCoh )
 
             if (dirX == 0.0f && dirY == 0.0f)
             {
-                imgSetPixel3f( dir, x, y, 0.0, 0.0, 0.0 );
+                imgSetPixel3f( dir, x, y, 1.0, 1.0, 0.0 );
             }
             else
             {
-                lumX = fabs( dirX );
-                lumY = fabs( dirY );
-                imgSetPixel3f( dir, x, y, 0.0f, lumX, lumY );
+//                lumX = fabs( dirX );
+//                lumY = fabs( dirY );
+//                imgSetPixel3f( dir, x, y, 0.0f, lumX, lumY );
+                if (dirX < 0)
+                {
+                    dirY *= -1;
+                    dirX *= -1;
+                    float lumDir = ( dirY + 1.0f ) / 2.0f;
+                    imgSetPixel3f( dir, x, y, lumDir, lumDir, lumDir );
+                }
             }
 
             lumCoh = field->getCoherence( x, y );
@@ -80,7 +87,7 @@ void testImage( char* fileIn, char* fileDir, char* fileCoh )
 
 int main( int argc, char** argv )
 {
-    testImage( "finger.bmp", "fingerDIR.bmp", "fingerCOH.bmp" );
+    testImage( "print.bmp", "printDIR.bmp", "printCOH.bmp" );
     //basicTest();
     return 0;
 }
