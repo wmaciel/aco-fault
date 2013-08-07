@@ -18,6 +18,7 @@ _evaporationRate(evaporationRate), _initialPheromone(initialPheromone), _minimum
     construct( imgGetHeight( image ), imgGetWidth( image ) );
     computeImageMatrix( image );
     clearFeromone();
+    _directionalField = new DirectionalField( imgGetData( image ), _width, _height, 5 );
 }
 
 
@@ -146,6 +147,21 @@ float Environment::getVisibility( int x, int y )
 float Environment::getVisibility( Point p )
 {
     return getVisibility( p.x, p.y );
+}
+
+
+
+void Environment::getDirection( int x, int y, float& dirX, float& dirY )
+{
+    dirX = _directionalField->getXDirection( x, y );
+    dirY = _directionalField->getYDirection( x, y );
+}
+
+
+
+float Environment::getDirectionStrength( int x, int y )
+{
+    return _directionalField->getCoherence( x, y );
 }
 
 

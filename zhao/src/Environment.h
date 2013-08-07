@@ -11,6 +11,7 @@
 #include <vector>
 #include "Point.h"
 #include "image.h"
+#include "DirectionalField.h"
 
 class Environment
 {
@@ -49,6 +50,12 @@ public:
      */
     float getVisibility( int x, int y );
     float getVisibility( Point p );
+
+    /**
+     * Returns the direction of the trend in the data
+     */
+    void getDirection( int x, int y, float& dirX, float& dirY );
+    float getDirectionStrength( int x, int y );
 
     /**
      * Creates the negative feedback of pheromone evaporation
@@ -109,6 +116,9 @@ private:
 
     /** Amount of pheromones in edge between nodes */
     float* _pheromoneMatrix;
+
+    /** Direction trend of the data at pixel x,y */
+    DirectionalField* _directionalField;
 
     /** The rate of evaporation of the pheromones */
     const float _evaporationRate;
