@@ -24,7 +24,7 @@ public:
     void setPheromoneWeight( float pheromoneWeight );
     void move();
     bool isAlive();
-    int pickIndex( std::vector<float> probabilities );
+    static int pickIndex( std::vector<float> probabilities );
 
 private:
     bool _isAlive;
