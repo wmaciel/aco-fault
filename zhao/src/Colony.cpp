@@ -22,7 +22,7 @@
 Colony::Colony( Image* image, int nAnts )
 {
     _environment = new Environment( INITIAL_PHEROMONE_, MINIMUM_PHEROMONE_, EVAPORATION_RATE_, image );
-    distributeAnts();
+    distributeAnts( nAnts );
 }
 
 Colony::~Colony()
@@ -34,7 +34,7 @@ void Colony::addAnt( Point point )
 
 }
 
-void Colony::distributeAnts()
+void Colony::distributeAnts( int nAnts )
 {
     int nHorizontalBlocks = _environment->getWidth() / BLOCK_SIZE;
     int nVerticalBlocks   = _environment->getHeight() / BLOCK_SIZE;
@@ -45,8 +45,10 @@ void Colony::distributeAnts()
         {
             Point pMin( hb * BLOCK_SIZE, vb * BLOCK_SIZE );
             Point pMax( pMin.x + BLOCK_SIZE, pMin.y + BLOCK_SIZE );
-
-            addAntInBlock( pMin, pMax );
+            for (int a = 0; a < nAnts; ++a)
+            {
+                addAntInBlock( pMin, pMax );
+            }
         }
     }
 }

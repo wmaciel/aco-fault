@@ -23,7 +23,7 @@ public:
     virtual ~Colony();
     void addAnt( Point point );
     void addAnts( int n );
-    void distributeAnts();
+    void distributeAnts( int nAnts );
     void addAntInBlock( Point pMin, Point pMax );
     void run( int nSteps );
     Image* getPheromoneImage();
