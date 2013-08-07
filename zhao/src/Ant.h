@@ -8,6 +8,8 @@
 #ifndef ANT_H
 #define	ANT_H
 
+#include <vector>
+
 #include "Point.h"
 
 class Environment;
@@ -22,6 +24,7 @@ public:
     void setPheromoneWeight( float pheromoneWeight );
     void move();
     bool isAlive();
+    int pickIndex( std::vector<float> probabilities );
 
 private:
     bool _isAlive;
