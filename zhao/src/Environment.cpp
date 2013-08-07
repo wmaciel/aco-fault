@@ -136,27 +136,16 @@ float Environment::getMaximumPheromone()
 
 
 
-float Environment::getVisibility( int xo, int yo, int xd, int yd )
+float Environment::getVisibility( int x, int y )
 {
-    float w  = _imageMatrix[id(xd-1, yd  )] - _imageMatrix[id(xo, yo)];
-    float e  = _imageMatrix[id(xd+1, yd  )] - _imageMatrix[id(xo, yo)];
-    float n  = _imageMatrix[id(xd  , yd+1)] - _imageMatrix[id(xo, yo)];
-    float s  = _imageMatrix[id(xd  , yd-1)] - _imageMatrix[id(xo, yo)];
-    float ne = _imageMatrix[id(xd+1, yd+1)] - _imageMatrix[id(xo, yo)];
-    float nw = _imageMatrix[id(xd-1, yd+1)] - _imageMatrix[id(xo, yo)];
-    float se = _imageMatrix[id(xd+1, yd-1)] - _imageMatrix[id(xo, yo)];
-    float sw = _imageMatrix[id(xd-1, yd-1)] - _imageMatrix[id(xo, yo)];
-
-    float max = _minimumPheromone + MAX(w,MAX(e,MAX(n,MAX(s,MAX(ne,MAX(nw,MAX(se,sw)))))));
-
-    return max;
+    return 1.0f - _imageMatrix[id(x,y)];
 }
 
 
 
-float Environment::getVisibility( Point origin, Point destination )
+float Environment::getVisibility( Point p )
 {
-    return getVisibility( origin.x, origin.y, destination.x, destination.y );
+    return getVisibility( p.x, p.y );
 }
 
 

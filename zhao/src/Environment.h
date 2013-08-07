@@ -47,8 +47,8 @@ public:
     /**
      * Returns the visibility of the pixel
      */
-    float getVisibility( int xa, int ya, int xb, int yb );
-    float getVisibility( Point origin, Point destination );
+    float getVisibility( int x, int y );
+    float getVisibility( Point p );
 
     /**
      * Creates the negative feedback of pheromone evaporation
