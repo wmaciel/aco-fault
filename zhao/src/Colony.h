@@ -21,15 +21,16 @@ class Colony
 public:
     Colony( Image* image );
     virtual ~Colony();
-    void distributeAnts();
-    void addAntInBlock( Point pMin, Point pMax );
     void run( int nSteps );
-    void moveAnts();
-    void updatePheromone();
     Image* getPheromoneImage();
-    bool available( Point point, Ant& ant );
 
 private:
+    void distributeAnts();
+    void addAntInBlock( Point pMin, Point pMax );
+    void moveAnts();
+    void updatePheromone();
+    bool available( Point point, Ant& ant );
+
     Environment* _environment;
     std::vector<Ant*> _ants;
 };
