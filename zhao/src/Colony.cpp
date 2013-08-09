@@ -18,23 +18,19 @@
 #define _PHEROMONE_WEIGHT_ 1.0f
 #define _VISIBILITY_WEIGHT_ 10.0f
 #define BLOCK_SIZE 10
+#define STEP_LENGTH 3
 
-Colony::Colony( Image* image, int nAnts )
+Colony::Colony( Image* image )
 {
     _environment = new Environment( INITIAL_PHEROMONE_, MINIMUM_PHEROMONE_, EVAPORATION_RATE_, image );
-    distributeAnts( nAnts );
+    distributeAnts();
 }
 
 Colony::~Colony()
 {
 }
 
-void Colony::addAnt( Point point )
-{
-
-}
-
-void Colony::distributeAnts( int nAnts )
+void Colony::distributeAnts()
 {
     int nHorizontalBlocks = _environment->getWidth() / BLOCK_SIZE;
     int nVerticalBlocks   = _environment->getHeight() / BLOCK_SIZE;
@@ -45,10 +41,7 @@ void Colony::distributeAnts( int nAnts )
         {
             Point pMin( hb * BLOCK_SIZE, vb * BLOCK_SIZE );
             Point pMax( pMin.x + BLOCK_SIZE, pMin.y + BLOCK_SIZE );
-            for (int a = 0; a < nAnts; ++a)
-            {
-                addAntInBlock( pMin, pMax );
-            }
+            addAntInBlock( pMin, pMax );
         }
     }
 }
@@ -80,12 +73,51 @@ void Colony::addAntInBlock( Point pMin, Point pMax )
     int width = _environment->getWidth();
     Point chosenPoint( pixel % width, pixel / width );
     Ant* ant = new Ant( chosenPoint, _environment );
+    ant->setStepLength( STEP_LENGTH );
+    ant->setPheromoneWeight( _PHEROMONE_WEIGHT_ );
+    ant->setVisibilityWeight( _VISIBILITY_WEIGHT_ );
     _ants.push_back( ant );
 }
 
 void Colony::run( int nSteps )
 {
+    for (int currentStep = 0; currentStep < nSteps; ++currentStep)
+    {
+        distributeAnts();
+        moveAnts();
+        updatePheromone();
+        _ants.clear();
+    }
+}
 
+void Colony::moveAnts()
+{
+    bool allDead = false;
+    int nAnts = _ants.size();
+
+    while (!allDead)
+    {
+        allDead = true;
+        for (int a = 0; a < nAnts; ++a)
+        {
+            Ant* ant = _ants[a];
+            if (ant->isAlive())
+            {
+                allDead = false;
+                ant->move();
+            }
+        }
+    }
+}
+
+void Colony::updatePheromone()
+{
+    int nAnts = _ants.size();
+
+    for (int a = 0; a < nAnts; ++a)
+    {
+        _ants[a]->depositPheromone();
+    }
 }
 
 Image* Colony::getPheromoneImage()

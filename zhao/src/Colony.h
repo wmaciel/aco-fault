@@ -19,13 +19,13 @@ class Environment;
 class Colony
 {
 public:
-    Colony( Image* image, int nAnts );
+    Colony( Image* image );
     virtual ~Colony();
-    void addAnt( Point point );
-    void addAnts( int n );
-    void distributeAnts( int nAnts );
+    void distributeAnts();
     void addAntInBlock( Point pMin, Point pMax );
     void run( int nSteps );
+    void moveAnts();
+    void updatePheromone();
     Image* getPheromoneImage();
     bool available( Point point, Ant& ant );
 
