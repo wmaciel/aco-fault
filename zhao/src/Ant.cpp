@@ -13,6 +13,7 @@
 
 Ant::Ant( Point point, Environment* environment )
 {
+    _pheromoneConstant = 0.5f;
     _position = point;
     _environment = environment;
 }
@@ -68,5 +69,9 @@ void Ant::move()
 
 void Ant::depositPheromone()
 {
-    //TODO
+    int pathSize = _path.size();
+    for (int i = 0; i < pathSize; ++i)
+    {
+        _environment->addPheromone( _pheromoneConstant, _path[i] );
+    }
 }
