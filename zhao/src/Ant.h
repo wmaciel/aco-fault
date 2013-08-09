@@ -24,6 +24,7 @@ public:
     void setPheromoneWeight( float pheromoneWeight );
     void move();
     bool isAlive();
+    void depositPheromone();
     static int pickIndex( std::vector<float> probabilities );
 
 private:
@@ -33,6 +34,7 @@ private:
     float _visibilityWeight;
     Point _position;
     Environment* _environment;
+    std::vector<Point> _path;
 };
 
 #endif	/* ANT_H */

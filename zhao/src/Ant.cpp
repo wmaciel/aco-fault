@@ -65,3 +65,8 @@ void Ant::move()
 {
     //TODO
 }
+
+void Ant::depositPheromone()
+{
+    //TODO
+}
