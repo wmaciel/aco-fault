@@ -55,3 +55,13 @@ int Ant::pickIndex( std::vector<float> probabilities )
 
     return -1;
 }
+
+bool Ant::isAlive()
+{
+    return _isAlive;
+}
+
+void Ant::move()
+{
+    //TODO
+}
