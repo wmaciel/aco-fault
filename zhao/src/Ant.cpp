@@ -21,6 +21,7 @@ Ant::Ant( Point point, Environment* environment )
 
 Ant::~Ant()
 {
+    _path.clear();
 }
 
 void Ant::setStepLength( int stepLength )
