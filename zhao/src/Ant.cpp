@@ -14,6 +14,7 @@
 Ant::Ant( Point point, Environment* environment )
 {
     _pheromoneConstant = 0.5f;
+    _fieldOfView = 15.0;
     _position = point;
     _environment = environment;
 }

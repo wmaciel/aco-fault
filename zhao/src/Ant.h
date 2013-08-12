@@ -34,6 +34,7 @@ private:
     float _visibilityWeight;
     Point _position;
     float _pheromoneConstant;
+    float _fieldOfView;
     Environment* _environment;
     std::vector<Point> _path;
 };
