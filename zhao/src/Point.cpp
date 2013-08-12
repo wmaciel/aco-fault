@@ -1,3 +1,5 @@
+#include <math.h>
+
 #include "Point.h"
 
 Point::Point()
@@ -27,6 +29,14 @@ Point::Point(const Point& orig)
 Point::~Point()
 {
     // do nothing
+}
+
+void Point::normalize()
+{
+    float norm = sqrt( x*x + y*y );
+    if (norm == 0.0f) return;
+    x /= norm;
+    y /= norm;
 }
 
 bool operator==(Point p1, Point p2)
