@@ -28,6 +28,10 @@ public:
     static int pickIndex( std::vector<float> probabilities );
 
 private:
+    void getVisiblePixels( std::vector<Point>& visiblePixels );
+    Point choosePixel( std::vector<Point>& visiblePixels );
+    bool isInsideFOV( Point p );
+
     bool _isAlive;
     int _stepLength;
     float _pheromoneWeight;

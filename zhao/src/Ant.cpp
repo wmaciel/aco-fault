@@ -77,3 +77,37 @@ void Ant::depositPheromone()
         _environment->addPheromone( _pheromoneConstant, _path[i] );
     }
 }
+
+void Ant::getVisiblePixels( std::vector<Point>& visiblePixels )
+{
+    for (int dx = -_stepLength; dx <= _stepLength; ++dx)
+    {
+        for (int dy = -_stepLength; dy <= _stepLength; ++ dy)
+        {
+            Point delta( dx, dy );
+            Point p = delta + _position;
+            if (isInsideFOV( p ))
+            {
+                visiblePixels.push_back( p );
+            }
+        }
+    }
+}
+
+Point Ant::choosePixel( std::vector<Point>& visiblePixels )
+{
+    return visiblePixels[0];
+}
+
+bool Ant::isInsideFOV( Point p )
+{
+    Point eyeDir;
+    _environment->getDirection( p.x, p.y, eyeDir.x, eyeDir.y );
+
+    p.normalize();
+    eyeDir.normalize();
+
+    float angle = acos( eyeDir.x * p.x + eyeDir.y * p.y );
+
+    return angle <= _fieldOfView;
+}
