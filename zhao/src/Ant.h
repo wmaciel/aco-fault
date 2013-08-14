@@ -32,6 +32,7 @@ private:
     Point choosePixel( std::vector<Point>& visiblePixels );
     void computeProbabilities( std::vector<Point>& pixels, std::vector<float>& probabilities );
     bool isInsideFOV( Point p );
+    void stopCriterion();
 
     bool _isAlive;
     int _stepLength;
@@ -40,6 +41,9 @@ private:
     Point _position;
     float _pheromoneConstant;
     float _fieldOfView;
+    float _coherenceThreshold;
+    int _abnormalSteps;
+    int _maxAbnormalSteps;
     Environment* _environment;
     std::vector<Point> _path;
 };

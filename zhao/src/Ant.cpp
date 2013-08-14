@@ -15,6 +15,9 @@ Ant::Ant( Point point, Environment* environment )
 {
     _pheromoneConstant = 0.5f;
     _fieldOfView = 15.0;
+    _coherenceThreshold = 0.3f;
+    _abnormalSteps = 0;
+    _maxAbnormalSteps = 3;
     _position = point;
     _environment = environment;
 }
@@ -66,7 +69,12 @@ bool Ant::isAlive()
 
 void Ant::move()
 {
-    //TODO
+    std::vector<Point> visiblePixels;
+    getVisiblePixels( visiblePixels );
+    Point chosenPoint = choosePixel( visiblePixels );
+    _position = chosenPoint;
+    _path.push_back( _position );
+    stopCriterion();
 }
 
 void Ant::depositPheromone()
@@ -135,4 +143,18 @@ bool Ant::isInsideFOV( Point p )
     float angle = acos( eyeDir.x * p.x + eyeDir.y * p.y );
 
     return angle <= _fieldOfView;
+}
+
+void Ant::stopCriterion()
+{
+    float directionCoherence = _environment->getDirectionStrength( _position.x, _position.y );
+    if (directionCoherence < _coherenceThreshold)
+    {
+        _abnormalSteps++;
+    }
+
+    if (_abnormalSteps > _maxAbnormalSteps)
+    {
+        _isAlive = false;
+    }
 }
