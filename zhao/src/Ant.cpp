@@ -96,7 +96,32 @@ void Ant::getVisiblePixels( std::vector<Point>& visiblePixels )
 
 Point Ant::choosePixel( std::vector<Point>& visiblePixels )
 {
-    return visiblePixels[0];
+    std::vector<float> probabilities;
+    computeProbabilities( visiblePixels, probabilities );
+    int chosenIndex = pickIndex( probabilities );
+    return visiblePixels[chosenIndex];
+}
+
+void Ant::computeProbabilities( std::vector<Point>& pixels, std::vector<float>& probabilities )
+{
+    // compute normalizing factor
+    float factor = 0;
+    for (unsigned int i = 0; i < pixels.size(); ++i)
+    {
+        float pheromone = _environment->getPheromone( pixels[i] );
+        float visibility = _environment->getVisibility( pixels[i] );
+        factor += pow( pheromone, _pheromoneWeight ) * pow( visibility, _visibilityWeight );
+    }
+    factor = 1.0f/factor;
+
+    //compute the probabilities
+    for (unsigned int i = 0; i < pixels.size(); ++i)
+    {
+        float pheromone = _environment->getPheromone( pixels[i] );
+        float visibility = _environment->getVisibility( pixels[i] );
+
+        probabilities.push_back( factor * pow( pheromone, _pheromoneWeight ) * pow( visibility, _visibilityWeight ) );
+    }
 }
 
 bool Ant::isInsideFOV( Point p )
