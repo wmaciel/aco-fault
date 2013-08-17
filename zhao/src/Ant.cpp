@@ -71,10 +71,17 @@ void Ant::move()
 {
     std::vector<Point> visiblePixels;
     getVisiblePixels( visiblePixels );
-    Point chosenPoint = choosePixel( visiblePixels );
-    _position = chosenPoint;
-    _path.push_back( _position );
-    stopCriterion();
+    if (visiblePixels.size() > 0)
+    {
+        Point chosenPoint = choosePixel( visiblePixels );
+        _position = chosenPoint;
+        _path.push_back( _position );
+        stopCriterion();
+    }
+    else
+    {
+        _isAlive = false;
+    }
 }
 
 void Ant::depositPheromone()
@@ -134,14 +141,20 @@ void Ant::computeProbabilities( std::vector<Point>& pixels, std::vector<float>& 
 
 bool Ant::isInsideFOV( Point p )
 {
-    Point eyeDir;
-    _environment->getDirection( p.x, p.y, eyeDir.x, eyeDir.y );
+    if (p.x < 0 || p.y < 0 || p.x >= _environment->getWidth() || p.y >= _environment->getHeight())
+    {
+        return false;
+    }
 
-    p.normalize();
+    Point eyeDir;
+    _environment->getDirection( _position.x, _position.y, eyeDir.x, eyeDir.y );
+
+    Point pDir( p.x - _position.x, p.y - _position.y );
+    pDir.normalize();
     eyeDir.normalize();
 
-    float angle = acos( eyeDir.x * p.x + eyeDir.y * p.y );
-
+    float angle = acos( eyeDir.x * pDir.x + eyeDir.y * pDir.y );
+    angle = angle * 180.0f / M_PI;
     return angle <= _fieldOfView;
 }
 

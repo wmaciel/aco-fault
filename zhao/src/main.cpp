@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "DirectionalField.h"
 #include "image.h"
+#include "Colony.h"
 
 void basicTest()
 {
@@ -42,7 +43,7 @@ void testImage( char* fileIn, char* fileDir, char* fileCoh )
     float* data = imgGetData( grey );
     int width = imgGetWidth(grey);
     int height = imgGetHeight(grey);
-    DirectionalField* field = new DirectionalField( data, width, height, 8 );
+    DirectionalField* field = new DirectionalField( data, width, height, 2 );
 
     Image* dir = imgCreate( width, height, 3 );
     Image* coh = imgCreate( width, height, 3 );
@@ -64,16 +65,15 @@ void testImage( char* fileIn, char* fileDir, char* fileCoh )
             }
             else
             {
-//                lumX = fabs( dirX );
-//                lumY = fabs( dirY );
-//                imgSetPixel3f( dir, x, y, 0.0f, lumX, lumY );
-                if (dirX < 0)
+                if (dirY < 0)
                 {
                     dirY *= -1;
                     dirX *= -1;
-                    float lumDir = ( dirY + 1.0f ) / 2.0f;
-                    imgSetPixel3f( dir, x, y, lumDir, lumDir, lumDir );
                 }
+
+                lumX = fabs( dirX );
+                lumY = fabs( dirY );
+                imgSetPixel3f( dir, x, y, 0.0f, lumX, lumY );
             }
 
             lumCoh = field->getCoherence( x, y );
@@ -85,9 +85,20 @@ void testImage( char* fileIn, char* fileDir, char* fileCoh )
     imgWriteBMP( fileCoh, coh );
 }
 
+void whoLetTheAntsOut( int argc, char** argv )
+{
+    Image* imgIN = imgReadBMP( "../data/stripes1010.bmp" );
+    Image* imgGray = imgGrey( imgIN );
+    imgDestroy( imgIN );
+    Colony* colony = new Colony( imgGray );
+    colony->run( 2 );
+    imgDestroy( imgGray );
+}
+
 int main( int argc, char** argv )
 {
-    testImage( "print.bmp", "printDIR.bmp", "printCOH.bmp" );
+    //testImage( "../data/stripes1010.bmp", "../data/stripes1010_dir.bmp", "../data/stripes1010_coh.bmp" );
     //basicTest();
+    whoLetTheAntsOut( argc, argv );
     return 0;
 }

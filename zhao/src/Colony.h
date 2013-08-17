@@ -30,6 +30,7 @@ private:
     void moveAnts();
     void updatePheromone();
     bool available( Point point, Ant& ant );
+    void printDebugImage();
 
     Environment* _environment;
     std::vector<Ant*> _ants;

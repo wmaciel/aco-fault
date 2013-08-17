@@ -6,6 +6,7 @@
  */
 
 #include "DirectionalField.h"
+#include "image.h"
 
 #include <math.h>
 #include <stdio.h>
@@ -433,4 +434,42 @@ void DirectionalField::debugPrint()
         }
         printf("\n");
     }
+}
+
+void DirectionalField::debugImage()
+{
+    Image* dbgImg = imgCreate( _width, _height, 3 );
+
+    for (int x = 0; x < _width; ++x)
+    {
+        for (int y = 0; y < _height; ++y)
+        {
+            float dirX = getXDirection( x, y );
+            float dirY = getYDirection( x, y );
+            float lumX;
+            float lumY;
+
+            imgSetPixel3f( dbgImg, x, y, 1,1,1 );
+
+            if (dirX == 0.0f && dirY == 0.0f)
+            {
+                imgSetPixel3f( dbgImg, x, y, 1.0, 1.0, 0.0 );
+            }
+            else
+            {
+                if (dirY < 0)
+                {
+                    dirY *= -1;
+                    dirX *= -1;
+                }
+
+                lumX = fabs( dirX );
+                lumY = fabs( dirY );
+                imgSetPixel3f( dbgImg, x, y, 0.0f, lumX, lumY );
+            }
+        }
+    }
+
+    imgWriteBMP( "directionalFieldDebugImage.bmp", dbgImg );
+    imgDestroy( dbgImg );
 }

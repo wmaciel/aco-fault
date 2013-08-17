@@ -40,10 +40,12 @@ public:
     float getXDirection( int x, int y );
 
     float getYDirection( int x, int y );
-    
+
     float getCoherence( int x, int y );
 
     void debugPrint();
+
+    void debugImage();
 
 private:
     /**
@@ -80,7 +82,7 @@ private:
     void buildDirectionMatrices();
 
     void normalizeDirections();
-    
+
     void normalizeCoherence();
 
     float getHorizontalWindowedDerivative( int px, int py, int windowSize );

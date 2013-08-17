@@ -18,7 +18,8 @@ _evaporationRate(evaporationRate), _initialPheromone(initialPheromone), _minimum
     construct( imgGetHeight( image ), imgGetWidth( image ) );
     computeImageMatrix( image );
     clearFeromone();
-    _directionalField = new DirectionalField( imgGetData( image ), _width, _height, 5 );
+    _directionalField = new DirectionalField( imgGetData( image ), _width, _height, 8 );
+    _directionalField->debugImage();
 }
 
 
@@ -49,15 +50,13 @@ void Environment::construct( int height, int width )
 
 void Environment::computeImageMatrix( Image* image )
 {
-    Image* gray = imgGrey( image );
-
 #pragma omp parallel for
     for (int x=0; x<_width; ++x)
     {
         for (int y=0; y<_height; ++y)
         {
             float luminance;
-            imgGetPixel3f( gray, x, y, &luminance, &luminance, &luminance );
+            imgGetPixel3f( image, x, y, &luminance, &luminance, &luminance );
 
             int i = id( x, y );
             _imageMatrix[i] = luminance;

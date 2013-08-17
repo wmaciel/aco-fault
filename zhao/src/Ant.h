@@ -27,7 +27,7 @@ public:
     void depositPheromone();
     static int pickIndex( std::vector<float> probabilities );
 
-private:
+//private:
     void getVisiblePixels( std::vector<Point>& visiblePixels );
     Point choosePixel( std::vector<Point>& visiblePixels );
     void computeProbabilities( std::vector<Point>& pixels, std::vector<float>& probabilities );

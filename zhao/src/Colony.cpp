@@ -10,6 +10,8 @@
 #include "Environment.h"
 #include "Ant.h"
 
+#include <stdio.h>
+
 #define INITIAL_PHEROMONE_ 0.1f
 #define EVAPORATION_RATE_ 0.05f
 #define MEMORY_ 100
@@ -18,12 +20,11 @@
 #define _PHEROMONE_WEIGHT_ 1.0f
 #define _VISIBILITY_WEIGHT_ 10.0f
 #define BLOCK_SIZE 10
-#define STEP_LENGTH 3
+#define STEP_LENGTH 1
 
 Colony::Colony( Image* image )
 {
     _environment = new Environment( INITIAL_PHEROMONE_, MINIMUM_PHEROMONE_, EVAPORATION_RATE_, image );
-    distributeAnts();
 }
 
 Colony::~Colony()
@@ -40,7 +41,7 @@ void Colony::distributeAnts()
         for (int vb = 0; vb < nVerticalBlocks; ++vb)
         {
             Point pMin( hb * BLOCK_SIZE, vb * BLOCK_SIZE );
-            Point pMax( pMin.x + BLOCK_SIZE, pMin.y + BLOCK_SIZE );
+            Point pMax( pMin.x + BLOCK_SIZE - 1, pMin.y + BLOCK_SIZE - 1 );
             addAntInBlock( pMin, pMax );
         }
     }
@@ -56,7 +57,7 @@ void Colony::addAntInBlock( Point pMin, Point pMax )
     {
         for (int x = pMin.x; x <= pMax.x; ++x)
         {
-            sum += 1.0f - _environment->getVisibility( x, y );
+            sum += _environment->getVisibility( x, y );
         }
     }
 
@@ -70,8 +71,7 @@ void Colony::addAntInBlock( Point pMin, Point pMax )
     }
 
     int pixel = Ant::pickIndex( probabilities );
-    int width = _environment->getWidth();
-    Point chosenPoint( pixel % width, pixel / width );
+    Point chosenPoint( pMin.x + pixel % BLOCK_SIZE, pMin.y + pixel / BLOCK_SIZE );
     Ant* ant = new Ant( chosenPoint, _environment );
     ant->setStepLength( STEP_LENGTH );
     ant->setPheromoneWeight( _PHEROMONE_WEIGHT_ );
@@ -97,6 +97,7 @@ void Colony::moveAnts()
 
     while (!allDead)
     {
+        printDebugImage();
         allDead = true;
         for (int a = 0; a < nAnts; ++a)
         {
@@ -128,4 +129,21 @@ Image* Colony::getPheromoneImage()
 bool Colony::available( Point point, Ant& ant )
 {
     return false;
+}
+
+void Colony::printDebugImage()
+{
+    static int step = 0;
+    Image* img = imgCreate( _environment->getWidth(), _environment->getHeight(), 3 );
+
+    int nAnts = _ants.size();
+    for (int i = 0; i < nAnts; ++i)
+    {
+        Ant* ant = _ants[i];
+        imgSetPixel3f( img, ant->_position.x, ant->_position.y, 1.0f, 0.0f, 0.0f );
+    }
+
+    char filename[100];
+    sprintf( filename, "debugImage%04d.bmp", ++step );
+    imgWriteBMP( filename, img );
 }
