@@ -45,7 +45,7 @@ public:
 
     void debugPrint();
 
-    void debugImage();
+    void debugImages();
 
 private:
     /**

@@ -436,10 +436,10 @@ void DirectionalField::debugPrint()
     }
 }
 
-void DirectionalField::debugImage()
+void DirectionalField::debugImages()
 {
+    //directional field
     Image* dbgImg = imgCreate( _width, _height, 3 );
-
     for (int x = 0; x < _width; ++x)
     {
         for (int y = 0; y < _height; ++y)
@@ -469,7 +469,19 @@ void DirectionalField::debugImage()
             }
         }
     }
-
     imgWriteBMP( "directionalFieldDebugImage.bmp", dbgImg );
     imgDestroy( dbgImg );
+
+    //coherence field
+    Image* cohImg = imgCreate( _width, _height, 3 );
+    for (int x = 0; x < _width; ++x)
+    {
+        for (int y = 0; y < _height; ++y)
+        {
+            float pixCoh = getCoherence( x, y ); //pixel coherence
+            imgSetPixel3f( cohImg, x, y, pixCoh, pixCoh, pixCoh );
+        }
+    }
+    imgWriteBMP( "coherenceFieldDebugImage.bmp", cohImg );
+    imgDestroy( cohImg );
 }
