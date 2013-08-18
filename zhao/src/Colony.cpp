@@ -20,7 +20,7 @@
 #define _PHEROMONE_WEIGHT_ 1.0f
 #define _VISIBILITY_WEIGHT_ 10.0f
 #define BLOCK_SIZE 10
-#define STEP_LENGTH 1
+#define STEP_LENGTH 3
 
 Colony::Colony( Image* image )
 {
@@ -144,6 +144,7 @@ void Colony::printDebugImage()
     }
 
     char filename[100];
-    sprintf( filename, "debugImage%04d.bmp", ++step );
+    sprintf( filename, "debugImages/debugImage%04d.bmp", ++step );
     imgWriteBMP( filename, img );
+    imgDestroy( img );
 }
