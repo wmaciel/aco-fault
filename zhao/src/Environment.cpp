@@ -19,7 +19,7 @@ _evaporationRate(evaporationRate), _initialPheromone(initialPheromone), _minimum
     computeImageMatrix( image );
     clearFeromone();
     _directionalField = new DirectionalField( imgGetData( image ), _width, _height, 8 );
-    _directionalField->debugImage();
+    _directionalField->debugImages();
 }
 
 
