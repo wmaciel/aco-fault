@@ -17,9 +17,9 @@
 #define MEMORY_ 100
 #define VISIBILITY_THRESHOLD_ 0.08f
 #define MINIMUM_PHEROMONE_ 0.01f
-#define _PHEROMONE_WEIGHT_ 1.0f
-#define _VISIBILITY_WEIGHT_ 10.0f
-#define BLOCK_SIZE 100
+#define PHEROMONE_WEIGHT_ 1.0f
+#define VISIBILITY_WEIGHT_ 10.0f
+#define BLOCK_SIZE 30
 #define STEP_LENGTH 3
 
 Colony::Colony( Image* image )
@@ -74,8 +74,8 @@ void Colony::addAntInBlock( Point pMin, Point pMax )
     Point chosenPoint( pMin.x + pixel % BLOCK_SIZE, pMin.y + pixel / BLOCK_SIZE );
     Ant* ant = new Ant( chosenPoint, _environment );
     ant->setStepLength( STEP_LENGTH );
-    ant->setPheromoneWeight( _PHEROMONE_WEIGHT_ );
-    ant->setVisibilityWeight( _VISIBILITY_WEIGHT_ );
+    ant->setPheromoneWeight( PHEROMONE_WEIGHT_ );
+    ant->setVisibilityWeight( VISIBILITY_WEIGHT_ );
     _ants.push_back( ant );
 }
 
