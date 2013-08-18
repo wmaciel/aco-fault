@@ -87,7 +87,7 @@ void testImage( char* fileIn, char* fileDir, char* fileCoh )
 
 void whoLetTheAntsOut( int argc, char** argv )
 {
-    Image* imgIN = imgReadBMP( "../data/sintetico_in.bmp" );
+    Image* imgIN = imgReadBMP( "../data/sinteticoPiece.bmp" );
     Image* imgGray = imgGrey( imgIN );
     imgDestroy( imgIN );
     Colony* colony = new Colony( imgGray );

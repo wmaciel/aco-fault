@@ -19,7 +19,7 @@
 #define MINIMUM_PHEROMONE_ 0.01f
 #define _PHEROMONE_WEIGHT_ 1.0f
 #define _VISIBILITY_WEIGHT_ 10.0f
-#define BLOCK_SIZE 10
+#define BLOCK_SIZE 100
 #define STEP_LENGTH 3
 
 Colony::Colony( Image* image )
