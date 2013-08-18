@@ -103,7 +103,7 @@ private:
      * Divides every element of the matrix by the greatest value in the matrix
      * @param matrix
      */
-    void normalizePheromone();
+    float* normalizePheromone();
 
     /** Height of the image */
     int _height;
@@ -128,6 +128,9 @@ private:
 
     /** Minimum value of the pheromone level, to avoid shutdown of search paths */
     const float _minimumPheromone;
+
+    /** Maximum value of the pheromone level */
+    float _maximumPheromone;
 };
 
 #endif	/* ENVIRONMENT_H */

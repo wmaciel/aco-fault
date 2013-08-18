@@ -134,7 +134,7 @@ bool Colony::available( Point point, Ant& ant )
 void Colony::printDebugImage()
 {
     static int step = 0;
-    Image* img = imgCreate( _environment->getWidth(), _environment->getHeight(), 3 );
+    Image* img = _environment->getPheromoneImage();//imgCreate( _environment->getWidth(), _environment->getHeight(), 3 );
 
     int nAnts = _ants.size();
     for (int i = 0; i < nAnts; ++i)

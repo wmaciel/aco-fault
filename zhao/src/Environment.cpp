@@ -15,6 +15,7 @@
 Environment::Environment( float initialPheromone, float minimumPheromone, float evaporationRate, Image* image ):
 _evaporationRate(evaporationRate), _initialPheromone(initialPheromone), _minimumPheromone(minimumPheromone)
 {
+    _maximumPheromone = 10.0f;
     construct( imgGetHeight( image ), imgGetWidth( image ) );
     computeImageMatrix( image );
     clearFeromone();
@@ -106,7 +107,13 @@ float Environment::getPheromone( Point point )
 
 void Environment::addPheromone( float amount, int x, int y )
 {
-    _pheromoneMatrix[id(x,y)] += amount;
+    int point = id(x,y);
+    _pheromoneMatrix[point] += amount;
+
+    if (_pheromoneMatrix[point] > _maximumPheromone)
+    {
+        _pheromoneMatrix[point] = _maximumPheromone;
+    }
 }
 
 
@@ -219,7 +226,7 @@ int Environment::getHeight()
 
 Image* Environment::getPheromoneImage()
 {
-    //normalizePheromone();
+    float* normalizedPheromone = normalizePheromone();
 
     Image* output = imgCreate( _width, _height, 3 );
 
@@ -228,7 +235,7 @@ Image* Environment::getPheromoneImage()
     {
         for (int y = 0; y < _height; ++y)
         {
-            float luminance = _pheromoneMatrix[id(x,y)];
+            float luminance = normalizedPheromone[id(x,y)];
             imgSetPixel3f( output, x, y, luminance, luminance, luminance );
 //            if (luminance >= 0.1)
 //            {
@@ -237,16 +244,19 @@ Image* Environment::getPheromoneImage()
         }
     }
 
+    delete[] normalizedPheromone;
+
     return output;
 }
 
 
 
-void Environment::normalizePheromone()
+float* Environment::normalizePheromone()
 {
     float max = 0;
 
     int nElements = _height * _width;
+    float* normalized = new float[nElements];
 
     for ( int i = 0; i < nElements; ++i )
     {
@@ -257,10 +267,14 @@ void Environment::normalizePheromone()
         }
     }
 
-#pragma omp parallel for
+    float factor = 1.0f / max;
+
+    #pragma omp parallel for
     for ( int i = 0; i < nElements; ++i )
     {
-       _pheromoneMatrix[i] /= max;
+       normalized[i] = _pheromoneMatrix[i] * factor;
     }
+
+    return normalized;
 }
 
