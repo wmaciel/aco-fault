@@ -44,6 +44,7 @@ public:
     float _coherenceThreshold;
     int _abnormalSteps;
     int _maxAbnormalSteps;
+    int _maxSteps;
     Environment* _environment;
     std::vector<Point> _path;
 };

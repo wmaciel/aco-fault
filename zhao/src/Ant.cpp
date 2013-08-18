@@ -18,8 +18,10 @@ Ant::Ant( Point point, Environment* environment )
     _coherenceThreshold = 0.3f;
     _abnormalSteps = 0;
     _maxAbnormalSteps = 3;
+    _maxSteps = 10;
     _position = point;
     _environment = environment;
+    _path.push_back( point );
 }
 
 Ant::~Ant()
@@ -167,6 +169,11 @@ void Ant::stopCriterion()
     }
 
     if (_abnormalSteps > _maxAbnormalSteps)
+    {
+        _isAlive = false;
+    }
+
+    if (_maxSteps <= (int)_path.size())
     {
         _isAlive = false;
     }
