@@ -19,7 +19,7 @@
 #define MINIMUM_PHEROMONE_ 0.01f
 #define PHEROMONE_WEIGHT_ 1.0f
 #define VISIBILITY_WEIGHT_ 2.0f
-#define BLOCK_SIZE 60
+#define BLOCK_SIZE 30
 #define STEP_LENGTH 3
 
 Colony::Colony( Image* image )
@@ -33,6 +33,9 @@ Colony::~Colony()
 
 void Colony::distributeAnts()
 {
+//    Point pm( 88, 0 );
+//    Point pM( 88, 0 );
+//    addAntInBlock( pm, pM );
     int nHorizontalBlocks = _environment->getWidth() / BLOCK_SIZE;
     int nVerticalBlocks   = _environment->getHeight() / BLOCK_SIZE;
 
@@ -143,7 +146,7 @@ void Colony::printDebugImage()
         Ant* ant = _ants[i];
         if (_ants[i]->isAlive())
         {
-            imgSetPixel3f( img, ant->_position.x, ant->_position.y, 1.0f, 0.0f, 0.0f );
+            imgSetPixel3f( img, ant->_position.x, ant->_position.y, 1.0f - i/(float)nAnts, (0.0f + i) / nAnts, 0.0f );
         }
         else
         {

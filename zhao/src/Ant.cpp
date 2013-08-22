@@ -102,12 +102,16 @@ void Ant::getVisiblePixels( std::vector<Point>& visiblePixels )
         for (int dy = -_stepLength; dy <= _stepLength; ++ dy)
         {
             if (dx == 0 && dy == 0) continue;
-            
+
             Point delta( dx, dy );
             Point p = delta + _position;
-            if (!visited( p ) && isInsideFOV( p ))
+            if (p.x >= 0 && p.y >= 0)
             {
-                visiblePixels.push_back( p );
+                float visibility = _environment->getVisibility( p );
+                if (!visited( p ) && isInsideFOV( p ) && visibility > 0)
+                {
+                    visiblePixels.push_back( p );
+                }
             }
         }
     }

@@ -52,7 +52,7 @@ void Environment::construct( int height, int width )
 
 void Environment::computeImageMatrix( Image* image )
 {
-#pragma omp parallel for
+//#pragma omp parallel for
     for (int x=0; x<_width; ++x)
     {
         for (int y=0; y<_height; ++y)
