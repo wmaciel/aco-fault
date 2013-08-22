@@ -18,8 +18,8 @@
 #define VISIBILITY_THRESHOLD_ 0.08f
 #define MINIMUM_PHEROMONE_ 0.01f
 #define PHEROMONE_WEIGHT_ 1.0f
-#define VISIBILITY_WEIGHT_ 10.0f
-#define BLOCK_SIZE 30
+#define VISIBILITY_WEIGHT_ 2.0f
+#define BLOCK_SIZE 60
 #define STEP_LENGTH 3
 
 Colony::Colony( Image* image )
@@ -104,6 +104,7 @@ void Colony::moveAnts()
             Ant* ant = _ants[a];
             if (ant->isAlive())
             {
+                //printf("Ant %d: (%d, %d)\n", a, ant->_position.x, ant->_position.y);
                 allDead = false;
                 ant->move();
             }
@@ -140,7 +141,14 @@ void Colony::printDebugImage()
     for (int i = 0; i < nAnts; ++i)
     {
         Ant* ant = _ants[i];
-        imgSetPixel3f( img, ant->_position.x, ant->_position.y, 1.0f, 0.0f, 0.0f );
+        if (_ants[i]->isAlive())
+        {
+            imgSetPixel3f( img, ant->_position.x, ant->_position.y, 1.0f, 0.0f, 0.0f );
+        }
+        else
+        {
+            imgSetPixel3f( img, ant->_position.x, ant->_position.y, 0.0f, 0.0f, 1.0f );
+        }
     }
 
     char filename[100];

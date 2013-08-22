@@ -33,6 +33,7 @@ public:
     void computeProbabilities( std::vector<Point>& pixels, std::vector<float>& probabilities );
     bool isInsideFOV( Point p );
     void stopCriterion();
+    bool visited( Point p );
 
     bool _isAlive;
     int _stepLength;

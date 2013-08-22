@@ -13,15 +13,15 @@
 
 Ant::Ant( Point point, Environment* environment )
 {
-    _pheromoneConstant = 0.5f;
+    _pheromoneConstant = 0.02f;
     _fieldOfView = 15.0;
     _coherenceThreshold = 0.3f;
     _abnormalSteps = 0;
     _maxAbnormalSteps = 3;
-    _maxSteps = 10;
+    _maxSteps = 20;
     _position = point;
     _environment = environment;
-    _path.push_back( point );
+    //_path.push_back( point );
 }
 
 Ant::~Ant()
@@ -101,9 +101,11 @@ void Ant::getVisiblePixels( std::vector<Point>& visiblePixels )
     {
         for (int dy = -_stepLength; dy <= _stepLength; ++ dy)
         {
+            if (dx == 0 && dy == 0) continue;
+            
             Point delta( dx, dy );
             Point p = delta + _position;
-            if (isInsideFOV( p ))
+            if (!visited( p ) && isInsideFOV( p ))
             {
                 visiblePixels.push_back( p );
             }
@@ -148,16 +150,34 @@ bool Ant::isInsideFOV( Point p )
         return false;
     }
 
-    Point eyeDir;
-    _environment->getDirection( _position.x, _position.y, eyeDir.x, eyeDir.y );
+    float eyeDirX, eyeDirY;
+    _environment->getDirection( _position.x, _position.y, eyeDirX, eyeDirY );
 
-    Point pDir( p.x - _position.x, p.y - _position.y );
-    pDir.normalize();
-    eyeDir.normalize();
+    float pDirX = p.x - _position.x;
+    float pDirY = p.y - _position.y;
 
-    float angle = acos( eyeDir.x * pDir.x + eyeDir.y * pDir.y );
+    float norm = sqrt( pDirX*pDirX + pDirY*pDirY );
+    pDirX /= norm;
+    pDirY /= norm;
+
+    norm = sqrt( eyeDirX*eyeDirX + eyeDirY*eyeDirY );
+    eyeDirX /= norm;
+    eyeDirY /= norm;
+
+    float angle = acos( eyeDirX * pDirX + eyeDirY *pDirY );
     angle = angle * 180.0f / M_PI;
-    return angle <= _fieldOfView;
+    if (angle <= _fieldOfView)
+    {
+        return true;
+    }
+    else // testa no outro sentido
+    {
+        eyeDirX = -eyeDirX;
+        eyeDirY = -eyeDirY;
+        angle = acos( eyeDirX * pDirX + eyeDirY * pDirY );
+        angle = angle * 180.0f / M_PI;
+        return angle <= _fieldOfView;
+    }
 }
 
 void Ant::stopCriterion()
@@ -177,4 +197,17 @@ void Ant::stopCriterion()
     {
         _isAlive = false;
     }
+}
+
+bool Ant::visited( Point p )
+{
+    for (int i = 0; i < _path.size(); ++i)
+    {
+        if (p == _path[i])
+        {
+            return true;
+        }
+    }
+
+    return false;
 }

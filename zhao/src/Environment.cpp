@@ -7,6 +7,7 @@
 #include <string.h>
 #include <float.h>
 #include <iostream>
+#include <stdlib.h>
 
 #include "Environment.h"
 
@@ -15,7 +16,7 @@
 Environment::Environment( float initialPheromone, float minimumPheromone, float evaporationRate, Image* image ):
 _evaporationRate(evaporationRate), _initialPheromone(initialPheromone), _minimumPheromone(minimumPheromone)
 {
-    _maximumPheromone = 10.0f;
+    _maximumPheromone = 1000.0f;
     construct( imgGetHeight( image ), imgGetWidth( image ) );
     computeImageMatrix( image );
     clearFeromone();
@@ -84,7 +85,11 @@ void Environment::clearFeromone()
 
 int Environment::id( int x, int y )
 {
-    if (x < 0 || y < 0) return 0;
+    if (x < 0 || y < 0)
+    {
+        std::cerr<<"ERROR!: Acessou fora da imagem!\n";
+        exit(1);
+    }
 
     return x + _width * y;
 }
@@ -263,7 +268,7 @@ float* Environment::normalizePheromone()
         if (max < _pheromoneMatrix[i])
         {
             max = _pheromoneMatrix[i];
-            std::cerr << "max: "<<max<<"\n";
+            //std::cerr << "max: "<<max<<"\n";
         }
     }
 

@@ -20,7 +20,7 @@ public:
     /**
      * Constructor
      */
-    Point( float x, float y );
+    Point( int x, int y );
 
     /**
      * Copy Constructor
@@ -38,10 +38,10 @@ public:
     void normalize();
 
     /** X coordinate */
-    float x;
+    int x;
 
     /** Y coordinate */
-    float y;
+    int y;
 };
 
 bool operator== (Point p1, Point p2);
