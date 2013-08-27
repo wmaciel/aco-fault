@@ -32,11 +32,6 @@ public:
      */
     virtual ~Point();
 
-    /**
-     * Normalizes the point as if it was a vector
-     */
-    void normalize();
-
     /** X coordinate */
     int x;
 

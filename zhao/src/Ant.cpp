@@ -205,7 +205,7 @@ void Ant::stopCriterion()
 
 bool Ant::visited( Point p )
 {
-    for (int i = 0; i < _path.size(); ++i)
+    for (unsigned int i = 0; i < _path.size(); ++i)
     {
         if (p == _path[i])
         {

@@ -31,14 +31,6 @@ Point::~Point()
     // do nothing
 }
 
-void Point::normalize()
-{
-    float norm = sqrt( x*x + y*y );
-    if (norm == 0.0f) return;
-    x /= norm;
-    y /= norm;
-}
-
 bool operator==(Point p1, Point p2)
 {
     return (p1.x == p2.x) && (p1.y == p2.y);
