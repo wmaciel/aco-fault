@@ -1893,6 +1893,8 @@ void imgNormalize( Image* img )
     }
 }
 
+
+
 void invertFourierMatrix( std::complex<float>* mtx, int w, int h )
 {
     int fullDim = w * h;
@@ -1901,6 +1903,8 @@ void invertFourierMatrix( std::complex<float>* mtx, int w, int h )
         mtx[i] = std::conj<float>( mtx[i] );
     }
 }
+
+
 
 Image* imgInverseFourier( std::complex<float>* buf_complex, int w, int h )
 {
@@ -1926,4 +1930,132 @@ Image* imgInverseFourier( std::complex<float>* buf_complex, int w, int h )
     }
 
     return img_out;
+}
+
+
+
+float applyErosionKernel( int px, int py, Image* image_in, Image* kernel )
+{
+    int kernelWidth  = imgGetWidth ( kernel );
+    int kernelHeight = imgGetHeight( kernel );
+
+    int imageWidth = imgGetWidth( image_in );
+    int imageHeight = imgGetHeight( image_in );
+
+    int kernelOffsetX = px - ( kernelWidth / 2 );
+    int kernelOffsetY = py - ( kernelHeight / 2 );
+
+    float minimum = 1.0f;
+
+    for (int kx = 0; kx < kernelWidth; ++kx)
+    {
+        for (int ky = 0; ky < kernelHeight; ++ky)
+        {
+            float kLum;
+            imgGetPixel3f( kernel, kx, ky, &kLum, &kLum, &kLum );
+
+            if (kLum < 0.5f) continue;
+
+            int imgX = kx + kernelOffsetX;
+            int imgY = ky + kernelOffsetY;
+
+            if (imgX < 0 || imgX >= imageWidth || imgY < 0 || imgY >= imageHeight) continue;
+
+            float imgLum;
+            imgGetPixel3f( image_in, imgX, imgY, &imgLum, &imgLum, &imgLum );
+
+            if (imgLum < minimum)
+            {
+                minimum = imgLum;
+            }
+        }
+    }
+
+    return minimum;
+}
+
+
+
+float applyDilationKernel( int px, int py, Image* image_in, Image* kernel )
+{
+    int kernelWidth  = imgGetWidth ( kernel );
+    int kernelHeight = imgGetHeight( kernel );
+
+    int imageWidth = imgGetWidth( image_in );
+    int imageHeight = imgGetHeight( image_in );
+
+    int kernelOffsetX = px - ( kernelWidth / 2 );
+    int kernelOffsetY = py - ( kernelHeight / 2 );
+
+    float maximum = 0.0f;
+
+    for (int kx = 0; kx < kernelWidth; ++kx)
+    {
+        for (int ky = 0; ky < kernelHeight; ++ky)
+        {
+            float kLum;
+            imgGetPixel3f( kernel, kx, ky, &kLum, &kLum, &kLum );
+
+            if (kLum < 0.5f) continue;
+
+            int imgX = kx + kernelOffsetX;
+            int imgY = ky + kernelOffsetY;
+
+            if (imgX < 0 || imgX >= imageWidth || imgY < 0 || imgY >= imageHeight) continue;
+
+            float imgLum;
+            imgGetPixel3f( image_in, imgX, imgY, &imgLum, &imgLum, &imgLum );
+
+            if (imgLum > maximum)
+            {
+                maximum = imgLum;
+            }
+        }
+    }
+
+    return maximum;
+}
+
+
+
+Image* imgDilate( Image* image_in, Image* kernel )
+{
+    Image* image_out = imgCopy( image_in );
+
+    int imgWidth     = imgGetWidth ( image_out );
+    int imgHeight    = imgGetHeight( image_out );
+
+    // para cada pixel da imagem
+    for (int x = 0; x < imgWidth; ++x)
+    {
+        for (int y = 0; y < imgHeight; ++y)
+        {
+            float lum = applyDilationKernel( x, y, image_in, kernel );
+            imgSetPixel3f( image_out, x, y, lum, lum, lum );
+        }
+    }
+
+    return image_out;
+}
+
+
+
+Image* imgErode( Image* image_in, Image* kernel )
+{
+    Image* image_out = imgCopy( image_in );
+
+    int imgWidth     = imgGetWidth ( image_out );
+    int imgHeight    = imgGetHeight( image_out );
+
+    // para cada pixel da imagem
+    for (int x = 0; x < imgWidth; ++x)
+    {
+        for (int y = 0; y < imgHeight; ++y)
+        {
+            float lum = applyErosionKernel( x, y, image_in, kernel );
+            imgSetPixel3f( image_out, x, y, lum, lum, lum );
+        }
+    }
+
+    return image_out;
 }

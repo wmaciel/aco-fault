@@ -364,4 +364,8 @@ void imgNormalize( Image* img );
  */
 Image* imgInverseFourier( std::complex<float>* buf_complex, int w, int h );
 
+Image* imgDilate( Image* image_in, Image* kernel );
+
+Image* imgErode( Image* image_in, Image* kernel );
+
 #endif
