@@ -57,8 +57,8 @@ void testImage( char* fileIn, char* fileDir, char* fileCoh, char* fileMask )
             float dirX = field->getXDirection( x, y );
             float dirY = field->getYDirection( x, y );
             float lumCoh;
-            float lumX;
-            float lumY;
+//            float lumX;
+//            float lumY;
 
             imgSetPixel3f( dir, x, y, 1,1,1 );
 
@@ -93,45 +93,48 @@ void testImage( char* fileIn, char* fileDir, char* fileCoh, char* fileMask )
         }
     }
 
-    imgWriteBMP( "gaussiana.bmp", greyGauss );
+    imgWriteBMP( (char*)"gaussiana.bmp", greyGauss );
     imgWriteBMP( fileDir, dir );
     imgWriteBMP( fileCoh, coh );
     imgWriteBMP( fileMask, mask );
 }
 
-//void whoLetTheAntsOut( int argc, char** argv )
-//{
-//    //srand( time(NULL) );
-//    Image* imgIN = imgReadBMP( "../data/volumePiece.bmp" );
-//    Image* imgGray = imgGrey( imgIN );
-//    imgDestroy( imgIN );
-//    Colony* colony = new Colony( imgGray );
-//    colony->run( 100 );
-//    imgDestroy( imgGray );
-//}
+void whoLetTheAntsOut( int argc, char** argv )
+{
+    //srand( time(NULL) );
+    Image* imgIN = imgReadBMP( (char*)"../data/volumePiece.bmp" );
+    Image* imgGray = imgGrey( imgIN );
+    imgDestroy( imgIN );
+    Image* imgGrayGauss = imgCopy( imgGray );
+    imgGauss( imgGrayGauss, imgGray );
+    imgDestroy( imgGray );
+    Colony* colony = new Colony( imgGrayGauss );
+    colony->run( 100 );
+    imgDestroy( imgGrayGauss );
+}
 
 void testImageMorphology()
 {
-    Image* aux = imgReadBMP( "morphology/print_mask.bmp" );
+    Image* aux = imgReadBMP( (char*)"morphology/print_mask.bmp" );
     Image* in = imgGrey( aux );
-    Image* kernel = imgReadBMP( "morphology/kernelBig.bmp" );
+    Image* kernel = imgReadBMP( (char*)"morphology/kernelBig.bmp" );
 
     Image* eroded = imgErode( in, kernel );
     Image* opened = imgDilate( eroded, kernel );
     Image* openedDilated = imgDilate( opened, kernel );
     Image* closed = imgErode( openedDilated, kernel );
 
-    imgWriteBMP( "morphology/eroded.bmp", eroded );
-    imgWriteBMP( "morphology/opened.bmp", opened );
-    imgWriteBMP( "morphology/openedDilated.bmp", openedDilated );
-    imgWriteBMP( "morphology/closed.bmp", closed );
+    imgWriteBMP( (char*)"morphology/eroded.bmp", eroded );
+    imgWriteBMP( (char*)"morphology/opened.bmp", opened );
+    imgWriteBMP( (char*)"morphology/openedDilated.bmp", openedDilated );
+    imgWriteBMP( (char*)"morphology/closed.bmp", closed );
 }
 
 int main( int argc, char** argv )
 {
     //testImage( "print.bmp", "print_dir.bmp", "print_coh.bmp", "print_mask.bmp" );
     //basicTest();
-    //whoLetTheAntsOut( argc, argv );
-    testImageMorphology();
+    whoLetTheAntsOut( argc, argv );
+    //testImageMorphology();
     return 0;
 }

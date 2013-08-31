@@ -469,7 +469,7 @@ void DirectionalField::debugImages()
             }
         }
     }
-    imgWriteBMP( "directionalFieldDebugImage.bmp", dbgImg );
+    imgWriteBMP( (char*)"directionalFieldDebugImage.bmp", dbgImg );
     imgDestroy( dbgImg );
 
     //coherence field
@@ -482,6 +482,6 @@ void DirectionalField::debugImages()
             imgSetPixel3f( cohImg, x, y, pixCoh, pixCoh, pixCoh );
         }
     }
-    imgWriteBMP( "coherenceFieldDebugImage.bmp", cohImg );
+    imgWriteBMP( (char*)"coherenceFieldDebugImage.bmp", cohImg );
     imgDestroy( cohImg );
 }
