@@ -102,7 +102,7 @@ void testImage( char* fileIn, char* fileDir, char* fileCoh, char* fileMask )
 void whoLetTheAntsOut( int argc, char** argv )
 {
     //srand( time(NULL) );
-    Image* imgIN = imgReadBMP( (char*)"../data/volumePiece.bmp" );
+    Image* imgIN = imgReadBMP( (char*)"../data/sinteticoPiece.bmp" );
     Image* imgGray = imgGrey( imgIN );
     imgDestroy( imgIN );
     Image* imgGrayGauss = imgCopy( imgGray );
