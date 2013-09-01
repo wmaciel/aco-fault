@@ -102,7 +102,7 @@ void testImage( char* fileIn, char* fileDir, char* fileCoh, char* fileMask )
 void whoLetTheAntsOut( int argc, char** argv )
 {
     //srand( time(NULL) );
-    Image* imgIN = imgReadBMP( (char*)"../data/sinteticoPiece.bmp" );
+    Image* imgIN = imgReadBMP( (char*)"../data/sintetico/sinteticoPiece.bmp" );
     Image* imgGray = imgGrey( imgIN );
     imgDestroy( imgIN );
     Image* imgGrayGauss = imgCopy( imgGray );
@@ -115,19 +115,19 @@ void whoLetTheAntsOut( int argc, char** argv )
 
 void testImageMorphology()
 {
-    Image* aux = imgReadBMP( (char*)"morphology/print_mask.bmp" );
+    Image* aux = imgReadBMP( (char*)"..data/morphology/print_mask.bmp" );
     Image* in = imgGrey( aux );
-    Image* kernel = imgReadBMP( (char*)"morphology/kernelBig.bmp" );
+    Image* kernel = imgReadBMP( (char*)"..data/morphology/kernelBig.bmp" );
 
     Image* eroded = imgErode( in, kernel );
     Image* opened = imgDilate( eroded, kernel );
     Image* openedDilated = imgDilate( opened, kernel );
     Image* closed = imgErode( openedDilated, kernel );
 
-    imgWriteBMP( (char*)"morphology/eroded.bmp", eroded );
-    imgWriteBMP( (char*)"morphology/opened.bmp", opened );
-    imgWriteBMP( (char*)"morphology/openedDilated.bmp", openedDilated );
-    imgWriteBMP( (char*)"morphology/closed.bmp", closed );
+    imgWriteBMP( (char*)"..data/morphology/eroded.bmp", eroded );
+    imgWriteBMP( (char*)"..data/morphology/opened.bmp", opened );
+    imgWriteBMP( (char*)"..data/morphology/openedDilated.bmp", openedDilated );
+    imgWriteBMP( (char*)"..data/morphology/closed.bmp", closed );
 }
 
 int main( int argc, char** argv )

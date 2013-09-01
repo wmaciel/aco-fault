@@ -34,6 +34,11 @@ DirectionalField::DirectionalField( float* data, int width, int height, int wind
     buildDirectionMatrices();
     normalizeDirections();
     normalizeCoherence();
+    delete[] _gxMatrix;
+    delete[] _gyMatrix;
+    delete[] _gxxMatrix;
+    delete[] _gyyMatrix;
+    delete[] _gxyMatrix;
 }
 
 
