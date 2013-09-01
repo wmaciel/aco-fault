@@ -10,6 +10,7 @@
 #include <stdlib.h>
 
 #include "Environment.h"
+#include "Parameters.h"
 
 #define MAX(a, b)  (((a) > (b)) ? (a) : (b))
 
@@ -20,7 +21,7 @@ _evaporationRate(evaporationRate), _initialPheromone(initialPheromone), _minimum
     construct( imgGetHeight( image ), imgGetWidth( image ) );
     computeImageMatrix( image );
     clearFeromone();
-    _directionalField = new DirectionalField( imgGetData( image ), _width, _height, 8 );
+    _directionalField = new DirectionalField( imgGetData( image ), _width, _height, DIR_FIELD_HALF_WINDOW );
     _directionalField->debugImages();
 }
 

@@ -11,20 +11,11 @@
 #include "Ant.h"
 
 #include <stdio.h>
-
-#define INITIAL_PHEROMONE_ 0.1f
-#define EVAPORATION_RATE_ 0.05f
-#define MEMORY_ 100
-#define VISIBILITY_THRESHOLD_ 0.08f
-#define MINIMUM_PHEROMONE_ 0.01f
-#define PHEROMONE_WEIGHT_ 1.0f
-#define VISIBILITY_WEIGHT_ 2.0f
-#define BLOCK_SIZE 30
-#define STEP_LENGTH 3
+#include "Parameters.h"
 
 Colony::Colony( Image* image )
 {
-    _environment = new Environment( INITIAL_PHEROMONE_, MINIMUM_PHEROMONE_, EVAPORATION_RATE_, image );
+    _environment = new Environment( INITIAL_PHEROMONE, MIN_PHEROMONE, EVAPORATION_RATE, image );
 }
 
 Colony::~Colony()
@@ -77,8 +68,8 @@ void Colony::addAntInBlock( Point pMin, Point pMax )
     Point chosenPoint( pMin.x + pixel % BLOCK_SIZE, pMin.y + pixel / BLOCK_SIZE );
     Ant* ant = new Ant( chosenPoint, _environment );
     ant->setStepLength( STEP_LENGTH );
-    ant->setPheromoneWeight( PHEROMONE_WEIGHT_ );
-    ant->setVisibilityWeight( VISIBILITY_WEIGHT_ );
+    ant->setPheromoneWeight( PHEROMONE_WEIGHT );
+    ant->setVisibilityWeight( VISIBILITY_WEIGHT );
     _ants.push_back( ant );
 }
 

@@ -10,15 +10,16 @@
 
 #include "Ant.h"
 #include "Environment.h"
+#include "Parameters.h"
 
 Ant::Ant( Point point, Environment* environment )
 {
-    _pheromoneConstant = 0.02f;
-    _fieldOfView = 15.0;
-    _coherenceThreshold = 0.3f;
+    _pheromoneConstant = PHEROMONE_CONSTANT;
+    _fieldOfView = FOV_ANGLE;
+    _coherenceThreshold = COHERENCE_TRESHOLD;
+    _maxAbnormalSteps = MAX_ABNORMAL_STEPS;
+    _maxSteps = MAX_STEPS;
     _abnormalSteps = 0;
-    _maxAbnormalSteps = 3;
-    _maxSteps = 20;
     _position = point;
     _environment = environment;
     //_path.push_back( point );
