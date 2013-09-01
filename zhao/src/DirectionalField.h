@@ -63,9 +63,9 @@ private:
      */
     float dy( int x, int y, float* data );
 
-    void direction( int pixel, float& dirX, float& dirY );
+    void computeDirection( int pixel, float& dirX, float& dirY );
 
-    float coherence( int pixel );
+    float computeCoherence( int pixel );
 
     void buildHorizontalDerivativeMatrix( float* data );
 
@@ -93,6 +93,9 @@ private:
 
     /** Coerência da direção de cada pixel */
     float* _coherence;
+
+    /** Imagem binária de coerência */
+    float* _coherenceMask;
 
     /** Componete horizontal de cada pixel */
     float* _directionX;

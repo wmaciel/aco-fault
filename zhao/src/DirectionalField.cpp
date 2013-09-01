@@ -102,7 +102,7 @@ float DirectionalField::dy( int x, int y, float* data )
     }
 }
 
-float DirectionalField::coherence( int pixel )
+float DirectionalField::computeCoherence( int pixel )
 {
     float gxxMinusGyy = _gxxMatrix[pixel] - _gyyMatrix[pixel];
     float hxy = gxxMinusGyy * gxxMinusGyy + 4 * _gxyMatrix[pixel] * _gxyMatrix[pixel];
@@ -116,7 +116,7 @@ float DirectionalField::coherence( int pixel )
     return sqrt( hxy ) / divisor;
 }
 
-void DirectionalField::direction( int pixel, float& dirX, float& dirY )
+void DirectionalField::computeDirection( int pixel, float& dirX, float& dirY )
 {
     float gxxMinusGyy = _gxxMatrix[pixel] - _gyyMatrix[pixel];
     float hxy = gxxMinusGyy * gxxMinusGyy + 4 * _gxyMatrix[pixel] * _gxyMatrix[pixel];
@@ -199,7 +199,7 @@ void DirectionalField::buildCoherenceMatrix()
         for (int y = 0; y < _height; ++y)
         {
             int i = pixel( x, y );
-            _coherence[i] = coherence( i );
+            _coherence[i] = computeCoherence( i );
         }
     }
 }
@@ -213,7 +213,7 @@ void DirectionalField::buildDirectionMatrices()
         for (int y = 0; y < _height; ++y)
         {
             int i = pixel( x, y );
-            direction( i, _directionX[i], _directionY[i] );
+            computeDirection( i, _directionX[i], _directionY[i] );
         }
     }
 }
@@ -489,4 +489,6 @@ void DirectionalField::debugImages()
     }
     imgWriteBMP( (char*)"coherenceFieldDebugImage.bmp", cohImg );
     imgDestroy( cohImg );
+
+    
 }
