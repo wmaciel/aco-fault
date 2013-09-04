@@ -7,17 +7,22 @@
 
 #include "DirectionalField.h"
 #include "image.h"
+#include "Parameters.h"
 
 #include <math.h>
 #include <stdio.h>
 
-DirectionalField::DirectionalField( Image* img, Image* kernel, int window )
+DirectionalField::DirectionalField( Image* img, Image* kernel )
 {
     _width = imgGetWidth( img );
     _height = imgGetHeight( img );
     _coherence = imgCreate( _width, _height, 1 );
     _coherenceMask = imgCreate( _width, _height, 1 );
     _direction = imgCreate( _width, _height, 3 );
+    _kernel = kernel;
+    _coherenceThreshold = COHERENCE_TRESHOLD;
+    
+    int window = DIR_FIELD_HALF_WINDOW;
 
     int size = _width * _height;
     _gxMatrix = new float[size];
@@ -34,6 +39,7 @@ DirectionalField::DirectionalField( Image* img, Image* kernel, int window )
     buildVerticalWindowedDerivativeMatrix( window );
     buildCrossedWindowedDerivativeMatrix( window );
     buildCoherenceImage();
+    buildCoherenceMask();
     buildDirectionImage();
     
     delete[] _gxMatrix;
@@ -41,12 +47,6 @@ DirectionalField::DirectionalField( Image* img, Image* kernel, int window )
     delete[] _gxxMatrix;
     delete[] _gyyMatrix;
     delete[] _gxyMatrix;
-}
-
-
-
-DirectionalField::DirectionalField( const DirectionalField& orig )
-{
 }
 
 
@@ -78,7 +78,7 @@ float DirectionalField::dx( int x, int y, float* data )
     {
         return data[front] - data[center];
     }
-    else                  // central difference
+    else                 // central difference
     {
         return ( data[front] - data[back] ) / 2.0f;
     }
@@ -94,7 +94,7 @@ float DirectionalField::dy( int x, int y, float* data )
     {
         return data[center] - data[bottom];
     }
-    else if ( y == 0 )// forward difference
+    else if ( y == 0 )    // forward difference
     {
         return data[top] - data[center];
     }
@@ -224,6 +224,16 @@ void DirectionalField::buildCoherenceMask()
             float mask = (lum >= _coherenceThreshold) ? 1 : 0;
             imgSetPixelf( _coherenceMask, x, y, mask );
         }
+    }
+    
+    if (_kernel)
+    {
+        // open
+        imgErode( _coherenceMask, _kernel );
+        imgDilate( _coherenceMask, _kernel );
+        //close
+        imgDilate( _coherenceMask, _kernel );
+        imgErode( _coherenceMask, _kernel );
     }
 }
 

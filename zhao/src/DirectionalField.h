@@ -27,12 +27,7 @@ public:
      * @param width Number of pixels in each row of data
      * @param height Number of pixels in each column of data
      */
-    DirectionalField( Image* img, Image* kernel, int window );
-
-    /**
-     * Copy Constructor
-     */
-    DirectionalField( const DirectionalField& orig );
+    DirectionalField( Image* img, Image* kernel = 0 );
 
     /**
      * Destructor
@@ -98,6 +93,8 @@ private:
     Image* _coherenceMask;
 
     float _coherenceThreshold;
+    
+    Image* _kernel;
 
     /** Componete horizontal de cada pixel */
     Image* _direction;

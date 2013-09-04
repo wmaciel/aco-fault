@@ -2057,7 +2057,7 @@ float applyDilationKernel( int px, int py, Image* image_in, Image* kernel )
 
 
 
-Image* imgDilate( Image* image_in, Image* kernel )
+void imgDilate( Image* image_in, Image* kernel )
 {
     Image* image_out = imgCopy( image_in );
 
@@ -2074,12 +2074,13 @@ Image* imgDilate( Image* image_in, Image* kernel )
         }
     }
 
-    return image_out;
+    imgDestroy( image_in );
+    image_in = image_out;
 }
 
 
 
-Image* imgErode( Image* image_in, Image* kernel )
+void imgErode( Image* image_in, Image* kernel )
 {
     Image* image_out = imgCopy( image_in );
 
@@ -2096,5 +2097,6 @@ Image* imgErode( Image* image_in, Image* kernel )
         }
     }
 
-    return image_out;
+    imgDestroy( image_in );
+    image_in = image_out;
 }
