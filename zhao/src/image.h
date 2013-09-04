@@ -130,6 +130,7 @@ float*  imgGetData(Image* image);
  */
 void imgSetPixel3fv(Image* image, int x, int y, float*  color);
 void imgSetPixel3f(Image* image, int x, int y, float R, float G, float B);
+void imgSetPixelf( Image* image, int x, int y, float L );
 
 /**
  *	Ajusta o pixel de uma imagem com a cor especificada.
@@ -151,6 +152,7 @@ void imgSetPixel3ubv(Image* image, int x, int y, unsigned char * color);
  */
 void imgGetPixel3fv(Image* image, int x, int y, float* color);
 void imgGetPixel3f(Image* image, int x, int y, float* R, float* G, float* B);
+float imgGetPixelf( Image* image, int x, int y );
 
 /**
  *	Obtem o pixel de uma imagem na posicao especificada.

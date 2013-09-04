@@ -472,6 +472,24 @@ void imgSetPixel3f(Image* image, int x, int y, float R, float G, float B)
    }
 }
 
+void imgSetPixelf(Image* image, int x, int y, float L)
+{
+    int pos = (y*image->width*image->dcs) + (x*image->dcs);
+    switch (image->dcs)
+    {
+      case 3:
+         image->buf[pos  ] = L;
+         image->buf[pos+1] = L;
+         image->buf[pos+2] = L;
+         break;
+      case 1:
+         image->buf[pos  ] = L;
+         break;
+      default:
+         break;
+    }
+}
+
 void imgGetPixel3fv(Image* image, int x, int y, float* color)
 {
    int pos = (y*image->width*image->dcs) + (x*image->dcs);
@@ -509,6 +527,27 @@ void imgGetPixel3f(Image* image, int x, int y, float* R, float* G, float* B)
       default:
          break;
    }
+}
+
+float imgGetPixelf(Image* image, int x, int y)
+{
+    int pos = (y*image->width*image->dcs) + (x*image->dcs);
+    float R,G,B;
+    switch (image->dcs) 
+    {
+       case 3:
+          R = image->buf[pos  ];
+          G = image->buf[pos+1];
+          B = image->buf[pos+2];
+          return luminance( R, G, B );
+          break;
+       case 1:
+          return image->buf[pos  ];
+          break;
+       default:
+          break;
+    }
+    return -1;
 }
 
 void imgSetPixel3ubv(Image* image, int x, int y, unsigned char * color)
