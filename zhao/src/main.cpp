@@ -42,11 +42,10 @@ void testImage( char* fileIn, char* fileDir, char* fileCoh, char* fileMask )
     Image* greyGauss = imgCopy( grey );
     imgGauss( greyGauss, grey );
 
-    float* data = imgGetData( greyGauss );
+    DirectionalField* field = new DirectionalField( greyGauss, 0, 8 );
+
     int width = imgGetWidth(greyGauss);
     int height = imgGetHeight(greyGauss);
-    DirectionalField* field = new DirectionalField( data, width, height, 8 );
-
     Image* dir = imgCreate( width, height, 3 );
     Image* coh = imgCreate( width, height, 3 );
     Image* mask = imgCreate( width, height, 3 );
@@ -54,8 +53,9 @@ void testImage( char* fileIn, char* fileDir, char* fileCoh, char* fileMask )
     {
         for (int y = 0; y < height; ++y)
         {
-            float dirX = field->getXDirection( x, y );
-            float dirY = field->getYDirection( x, y );
+            float dirX;
+            float dirY;
+            field->getDirection( x, y, dirX, dirY );
             float lumCoh;
 //            float lumX;
 //            float lumY;

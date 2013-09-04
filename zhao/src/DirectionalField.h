@@ -8,6 +8,8 @@
 #ifndef DIRECTIONALFIELD_H
 #define	DIRECTIONALFIELD_H
 
+#include "image.h"
+
 /**
  * Represents a 2D directional field computed trough the method presented by
  * Asker M. Bazen and Sabih H. Gerez in their article entitled "Directional
@@ -25,7 +27,7 @@ public:
      * @param width Number of pixels in each row of data
      * @param height Number of pixels in each column of data
      */
-    DirectionalField( float* data, int width, int height, int window );
+    DirectionalField( Image* img, Image* kernel, int window );
 
     /**
      * Copy Constructor
@@ -36,12 +38,12 @@ public:
      * Destructor
      */
     virtual ~DirectionalField();
-
-    float getXDirection( int x, int y );
-
-    float getYDirection( int x, int y );
+    
+    void getDirection( int x, int y, float& dirX, float& dirY );
 
     float getCoherence( int x, int y );
+
+    bool getCoherenceMask( int x, int y );
 
     void debugPrint();
 
@@ -77,13 +79,11 @@ private:
 
     void buildCrossedWindowedDerivativeMatrix( int windowSize );
 
-    void buildCoherenceMatrix();
+    void buildCoherenceImage();
 
-    void buildDirectionMatrices();
+    void buildCoherenceMask();
 
-    void normalizeDirections();
-
-    void normalizeCoherence();
+    void buildDirectionImage();
 
     float getHorizontalWindowedDerivative( int px, int py, int windowSize );
 
@@ -92,16 +92,15 @@ private:
     float getCrossedWindowedDerivative( int px, int py, int windowsize );
 
     /** Coerência da direção de cada pixel */
-    float* _coherence;
+    Image* _coherence;
 
     /** Imagem binária de coerência */
-    float* _coherenceMask;
+    Image* _coherenceMask;
+
+    float _coherenceThreshold;
 
     /** Componete horizontal de cada pixel */
-    float* _directionX;
-
-    /** Componente vertical de cada pixel */
-    float* _directionY;
+    Image* _direction;
 
     float* _gxMatrix;
 
