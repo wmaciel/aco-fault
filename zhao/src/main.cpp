@@ -42,7 +42,7 @@ void testImage( char* fileIn, char* fileDir, char* fileCoh, char* fileMask )
     Image* greyGauss = imgCopy( grey );
     imgGauss( greyGauss, grey );
 
-    DirectionalField* field = new DirectionalField( greyGauss, 0, 8 );
+    DirectionalField* field = new DirectionalField( greyGauss, 0 );
 
     int width = imgGetWidth(greyGauss);
     int height = imgGetHeight(greyGauss);
@@ -115,19 +115,19 @@ void whoLetTheAntsOut( int argc, char** argv )
 
 void testImageMorphology()
 {
-    Image* aux = imgReadBMP( (char*)"..data/morphology/print_mask.bmp" );
-    Image* in = imgGrey( aux );
-    Image* kernel = imgReadBMP( (char*)"..data/morphology/kernelBig.bmp" );
-
-    Image* eroded = imgErode( in, kernel );
-    Image* opened = imgDilate( eroded, kernel );
-    Image* openedDilated = imgDilate( opened, kernel );
-    Image* closed = imgErode( openedDilated, kernel );
-
-    imgWriteBMP( (char*)"..data/morphology/eroded.bmp", eroded );
-    imgWriteBMP( (char*)"..data/morphology/opened.bmp", opened );
-    imgWriteBMP( (char*)"..data/morphology/openedDilated.bmp", openedDilated );
-    imgWriteBMP( (char*)"..data/morphology/closed.bmp", closed );
+//    Image* aux = imgReadBMP( (char*)"..data/morphology/print_mask.bmp" );
+//    Image* in = imgGrey( aux );
+//    Image* kernel = imgReadBMP( (char*)"..data/morphology/kernelBig.bmp" );
+//
+//    Image* eroded = imgErode( in, kernel );
+//    Image* opened = imgDilate( eroded, kernel );
+//    Image* openedDilated = imgDilate( opened, kernel );
+//    Image* closed = imgErode( openedDilated, kernel );
+//
+//    imgWriteBMP( (char*)"..data/morphology/eroded.bmp", eroded );
+//    imgWriteBMP( (char*)"..data/morphology/opened.bmp", opened );
+//    imgWriteBMP( (char*)"..data/morphology/openedDilated.bmp", openedDilated );
+//    imgWriteBMP( (char*)"..data/morphology/closed.bmp", closed );
 }
 
 int main( int argc, char** argv )
