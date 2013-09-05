@@ -17,7 +17,7 @@
 Environment::Environment( float initialPheromone, float minimumPheromone, float evaporationRate, Image* image ):
 _evaporationRate(evaporationRate), _initialPheromone(initialPheromone), _minimumPheromone(minimumPheromone)
 {
-    _maximumPheromone = 1000.0f;
+    _maximumPheromone = MAX_PHEROMONE;
     construct( imgGetHeight( image ), imgGetWidth( image ) );
     computeImageMatrix( image );
     clearFeromone();
@@ -242,10 +242,6 @@ Image* Environment::getPheromoneImage()
         {
             float luminance = normalizedPheromone[id(x,y)];
             imgSetPixel3f( output, x, y, luminance, luminance, luminance );
-//            if (luminance >= 0.1)
-//            {
-//                imgSetPixel3f( output, x, y, 1.0f, 1.0f, 1.0f );
-//            }
         }
     }
 
@@ -268,7 +264,6 @@ float* Environment::normalizePheromone()
         if (max < _pheromoneMatrix[i])
         {
             max = _pheromoneMatrix[i];
-            //std::cerr << "max: "<<max<<"\n";
         }
     }
 
