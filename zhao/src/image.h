@@ -358,7 +358,7 @@ void imgGamma( Image* img, float factor );
 void imgNormalize( Image* img );
 
 /**
- * When given a matrix of complex numbers, it ouputs the original image w x h.
+ * When given a matrix of complex numbers, it outputs the original image w x h.
  * @param buf_complex
  * @param w
  * @param h
