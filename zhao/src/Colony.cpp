@@ -18,15 +18,16 @@ Colony::Colony( Image* image )
     _environment = new Environment( INITIAL_PHEROMONE, MIN_PHEROMONE, EVAPORATION_RATE, image );
 }
 
+
+
 Colony::~Colony()
 {
 }
 
+
+
 void Colony::distributeAnts()
 {
-//    Point pm( 88, 0 );
-//    Point pM( 88, 0 );
-//    addAntInBlock( pm, pM );
     int nHorizontalBlocks = _environment->getWidth() / BLOCK_SIZE;
     int nVerticalBlocks   = _environment->getHeight() / BLOCK_SIZE;
 
@@ -40,6 +41,8 @@ void Colony::distributeAnts()
         }
     }
 }
+
+
 
 void Colony::addAntInBlock( Point pMin, Point pMax )
 {
@@ -73,6 +76,8 @@ void Colony::addAntInBlock( Point pMin, Point pMax )
     _ants.push_back( ant );
 }
 
+
+
 void Colony::run( int nSteps )
 {
     for (int currentStep = 0; currentStep < nSteps; ++currentStep)
@@ -83,6 +88,8 @@ void Colony::run( int nSteps )
         _ants.clear();
     }
 }
+
+
 
 void Colony::moveAnts()
 {
@@ -106,6 +113,8 @@ void Colony::moveAnts()
     }
 }
 
+
+
 void Colony::updatePheromone()
 {
     int nAnts = _ants.size();
@@ -116,15 +125,21 @@ void Colony::updatePheromone()
     }
 }
 
+
+
 Image* Colony::getPheromoneImage()
 {
     return 0;
 }
 
+
+
 bool Colony::available( Point point, Ant& ant )
 {
     return false;
 }
+
+
 
 void Colony::printDebugImage()
 {
