@@ -34,6 +34,7 @@ public:
     bool isInsideFOV( Point p );
     void stopCriterion();
     bool visited( Point p );
+    void lineBresenham( Point src, Point dst, std::vector<Point>& line );
 
     bool _isAlive;
     int _stepLength;

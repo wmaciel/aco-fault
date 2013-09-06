@@ -215,3 +215,65 @@ bool Ant::visited( Point p )
 
     return false;
 }
+
+
+
+void Ant::lineBresenham( Point src, Point dst, std::vector<Point>& line )
+{
+    int x0 = src.x;
+    int y0 = src.y;
+    int x1 = dst.x;
+    int y1 = dst.y;
+    
+//   dx := abs(x1-x0)
+//   dy := abs(y1-y0)
+//   if x0 < x1 then sx := 1 else sx := -1
+//   if y0 < y1 then sy := 1 else sy := -1
+//   err := dx-dy
+    
+    int dx = abs( x1 - x0 );
+    int dy = abs( y1 - y0 );
+    int sx = (x0 < x1) ? 1 : -1;
+    int sy = (y0 < y1) ? 1 : -1;
+    int err = dx - dy;
+    
+//   loop
+//     plot(x0,y0)
+//     if x0 = x1 and y0 = y1 exit loop
+//     e2 := 2*err
+//     if e2 > -dy then 
+//       err := err - dy
+//       x0 := x0 + sx
+//     end if
+//     if x0 = x1 and y0 = y1 then 
+//       plot(x0,y0)
+//       exit loop
+//     end if
+//     if e2 <  dx then 
+//       err := err + dx
+//       y0 := y0 + sy 
+//     end if
+//   end loop
+    
+    while (true)
+    {
+        line.push_back( Point( x0, y0 ) );
+        if (x0 == x1 && y0 == y1) break;
+        int e2= 2*err;
+        if (e2 > -dy)
+        {
+            err = err - dy;
+            x0 += sx;
+        }
+        if (x0 == x1 && y0 == y1)
+        {
+            line.push_back( Point( x0, y0 ) );
+            break;
+        }
+        if (e2 < dx)
+        {
+            err += dx;
+            y0 += sy;
+        }
+    }
+}
