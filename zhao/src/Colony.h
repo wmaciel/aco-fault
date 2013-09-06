@@ -26,6 +26,7 @@ public:
 
 private:
     void distributeAnts();
+    void distributeAntsByBlock();
     void addAntInBlock( Point pMin, Point pMax );
     void moveAnts();
     void updatePheromone();

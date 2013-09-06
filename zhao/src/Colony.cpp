@@ -28,6 +28,13 @@ Colony::~Colony()
 
 void Colony::distributeAnts()
 {
+    distributeAntsByBlock();
+}
+
+
+
+void Colony::distributeAntsByBlock()
+{
     int nHorizontalBlocks = _environment->getWidth() / BLOCK_SIZE;
     int nVerticalBlocks   = _environment->getHeight() / BLOCK_SIZE;
 
