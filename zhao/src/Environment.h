@@ -56,6 +56,7 @@ public:
      */
     void getDirection( int x, int y, float& dirX, float& dirY );
     float getDirectionStrength( int x, int y );
+    bool getDirectionStrengthMask( int x, int y );
 
     /**
      * Creates the negative feedback of pheromone evaporation

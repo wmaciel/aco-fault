@@ -177,6 +177,13 @@ float Environment::getDirectionStrength( int x, int y )
 
 
 
+bool Environment::getDirectionStrengthMask( int x, int y )
+{
+    return _directionalField->getCoherenceMask( x, y );
+}
+
+
+
 void Environment::evaporatePheromone()
 {
 #pragma omp parallel for
