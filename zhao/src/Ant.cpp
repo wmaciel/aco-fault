@@ -187,12 +187,11 @@ bool Ant::isInsideFOV( Point p )
 
 void Ant::stopCriterion()
 {
-    float directionCoherence = _environment->getDirectionStrength( _position.x, _position.y );
-    if (directionCoherence < _coherenceThreshold)
+    if (!_environment->getDirectionStrengthMask( _position.x, _position.y ) )
     {
         _abnormalSteps++;
     }
-
+    
     if (_abnormalSteps > _maxAbnormalSteps)
     {
         _isAlive = false;
