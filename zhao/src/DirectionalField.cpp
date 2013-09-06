@@ -255,6 +255,11 @@ void DirectionalField::buildDirectionImage()
                 dirX /= lenght;
                 dirY /= lenght;
             }
+            if (dirY < 0)
+            {
+                dirX = -dirX;
+                dirY = -dirY;
+            }
 
             imgSetPixel3f( _direction, x, y, 0.0f, dirX, dirY );
         }
@@ -458,17 +463,6 @@ void DirectionalField::debugImages()
     imgDestroy( dbgImg );
 
     //coherence field
-    Image* cohImg = imgCreate( _width, _height, 3 );
-    for (int x = 0; x < _width; ++x)
-    {
-        for (int y = 0; y < _height; ++y)
-        {
-            float pixCoh = getCoherence( x, y ); //pixel coherence
-            imgSetPixel3f( cohImg, x, y, pixCoh, pixCoh, pixCoh );
-        }
-    }
-    imgWriteBMP( (char*)"coherenceFieldDebugImage.bmp", cohImg );
-    imgDestroy( cohImg );
-
-
+    imgWriteBMP( (char*)"coherenceFieldDebugImage.bmp", _coherence );
+    imgWriteBMP( (char*)"coherenceFieldDebugMask.bmp", _coherenceMask );
 }
