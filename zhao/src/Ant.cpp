@@ -77,8 +77,10 @@ void Ant::move()
     if (visiblePixels.size() > 0)
     {
         Point chosenPoint = choosePixel( visiblePixels );
+        std::vector<Point> line;
+        lineBresenham( _position, chosenPoint, line );
         _position = chosenPoint;
-        _path.push_back( _position );
+        _path.insert( _path.end(), line.begin()+1, line.end() );
         stopCriterion();
     }
     else
