@@ -92,5 +92,11 @@
  */
 #define DIR_FIELD_HALF_WINDOW 8
 
+/**
+ * Number of ants inserted into the environment. This value is not used if the 
+ * ants a distributed by blocks.
+ */
+#define NUMBER_OF_ANTS 500;
+
 #endif	/* PARAMETERS_H */
 
