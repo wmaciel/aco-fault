@@ -96,7 +96,7 @@
  * Number of ants inserted into the environment. This value is not used if the 
  * ants a distributed by blocks.
  */
-#define NUMBER_OF_ANTS 500;
+#define NUMBER_OF_ANTS 500
 
 #endif	/* PARAMETERS_H */
 
