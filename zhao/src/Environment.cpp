@@ -259,6 +259,24 @@ Image* Environment::getPheromoneImage()
 
 
 
+Image* Environment::getVisibilityImage()
+{
+    Image* output = imgCreate( _width, _height, 1 );
+    
+    for (int x = 0; x < _width; ++x)
+    {
+        for (int y = 0; y < _height; ++y)
+        {
+            float visibility = 1.0f - _imageMatrix[id(x,y)];
+            imgSetPixelf( output, x, y, visibility );
+        }
+    }
+    
+    return output;
+}
+
+
+
 float* Environment::normalizePheromone()
 {
     float max = 0;

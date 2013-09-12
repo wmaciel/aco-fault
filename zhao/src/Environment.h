@@ -79,6 +79,8 @@ public:
     int getHeight();
 
     Image* getPheromoneImage();
+    
+    Image* getVisibilityImage();
 
 private:
 
