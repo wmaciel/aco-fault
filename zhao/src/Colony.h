@@ -27,12 +27,17 @@ public:
 private:
     void distributeAnts();
     void distributeAntsByBlock();
+    void distributeAntsByGamma();
+    Image* generateProbabilityImage( Image* input );
+    void generateProbabilityImages();
     void addAntInBlock( Point pMin, Point pMax );
+    void addAntInImage( Image* probabilityImage );
     void moveAnts();
     void updatePheromone();
     bool available( Point point, Ant& ant );
     void printDebugImage();
 
+    std::vector<Image*> _probabilityDistributions;
     Environment* _environment;
     std::vector<Ant*> _ants;
 };

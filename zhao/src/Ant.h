@@ -26,6 +26,7 @@ public:
     bool isAlive();
     void depositPheromone();
     static int pickIndex( std::vector<float> probabilities );
+    static int pickIndex( float* probabilities, int size );
 
 //private:
     void getVisiblePixels( std::vector<Point>& visiblePixels );

@@ -16,6 +16,8 @@
 Colony::Colony( Image* image )
 {
     _environment = new Environment( INITIAL_PHEROMONE, MIN_PHEROMONE, EVAPORATION_RATE, image );
+    
+    generateProbabilityImages();
 }
 
 
@@ -28,7 +30,8 @@ Colony::~Colony()
 
 void Colony::distributeAnts()
 {
-    distributeAntsByBlock();
+//    distributeAntsByBlock();
+    distributeAntsByGamma();
 }
 
 
@@ -47,6 +50,63 @@ void Colony::distributeAntsByBlock()
             addAntInBlock( pMin, pMax );
         }
     }
+}
+
+
+
+void Colony::distributeAntsByGamma()
+{
+    int nGammaImages = _probabilityDistributions.size();
+    
+    for (int a = 0; a < NUMBER_OF_ANTS; ++a)
+    {
+        addAntInImage( _probabilityDistributions[a % nGammaImages] );
+    }
+}
+
+
+
+void Colony::generateProbabilityImages()
+{
+     Image* vis = _environment->getVisibilityImage(); imgWriteBMP( (char*)"gammaone.bmp", vis );
+     
+     Image* visGammaDown = imgCopy( vis );
+     imgGamma( visGammaDown, 0.5f ); imgWriteBMP( (char*)"gammadown.bmp", visGammaDown );
+     Image* gammaDownProb = generateProbabilityImage( visGammaDown );
+     imgDestroy( visGammaDown );
+     _probabilityDistributions.push_back( gammaDownProb );
+     
+     Image* visGammaUp = imgCopy( vis );
+     imgGamma( visGammaUp, 1.5f ); imgWriteBMP( (char*)"gammaup.bmp", visGammaUp );
+     Image* gammaUpProb = generateProbabilityImage( visGammaUp );
+     imgDestroy( visGammaUp );
+     _probabilityDistributions.push_back( gammaUpProb );
+     
+     Image* prob = generateProbabilityImage( vis );
+     imgDestroy( vis );
+     _probabilityDistributions.push_back( prob );
+}
+
+
+
+Image* Colony::generateProbabilityImage( Image* input )
+{
+    if (imgGetDimColorSpace( input ) != 1) return 0;
+    
+    Image* output = imgCopy( input );
+    float* data = imgGetData( output );
+    int size = imgGetWidth( output ) * imgGetHeight( output );
+    float sum = 0;
+    for (int i = 0; i < size; ++i)
+    {
+        sum += data[i];
+    }
+    for (int i = 0; i < size; ++i)
+    {
+        data[i] /= sum;
+    }
+    
+    return output;
 }
 
 
@@ -73,9 +133,26 @@ void Colony::addAntInBlock( Point pMin, Point pMax )
             probabilities.push_back( pixelValue / sum );
         }
     }
+    
+    int blockSize = pMax.x - pMin.x + 1;
 
     int pixel = Ant::pickIndex( probabilities );
-    Point chosenPoint( pMin.x + pixel % BLOCK_SIZE, pMin.y + pixel / BLOCK_SIZE );
+    Point chosenPoint( pMin.x + pixel % blockSize, pMin.y + pixel / blockSize );
+    Ant* ant = new Ant( chosenPoint, _environment );
+    ant->setStepLength( STEP_LENGTH );
+    ant->setPheromoneWeight( PHEROMONE_WEIGHT );
+    ant->setVisibilityWeight( VISIBILITY_WEIGHT );
+    _ants.push_back( ant );
+}
+
+
+
+void Colony::addAntInImage( Image* probabilityImage )
+{
+    float* probabilities = imgGetData( probabilityImage );
+    int pixel = Ant::pickIndex( probabilities, _environment->getWidth()*_environment->getHeight() );
+    int width = imgGetWidth( probabilityImage );
+    Point chosenPoint( pixel % width, pixel / width );
     Ant* ant = new Ant( chosenPoint, _environment );
     ant->setStepLength( STEP_LENGTH );
     ant->setPheromoneWeight( PHEROMONE_WEIGHT );
