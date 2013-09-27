@@ -2069,13 +2069,12 @@ void imgDilate( Image* image_in, Image* kernel )
     {
         for (int y = 0; y < imgHeight; ++y)
         {
-            float lum = applyDilationKernel( x, y, image_in, kernel );
-            imgSetPixel3f( image_out, x, y, lum, lum, lum );
+            float lum = applyDilationKernel( x, y, image_out, kernel );
+            imgSetPixel3f( image_in, x, y, lum, lum, lum );
         }
     }
 
-    imgDestroy( image_in );
-    image_in = image_out;
+    imgDestroy( image_out );
 }
 
 
@@ -2092,11 +2091,10 @@ void imgErode( Image* image_in, Image* kernel )
     {
         for (int y = 0; y < imgHeight; ++y)
         {
-            float lum = applyErosionKernel( x, y, image_in, kernel );
-            imgSetPixel3f( image_out, x, y, lum, lum, lum );
+            float lum = applyErosionKernel( x, y, image_out, kernel );
+            imgSetPixel3f( image_in, x, y, lum, lum, lum );
         }
     }
 
-    imgDestroy( image_in );
-    image_in = image_out;
+    imgDestroy( image_out );
 }

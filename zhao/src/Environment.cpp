@@ -21,7 +21,8 @@ _evaporationRate(evaporationRate), _initialPheromone(initialPheromone), _minimum
     construct( imgGetHeight( image ), imgGetWidth( image ) );
     computeImageMatrix( image );
     clearFeromone();
-    _directionalField = new DirectionalField( image, 0 );
+    Image* kernel = imgReadBMP( KERNEL_PATH );
+    _directionalField = new DirectionalField( image, kernel );
     _directionalField->debugImages();
 }
 

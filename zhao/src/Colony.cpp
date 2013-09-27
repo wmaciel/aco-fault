@@ -30,7 +30,7 @@ Colony::~Colony()
 
 void Colony::distributeAnts()
 {
-//    distributeAntsByBlock();
+    //distributeAntsByBlock();
     distributeAntsByGamma();
 }
 
@@ -236,7 +236,11 @@ void Colony::printDebugImage()
         Ant* ant = _ants[i];
         if (_ants[i]->isAlive())
         {
-            imgSetPixel3f( img, ant->_position.x, ant->_position.y, 1.0f - i/(float)nAnts, (0.0f + i) / nAnts, 0.0f );
+            // each ant has a color
+            //imgSetPixel3f( img, ant->_position.x, ant->_position.y, 1.0f - i/(float)nAnts, (0.0f + i) / nAnts, 0.0f );
+            
+            //all ants are red
+            imgSetPixel3f( img, ant->_position.x, ant->_position.y, 1,0,0 );
         }
         else
         {

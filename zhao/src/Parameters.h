@@ -46,7 +46,7 @@
  * Used for the block wise ant distribution technique presented by Zhao. This is
  * the size of one side of the block
  */
-#define BLOCK_SIZE 25
+#define BLOCK_SIZE 30
 
 /**
  * How many long can an ant "leap" in one step
@@ -68,18 +68,18 @@
  * treshold are seen as dead ends. Any ant that steps on a pixel like that will 
  * increase it's abnormal step counter
  */
-#define COHERENCE_TRESHOLD 0.3f
+#define COHERENCE_TRESHOLD 0.2f
 
 /**
  * Maximum number of abnormal steps an ant can have before dying
  */
-#define MAX_ABNORMAL_STEPS 3
+#define MAX_ABNORMAL_STEPS 5
 
 /**
  * Maximum number of steps an Ant can have. It is used as a timeout for ants 
  * that may end up on an infinite loop
  */
-#define MAX_STEPS 20
+#define MAX_STEPS 100
 
 /**
  * The maximum amount of pheromone allowed to accumulate in a single pixel
@@ -97,6 +97,12 @@
  * ants a distributed by blocks.
  */
 #define NUMBER_OF_ANTS 100
+
+/**
+ * Path to the kernel image used for the opennign and closing of the coherence 
+ * mask image
+ */
+#define KERNEL_PATH ((char*)"../data/morphology/kernelBig.bmp")
 
 #endif	/* PARAMETERS_H */
 
