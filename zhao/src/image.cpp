@@ -2188,3 +2188,12 @@ float imgComputeVariance( Image* image, float mean )
     
     return sum / ( w * h );
 }
+
+
+
+void imgGauss( Image* img )
+{
+    Image* aux = imgCopy( img );
+    imgGauss( img, aux );
+    imgDestroy( aux );
+}

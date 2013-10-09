@@ -378,4 +378,6 @@ float imgComputeVariance( Image* image );
 
 float imgComputeVariance( Image* image, float mean );
 
+void imgGauss( Image* img );
+
 #endif
