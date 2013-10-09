@@ -22,6 +22,7 @@ Ant::Ant( Point point, Environment* environment )
     _abnormalSteps = 0;
     _position = point;
     _environment = environment;
+    _isAlive = true;
     //_path.push_back( point );
 }
 
