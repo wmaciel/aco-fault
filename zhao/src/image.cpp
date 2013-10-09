@@ -258,8 +258,14 @@ void imgDestroy(Image* image)
 {
    if (image)
    {
-      if (image->buf) free (image->buf);
-      free(image);
+      if (image->buf)
+      {
+          free( image->buf );
+          image->buf = 0;
+      }
+      
+      free( image );
+      image = 0;
    }
 }
 
@@ -290,15 +296,14 @@ Image* imgGrey(Image* image)
    int h = imgGetHeight(image);
    Image* img1=imgCreate(w,h,1);
    int x,y;
-   float rgb[3],grey[3];
+   float rgb[3];
+   float grey;
 
    for (y=0;y<h;y++){
       for (x=0;x<w;x++) {
          imgGetPixel3fv(image,x,y,rgb);
-         grey[0]=luminance(rgb[0],rgb[1],rgb[2]);
-         grey[1]=grey[0];
-         grey[2]=grey[0];
-         imgSetPixel3fv(img1,x,y,grey);
+         grey=luminance(rgb[0],rgb[1],rgb[2]);
+         imgSetPixelf(img1,x,y,grey);
       }
    }
    return img1;
@@ -928,38 +933,48 @@ int imgWriteBMP(char *filename, Image* bmp)
 
 Image* imgReadPFM(char *filename)
 {
-  FILE *fp;
-  Image* img;
-  float scale;
-  int w,h;
+    FILE *fp;
+    Image* img;
+    float min,max;
+    int i,w,h,dcs;
 
-  char line[256];
+    char line[256];
 
-  fp = fopen(filename, "rb");
-  if (fp == NULL) {  printf("%s nao pode ser aberto\n",filename); return NULL;}
+    fp = fopen(filename, "rb");
+    if (fp == NULL)
+    {
+        printf("%s nao pode ser aberto\n",filename);
+        return NULL;
+    }
 
-  fgets(line,256,fp);
+    fgets(line,256,fp);
 
-  if(strcmp(line,"PF\n"))
-  {
-    return 0;
-  }
+    if(strcmp(line,"PF\n")) 
+    {
+        return 0;
+    }
 
-  while (fscanf( fp, " %d ", &w ) != 1)
-     fgets(line, 256, fp);
-  while (fscanf( fp, " %d ", &h ) != 1)
-     fgets(line, 256, fp);
-  while (fscanf( fp, " %f", &scale ) != 1)
-     fgets(line, 256, fp);
+    while (fscanf( fp, " %d ", &w ) != 1)
+        fgets(line, 256, fp);
+    while (fscanf( fp, " %d ", &h ) != 1)
+        fgets(line, 256, fp);
+    while (fscanf( fp, " %d", &dcs) != 1)
+        fgets(line, 256, fp);
 
-  fgetc(fp);
+    fgetc(fp);
 
-  img = imgCreate(w,h,3);
-  fread( img->buf, 3*w*h, sizeof(float), fp );
+    img = imgCreate(w,h,dcs);
+    fread( img->buf, sizeof(float), dcs*w*h, fp );
+    min=max=img->buf[0];
+    for (i=1; i<dcs*w*h;i++)
+    {
+      if (min>img->buf[i]) min = img->buf[i];
+      if (max<img->buf[i]) max = img->buf[i];
+    }
 
-   fprintf(stdout,"imgReadPFM: %s successfuly loaded\n",filename);
-  fclose(fp);
-  return img;
+    fprintf(stdout,"imgReadPFM: %s successfuly loaded\n(w=%d,h=%d,dcs=%d) - min=%f max=%f\n",filename,w,h,dcs,min,max);
+    fclose(fp);
+    return img;
 }
 
 
@@ -967,17 +982,16 @@ Image* imgReadPFM(char *filename)
 int imgWritePFM(char * filename, Image* img)
 {
   FILE * fp;
-  float  scale=1.f;
-
+ 
   if ((fp = fopen(filename, "wb")) == NULL) {
-    printf("\nNão foi possivel abrir o arquivo %s\n",filename);
+    printf("\nNÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£o foi possivel abrir o arquivo %s\n",filename);
     return 0;
   }
 
   /* the ppm file header */
-  fprintf(fp,"PF\n%d %d\n%f\n", img->width, img->height, scale);
+  fprintf(fp,"PF\n%d %d\n%d\n", img->width, img->height, img->dcs);
 
-  fwrite( img->buf, 3*img->width*img->height, sizeof(float), fp );
+  fwrite( img->buf, img->dcs*img->width*img->height, sizeof(float), fp );
 
   fprintf(stdout,"imgWritePFM: %s successfuly created\n",filename);
   fclose(fp);
@@ -1906,7 +1920,16 @@ void imgGamma( Image* img, float factor )
 
     for (int i = 0; i < n; ++i)
     {
+        float aux = array[i];
+        if (isnan(array[i]))
+        {
+            printf("NAN found before the power function!\n");
+        }
         array[i] = pow( array[i], factor );
+        if (isnan(array[i]))
+        {
+            printf("NAN found! Apparently you cant calculate %f to the power of %f\n", aux, factor);
+        }
     }
 }
 
@@ -2097,4 +2120,71 @@ void imgErode( Image* image_in, Image* kernel )
     }
 
     imgDestroy( image_out );
+}
+
+
+
+void imgClipPositiveOutliers(Image* image, float clippingValue)
+{
+    if (imgGetDimColorSpace( image ) != 1) return;
+    
+    int h = imgGetHeight( image );
+    int w = imgGetWidth( image );
+    for (int y = 0; y < h; ++y)
+    {
+        for (int x = 0; x < w; ++x)
+        {
+            if (imgGetPixelf( image, x, y ) > clippingValue)
+            {
+                imgSetPixelf( image, x, y, clippingValue );
+            }
+        }
+    }
+}
+
+
+
+float imgComputeMean( Image* image )
+{
+    int w = imgGetWidth( image );
+    int h = imgGetHeight( image );
+    float sum = 0;
+    
+    for (int y = 0; y < h; ++y)
+    {
+        for (int x = 0; x < w; ++x)
+        {
+            sum += imgGetPixelf( image, x, y );
+        }
+    }
+    
+    return sum / ( w * h );
+}
+
+
+
+float imgComputeVariance( Image* image )
+{
+    float mean = imgComputeMean( image );
+    return imgComputeVariance( image, mean );
+}
+
+
+
+float imgComputeVariance( Image* image, float mean )
+{
+    int w = imgGetWidth( image );
+    int h = imgGetHeight( image );
+    float sum = 0;
+    
+    for (int y = 0; y < h; ++y)
+    {
+        for (int x = 0; x < w; ++x)
+        {
+            float pixelValue = imgGetPixelf( image, x, y );
+            sum += (pixelValue - mean) * (pixelValue - mean);
+        }
+    }
+    
+    return sum / ( w * h );
 }

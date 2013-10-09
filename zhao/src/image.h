@@ -370,4 +370,12 @@ void imgDilate( Image* image_in, Image* kernel );
 
 void imgErode( Image* image_in, Image* kernel );
 
+void imgClipPositiveOutliers( Image* image, float clippingValue );
+
+float imgComputeMean( Image* image );
+
+float imgComputeVariance( Image* image );
+
+float imgComputeVariance( Image* image, float mean );
+
 #endif
