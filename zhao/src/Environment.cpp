@@ -87,7 +87,7 @@ void Environment::clearFeromone()
 
 int Environment::id( int x, int y )
 {
-    if (x < 0 || y < 0)
+    if (x < 0 || y < 0 || x >= _width || y >= _height)
     {
         std::cerr<<"ERROR!: Acessou fora da imagem!\n";
         exit(1);
