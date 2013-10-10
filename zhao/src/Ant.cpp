@@ -121,6 +121,9 @@ void Ant::depositPheromone()
 
 void Ant::getVisiblePixels( std::vector<Point>& visiblePixels )
 {
+    int width = _environment->getWidth();
+    int height = _environment->getHeight();
+    
     for (int dx = -_stepLength; dx <= _stepLength; ++dx)
     {
         for (int dy = -_stepLength; dy <= _stepLength; ++ dy)
@@ -129,7 +132,7 @@ void Ant::getVisiblePixels( std::vector<Point>& visiblePixels )
 
             Point delta( dx, dy );
             Point p = delta + _position;
-            if (p.x >= 0 && p.y >= 0)
+            if (p.x >= 0 && p.y >= 0 && p.x < width && p.y < height)
             {
                 float visibility = _environment->getVisibility( p );
                 if (!visited( p ) && isInsideFOV( p ) && visibility > 0)
