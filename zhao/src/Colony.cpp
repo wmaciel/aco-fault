@@ -9,12 +9,29 @@
 #include "Point.h"
 #include "Environment.h"
 #include "Ant.h"
+#include "Parameters.h"
 
 #include <stdio.h>
-#include "Parameters.h"
+#include <stdlib.h>
 
 Colony::Colony( Image* image )
 {
+    if (imgGetDimColorSpace( image ) != 1)
+    {
+        exit( 1 );
+    }
+    
+    // Normalize image
+    float mean = imgComputeMean( image );
+    float stdDev = sqrt( imgComputeVariance( image, mean ) );
+    imgClipPositiveOutliers( image, mean + stdDev + stdDev + stdDev + stdDev );
+    imgNormalize( image );
+    
+    // Apply gaussian filter for noise reduction
+    imgGauss( image );
+    
+    imgWriteBMP( (char*)"trueInput.bmp", image );
+    
     _environment = new Environment( INITIAL_PHEROMONE, MIN_PHEROMONE, EVAPORATION_RATE, image );
     
     generateProbabilityImages();
@@ -99,6 +116,10 @@ Image* Colony::generateProbabilityImage( Image* input )
     float sum = 0;
     for (int i = 0; i < size; ++i)
     {
+        if (isnan(data[i]))
+        {
+            printf( "Cannot generate probability image, NAN detected! on pixel %d\n", i );
+        }
         sum += data[i];
     }
     for (int i = 0; i < size; ++i)
@@ -187,11 +208,17 @@ void Colony::moveAnts()
         for (int a = 0; a < nAnts; ++a)
         {
             Ant* ant = _ants[a];
+            
             if (ant->isAlive())
             {
-                //printf("Ant %d: (%d, %d)\n", a, ant->_position.x, ant->_position.y);
                 allDead = false;
                 ant->move();
+            }
+            
+            if (ant->_position.x < 0 || ant->_position.x >= _environment->getWidth()
+                    || ant->_position.y < 0 || ant->_position.y >= _environment->getHeight())
+            {
+                printf( "INVALID MOVE BY ANT %d! (%d, %d)\n", a, ant->_position.x, ant->_position.y );
             }
         }
     }
@@ -234,7 +261,7 @@ void Colony::printDebugImage()
     for (int i = 0; i < nAnts; ++i)
     {
         Ant* ant = _ants[i];
-        if (_ants[i]->isAlive())
+        if (ant->isAlive())
         {
             // each ant has a color
             //imgSetPixel3f( img, ant->_position.x, ant->_position.y, 1.0f - i/(float)nAnts, (0.0f + i) / nAnts, 0.0f );
@@ -249,7 +276,7 @@ void Colony::printDebugImage()
     }
 
     char filename[100];
-    sprintf( filename, "debugImages/debugImage%04d.bmp", ++step );
+    sprintf( filename, "/home/keoma/Dropbox/PUC/Mestrado/antColonyOptimization/zhao/build/debugImages/debugImage%04d.bmp", ++step );
     imgWriteBMP( filename, img );
     imgDestroy( img );
 }

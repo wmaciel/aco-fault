@@ -42,7 +42,7 @@ void testImage( char* fileIn, char* fileDir, char* fileCoh, char* fileMask )
     Image* greyGauss = imgCopy( grey );
     imgGauss( greyGauss, grey );
 
-    Image* kernel = imgReadBMP( "../data/morphology/kernelBig.bmp" );
+    Image* kernel = imgReadBMP( (char*)"../data/morphology/kernelBig.bmp" );
     DirectionalField* field = new DirectionalField( greyGauss, kernel );
 
     int width = imgGetWidth(greyGauss);
@@ -93,15 +93,10 @@ void testImage( char* fileIn, char* fileDir, char* fileCoh, char* fileMask )
 void whoLetTheAntsOut( int argc, char** argv )
 {
     srand( time(NULL) );
-    Image* imgIN = imgReadBMP( (char*)"../data/sintetico/sinteticoPiece.bmp" );
-    Image* imgGray = imgGrey( imgIN );
-    imgDestroy( imgIN );
-    Image* imgGrayGauss = imgCopy( imgGray );
-    imgGauss( imgGrayGauss, imgGray );
-    imgDestroy( imgGray );
-    Colony* colony = new Colony( imgGrayGauss );
+    Image* input = imgReadPFM( (char*)"/home/keoma/Dropbox/PUC/Mestrado/antColonyOptimization/zhao/data/atributo/maxVolume_all_PFMCrossline_1060_TAG.pfm" );
+    Colony* colony = new Colony( input );
     colony->run( 100 );
-    imgDestroy( imgGrayGauss );
+    imgDestroy( input );
 }
 
 void testImageMorphology()
