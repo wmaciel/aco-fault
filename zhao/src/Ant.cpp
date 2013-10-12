@@ -6,6 +6,7 @@
  */
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <time.h>
 
 #include "Ant.h"
@@ -24,6 +25,11 @@ Ant::Ant( Point point, Environment* environment )
     _environment = environment;
     _isAlive = true;
     //_path.push_back( point );
+    if (_position.x < 0 || _position.x >= _environment->getWidth()
+                    || _position.y < 0 || _position.y >= _environment->getHeight())
+    {
+        printf( "INVALID CREATION! (%d, %d)\n", _position.x, _position.y );
+    }
 }
 
 Ant::~Ant()
@@ -74,12 +80,15 @@ int Ant::pickIndex( float* probabilities, int size )
     // if the roll is exactly 1.0, it will never reach a negative value
 
     // checks which item in the vector it corresponds to
-    for (int i = 0; i < size; ++i)
+    while (true)
     {
-        roll -= probabilities[i];
-        if (roll < 0)
+        for (int i = 0; i < size; ++i)
         {
-            return i;
+            roll -= probabilities[i];
+            if (roll < 0)
+            {
+                return i;
+            }
         }
     }
 
@@ -103,6 +112,12 @@ void Ant::move()
         _position = chosenPoint;
         _path.insert( _path.end(), line.begin()+1, line.end() );
         stopCriterion();
+        
+        if (_position.x < 0 || _position.x >= _environment->getWidth()
+                    || _position.y < 0 || _position.y >= _environment->getHeight())
+        {
+            printf( "INVALID MOVE! (%d, %d)\n", _position.x, _position.y );
+        }
     }
     else
     {
