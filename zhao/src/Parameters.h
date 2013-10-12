@@ -90,7 +90,7 @@
  * Used by the directional field. Indicates how big is the window for the 
  * covariance matrices
  */
-#define DIR_FIELD_HALF_WINDOW 8
+#define DIR_FIELD_HALF_WINDOW 3
 
 /**
  * Number of ants inserted into the environment. This value is not used if the 
@@ -102,7 +102,7 @@
  * Path to the kernel image used for the opennign and closing of the coherence 
  * mask image
  */
-#define KERNEL_PATH ((char*)"../data/morphology/kernelBig.bmp")
+#define KERNEL_PATH ((char*)"/home/keoma/Dropbox/PUC/Mestrado/antColonyOptimization/zhao/data/morphology/kernelBig.bmp")
 
 #endif	/* PARAMETERS_H */
 
