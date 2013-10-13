@@ -87,6 +87,7 @@
 #define MAX_PHEROMONE 1000.0f
 
 /**
+ * DEPRECATED, This define should be removed as soon as possible!!!!!!!!!!!!
  * Used by the directional field. Indicates how big is the window for the 
  * covariance matrices
  */
@@ -103,6 +104,16 @@
  * mask image
  */
 #define KERNEL_PATH ((char*)"/home/keoma/Dropbox/PUC/Mestrado/antColonyOptimization/zhao/data/morphology/kernelBig.bmp")
+
+/**
+ * Width of the Gaussian window used to build the directional field
+ */
+#define DIR_FIELD_GAUSSIAN_WINDOW_HALF_WIDTH 5
+
+/**
+ * Height of the Gaussian window used to build the directional field
+ */
+#define DIR_FIELD_GAUSSIAN_WINDOW_HALF_HEIGHT 5
 
 #endif	/* PARAMETERS_H */
 
