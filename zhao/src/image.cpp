@@ -2197,3 +2197,38 @@ void imgGauss( Image* img )
     imgGauss( img, aux );
     imgDestroy( aux );
 }
+
+
+
+Image* imgCreateGaussianKernel( int halfWidth, int halfHeight, float stdDev )
+{
+    float r, s = 2.0 * stdDev * stdDev;
+    float sum = 0.0;
+    int width = halfWidth + halfWidth + 1;
+    int height = halfHeight + halfHeight + 1;
+    Image* gKernel = imgCreate( width, height, 1 );
+    
+    // generate the kernel
+    for (int y = -halfHeight; y <= halfHeight; ++y)
+    {
+        for (int x = -halfWidth; x <= halfWidth; ++x)
+        {
+            r = sqrt( x * x + y * y );
+            float value = (exp(-(r*r)/s))/(M_PI * s);
+            imgSetPixelf( gKernel, x + halfWidth, y + halfHeight, value );
+            sum += value;
+        }
+    }
+    
+    // normalize the kernel
+    for (int y = 0; y < height; ++y)
+    {
+        for (int x = 0; x < width; ++x)
+        {
+            float value = imgGetPixelf( gKernel, x, y );
+            imgSetPixelf( gKernel, x, y, value / sum );
+        }
+    }
+    
+    return gKernel;
+}

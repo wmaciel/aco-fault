@@ -380,4 +380,6 @@ float imgComputeVariance( Image* image, float mean );
 
 void imgGauss( Image* img );
 
+Image* imgCreateGaussianKernel( int halfWidth, int halfHeight, float stdDev );
+
 #endif
