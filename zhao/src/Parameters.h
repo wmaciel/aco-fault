@@ -108,12 +108,12 @@
 /**
  * Width of the Gaussian window used to build the directional field
  */
-#define DIR_FIELD_GAUSSIAN_WINDOW_HALF_WIDTH 5
+#define DIR_FIELD_GAUSSIAN_WINDOW_HALF_WIDTH 2
 
 /**
  * Height of the Gaussian window used to build the directional field
  */
-#define DIR_FIELD_GAUSSIAN_WINDOW_HALF_HEIGHT 5
+#define DIR_FIELD_GAUSSIAN_WINDOW_HALF_HEIGHT 2
 
 #endif	/* PARAMETERS_H */
 

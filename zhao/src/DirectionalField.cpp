@@ -23,6 +23,7 @@ DirectionalField::DirectionalField( Image* img, Image* kernel )
     _coherenceThreshold = COHERENCE_TRESHOLD;
     
     int window = DIR_FIELD_HALF_WINDOW;
+    _gaussianKernel = imgCreateGaussianKernel( DIR_FIELD_GAUSSIAN_WINDOW_HALF_WIDTH, DIR_FIELD_GAUSSIAN_WINDOW_HALF_HEIGHT, 1.0f );
 
     int size = _width * _height;
     _gxMatrix = new float[size];
@@ -34,7 +35,7 @@ DirectionalField::DirectionalField( Image* img, Image* kernel )
     float* data = imgGetData( img );
 
     buildHorizontalDerivativeMatrix( data );
-    buildHorizontalWindowedDerivativeMatrix( window );
+    buildHorizontalWindowedDerivativeMatrix();
     buildVerticalDerivativeMatrix( data );
     buildVerticalWindowedDerivativeMatrix( window );
     buildCrossedWindowedDerivativeMatrix( window );
@@ -155,13 +156,13 @@ void DirectionalField::buildVerticalDerivativeMatrix( float* data )
 
 
 
-void DirectionalField::buildHorizontalWindowedDerivativeMatrix( int windowSize )
+void DirectionalField::buildHorizontalWindowedDerivativeMatrix()
 {
     for (int x = 0; x < _width; ++x)
     {
         for (int y = 0; y < _height; ++y)
         {
-            _gxxMatrix[pixel(x,y)] = getHorizontalWindowedDerivative( x, y, windowSize );
+            _gxxMatrix[pixel(x,y)] = getHorizontalWindowedDerivative( x, y );
         }
     }
 }
@@ -268,24 +269,32 @@ void DirectionalField::buildDirectionImage()
 
 
 
-float DirectionalField::getHorizontalWindowedDerivative( int px, int py, int windowSize )
+float DirectionalField::getHorizontalWindowedDerivative( int px, int py )
 {
-    float sum = 0;
-
-    for (int x = px - windowSize; x <= px + windowSize; ++x)
+    int windowWidth = imgGetWidth( _gaussianKernel );
+    int windowHeight = imgGetHeight( _gaussianKernel );
+    int windowHalfWidth = windowWidth / 2;
+    int windowHalfHeight = windowHeight / 2;
+    
+    float sum = 0.0f;
+    
+    for (int wY = 0; wY < windowHeight; ++wY)
     {
-        if (x < 0) continue;
-        if (x >= _width) continue;
-
-        for (int y = py - windowSize; y <= py + windowSize; ++y)
+        int imgY = py + wY - windowHalfHeight;
+        if (imgY < 0 || imgY >= _height) continue;
+        
+        for (int wX = 0; wX < windowWidth; ++wX)
         {
-            if (y < 0) continue;
-            if (y >= _height) continue;
-
-            sum += _gxMatrix[pixel(x,y)] * _gxMatrix[pixel(x,y)];
+            int imgX = px + wX - windowHalfWidth;
+            if (imgX < 0 || imgX >= _width) continue;
+            
+            float value = _gxMatrix[pixel(imgX, imgY)];
+            value *= value;
+            
+            sum += imgGetPixelf( _gaussianKernel, wX, wY ) * value;
         }
     }
-
+    
     return sum;
 }
 
@@ -293,22 +302,30 @@ float DirectionalField::getHorizontalWindowedDerivative( int px, int py, int win
 
 float DirectionalField::getVerticalWindowedDerivative(int px, int py, int windowSize)
 {
-    float sum = 0;
-
-    for (int x = px - windowSize; x <= px + windowSize; ++x)
+    int windowWidth = imgGetWidth( _gaussianKernel );
+    int windowHeight = imgGetHeight( _gaussianKernel );
+    int windowHalfWidth = windowWidth / 2;
+    int windowHalfHeight = windowHeight / 2;
+    
+    float sum = 0.0f;
+    
+    for (int wY = 0; wY < windowHeight; ++wY)
     {
-        if (x < 0) continue;
-        if (x >= _width) continue;
-
-        for (int y = py - windowSize; y <= py + windowSize; ++y)
+        int imgY = py + wY - windowHalfHeight;
+        if (imgY < 0 || imgY >= _height) continue;
+        
+        for (int wX = 0; wX < windowWidth; ++wX)
         {
-            if (y < 0) continue;
-            if (y >= _height) continue;
-
-            sum += _gyMatrix[pixel(x,y)] * _gyMatrix[pixel(x,y)];
+            int imgX = px + wX - windowHalfWidth;
+            if (imgX < 0 || imgX >= _width) continue;
+            
+            float value = _gyMatrix[pixel(imgX, imgY)];
+            value *= value;
+            
+            sum += imgGetPixelf( _gaussianKernel, wX, wY ) * value;
         }
     }
-
+    
     return sum;
 }
 
@@ -316,22 +333,30 @@ float DirectionalField::getVerticalWindowedDerivative(int px, int py, int window
 
 float DirectionalField::getCrossedWindowedDerivative( int px, int py, int windowSize )
 {
-    float sum = 0;
-
-    for (int x = px - windowSize; x <= px + windowSize; ++x)
+    int windowWidth = imgGetWidth( _gaussianKernel );
+    int windowHeight = imgGetHeight( _gaussianKernel );
+    int windowHalfWidth = windowWidth / 2;
+    int windowHalfHeight = windowHeight / 2;
+    
+    float sum = 0.0f;
+    
+    for (int wY = 0; wY < windowHeight; ++wY)
     {
-        if (x < 0) continue;
-        if (x >= _width) continue;
-
-        for (int y = py - windowSize; y <= py + windowSize; ++y)
+        int imgY = py + wY - windowHalfHeight;
+        if (imgY < 0 || imgY >= _height) continue;
+        
+        for (int wX = 0; wX < windowWidth; ++wX)
         {
-            if (y < 0) continue;
-            if (y >= _height) continue;
-
-            sum += _gxMatrix[pixel(x,y)] * _gyMatrix[pixel(x,y)];
+            int imgX = px + wX - windowHalfWidth;
+            if (imgX < 0 || imgX >= _width) continue;
+            
+            float value = _gyMatrix[pixel(imgX, imgY)];
+            value *= _gxMatrix[pixel(imgX, imgY)];
+            
+            sum += imgGetPixelf( _gaussianKernel, wX, wY ) * value;
         }
     }
-
+    
     return sum;
 }
 

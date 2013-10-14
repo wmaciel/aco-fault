@@ -66,7 +66,7 @@ private:
 
     void buildHorizontalDerivativeMatrix( float* data );
 
-    void buildHorizontalWindowedDerivativeMatrix( int windowSize );
+    void buildHorizontalWindowedDerivativeMatrix();
 
     void buildVerticalDerivativeMatrix( float* data );
 
@@ -80,7 +80,7 @@ private:
 
     void buildDirectionImage();
 
-    float getHorizontalWindowedDerivative( int px, int py, int windowSize );
+    float getHorizontalWindowedDerivative( int px, int py );
 
     float getVerticalWindowedDerivative( int px, int py, int windowSize );
 
@@ -113,7 +113,7 @@ private:
 
     int _height;
 
-
+    Image* _gaussianKernel;
 };
 
 #endif	/* DIRECTIONALFIELD_H */
