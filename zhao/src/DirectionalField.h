@@ -70,9 +70,9 @@ private:
 
     void buildVerticalDerivativeMatrix( float* data );
 
-    void buildVerticalWindowedDerivativeMatrix( int windowSize );
+    void buildVerticalWindowedDerivativeMatrix();
 
-    void buildCrossedWindowedDerivativeMatrix( int windowSize );
+    void buildCrossedWindowedDerivativeMatrix();
 
     void buildCoherenceImage();
 
@@ -82,9 +82,9 @@ private:
 
     float getHorizontalWindowedDerivative( int px, int py );
 
-    float getVerticalWindowedDerivative( int px, int py, int windowSize );
+    float getVerticalWindowedDerivative( int px, int py );
 
-    float getCrossedWindowedDerivative( int px, int py, int windowsize );
+    float getCrossedWindowedDerivative( int px, int py );
 
     /** Coerência da direção de cada pixel */
     Image* _coherence;
