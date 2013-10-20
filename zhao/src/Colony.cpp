@@ -18,13 +18,16 @@ Colony::Colony( Image* image )
 {
     if (imgGetDimColorSpace( image ) != 1)
     {
-        exit( 1 );
+        Image* aux = imgGrey( image );
+        imgDestroy( image );
+        image = aux;
+        aux = 0;
     }
     
     // Normalize image
     float mean = imgComputeMean( image );
     float stdDev = sqrt( imgComputeVariance( image, mean ) );
-    imgClipPositiveOutliers( image, mean + stdDev + stdDev + stdDev + stdDev );
+    imgClipPositiveOutliers( image, mean + stdDev + stdDev + stdDev + stdDev + stdDev );
     imgNormalize( image );
     
     // Apply gaussian filter for noise reduction
