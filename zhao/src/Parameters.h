@@ -68,7 +68,7 @@
  * treshold are seen as dead ends. Any ant that steps on a pixel like that will 
  * increase it's abnormal step counter
  */
-#define COHERENCE_TRESHOLD 0.2f
+#define COHERENCE_TRESHOLD 0.5f
 
 /**
  * Maximum number of abnormal steps an ant can have before dying
@@ -93,10 +93,10 @@
 #define NUMBER_OF_ANTS 100
 
 /**
- * Path to the kernel image used for the opennign and closing of the coherence 
+ * Path to the kernel image used for the opening and closing of the coherence 
  * mask image
  */
-#define KERNEL_PATH ((char*)"/home/keoma/Dropbox/PUC/Mestrado/antColonyOptimization/zhao/data/morphology/kernelBig.bmp")
+#define KERNEL_PATH ((char*)"/home/keoma/Dropbox/PUC/Mestrado/antColonyOptimization/zhao/data/morphology/kernel.bmp")
 
 /**
  * Width of the Gaussian window used to build the directional field
