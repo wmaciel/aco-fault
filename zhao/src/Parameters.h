@@ -87,13 +87,6 @@
 #define MAX_PHEROMONE 1000.0f
 
 /**
- * DEPRECATED, This define should be removed as soon as possible!!!!!!!!!!!!
- * Used by the directional field. Indicates how big is the window for the 
- * covariance matrices
- */
-#define DIR_FIELD_HALF_WINDOW 3
-
-/**
  * Number of ants inserted into the environment. This value is not used if the 
  * ants a distributed by blocks.
  */
