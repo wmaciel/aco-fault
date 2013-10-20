@@ -93,7 +93,8 @@ void testImage( char* fileIn, char* fileDir, char* fileCoh, char* fileMask )
 void whoLetTheAntsOut( int argc, char** argv )
 {
     srand( time(NULL) );
-    Image* input = imgReadPFM( (char*)"/home/keoma/Dropbox/PUC/Mestrado/antColonyOptimization/zhao/data/atributo/maxVolume_all_PFMCrossline_1060_TAG.pfm" );
+    Image* input = imgReadPFM( (char*)"/home/keoma/Dropbox/PUC/Mestrado/antColonyOptimization/zhao/data/atributo/maxVolume_all_TimeSlice_404_TAG.pfm" );
+    //Image* input = imgReadBMP( (char*)"/home/keoma/Dropbox/PUC/Mestrado/antColonyOptimization/zhao/data/sintetico/sinteticoPiece.bmp" );
     Colony* colony = new Colony( input );
     colony->run( 100 );
     imgDestroy( input );
