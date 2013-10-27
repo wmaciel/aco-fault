@@ -41,6 +41,6 @@ public:
 
 bool operator== (Point p1, Point p2);
 
-Point& operator+ (Point p1, Point p2);
+Point operator+ (Point p1, Point p2);
 
 #endif	/* POINT_H */
