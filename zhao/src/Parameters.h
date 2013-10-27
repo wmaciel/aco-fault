@@ -90,7 +90,7 @@
  * Number of ants inserted into the environment. This value is not used if the 
  * ants a distributed by blocks.
  */
-#define NUMBER_OF_ANTS 1000
+#define NUMBER_OF_ANTS 745
 
 /**
  * Path to the kernel image used for the opening and closing of the coherence 
