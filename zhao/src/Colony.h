@@ -25,6 +25,7 @@ public:
     Image* getPheromoneImage();
 
 private:
+    void clearAnts();
     void distributeAnts();
     void distributeAntsByBlock();
     void distributeAntsByGamma();

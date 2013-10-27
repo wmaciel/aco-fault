@@ -48,6 +48,19 @@ Colony::~Colony()
 
 
 
+void Colony::clearAnts()
+{
+    #pragma omp parallel for
+    for( int a = 0; a < NUMBER_OF_ANTS; ++a)
+    {
+        delete _ants[a];
+    }
+    
+    _ants.clear();
+}
+
+
+
 void Colony::distributeAnts()
 {
     //distributeAntsByBlock();
@@ -193,7 +206,7 @@ void Colony::run( int nSteps )
         distributeAnts();
         moveAnts();
         updatePheromone();
-        _ants.clear();
+        clearAnts();
     }
 }
 
@@ -203,8 +216,6 @@ void Colony::moveAnts()
 {
     bool allDead = false;
     const int nAnts = _ants.size();
-    const int environmentWidth = _environment->getWidth();
-    const int environmentHeight = _environment->getHeight();
     
     while (!allDead)
     {
@@ -219,12 +230,6 @@ void Colony::moveAnts()
                 allDead = false;
                 ant->move();
             }
-            
-            if (ant->_position.x < 0 || ant->_position.x >= environmentWidth
-                    || ant->_position.y < 0 || ant->_position.y >= environmentHeight)
-            {
-                printf( "INVALID MOVE BY ANT %d! (%d, %d)\n", a, ant->_position.x, ant->_position.y );
-            }
         }
     }
     printDebugImage();
@@ -234,6 +239,8 @@ void Colony::moveAnts()
 
 void Colony::updatePheromone()
 {
+    _environment->evaporatePheromone();
+    
     int nAnts = _ants.size();
 
     for (int a = 0; a < nAnts; ++a)
