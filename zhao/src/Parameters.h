@@ -35,7 +35,7 @@
  * The relative importance of the visibility value in comparison with the 
  * pheromone value
  */
-#define VISIBILITY_WEIGHT 2.0f
+#define VISIBILITY_WEIGHT 5.0f
 
 /**
  * Number of steps an ant remembers taking.
@@ -51,7 +51,7 @@
 /**
  * How many long can an ant "leap" in one step
  */
-#define STEP_LENGTH 3
+#define STEP_LENGTH 10
 
 /**
  * The amount of pheromone each ant deposits at each pixel it has traversed
@@ -90,7 +90,7 @@
  * Number of ants inserted into the environment. This value is not used if the 
  * ants a distributed by blocks.
  */
-#define NUMBER_OF_ANTS 100
+#define NUMBER_OF_ANTS 1000
 
 /**
  * Path to the kernel image used for the opening and closing of the coherence 
