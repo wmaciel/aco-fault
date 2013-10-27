@@ -202,11 +202,14 @@ void Colony::run( int nSteps )
 void Colony::moveAnts()
 {
     bool allDead = false;
-    int nAnts = _ants.size();
-
+    const int nAnts = _ants.size();
+    const int environmentWidth = _environment->getWidth();
+    const int environmentHeight = _environment->getHeight();
+    
     while (!allDead)
     {
         allDead = true;
+        #pragma omp parallel for
         for (int a = 0; a < nAnts; ++a)
         {
             Ant* ant = _ants[a];
@@ -217,8 +220,8 @@ void Colony::moveAnts()
                 ant->move();
             }
             
-            if (ant->_position.x < 0 || ant->_position.x >= _environment->getWidth()
-                    || ant->_position.y < 0 || ant->_position.y >= _environment->getHeight())
+            if (ant->_position.x < 0 || ant->_position.x >= environmentWidth
+                    || ant->_position.y < 0 || ant->_position.y >= environmentHeight)
             {
                 printf( "INVALID MOVE BY ANT %d! (%d, %d)\n", a, ant->_position.x, ant->_position.y );
             }
