@@ -206,7 +206,6 @@ void Colony::moveAnts()
 
     while (!allDead)
     {
-        printDebugImage();
         allDead = true;
         for (int a = 0; a < nAnts; ++a)
         {
@@ -225,6 +224,7 @@ void Colony::moveAnts()
             }
         }
     }
+    printDebugImage();
 }
 
 
@@ -260,23 +260,39 @@ void Colony::printDebugImage()
     static int step = 0;
     Image* img = _environment->getPheromoneImage();//imgCreate( _environment->getWidth(), _environment->getHeight(), 3 );
 
-    int nAnts = _ants.size();
-    for (int i = 0; i < nAnts; ++i)
+    for (int x = 0; x < _environment->getWidth(); ++x)
     {
-        Ant* ant = _ants[i];
-        if (ant->isAlive())
+        for (int y = 0; y < _environment->getHeight(); ++y)
         {
-            // each ant has a color
-            //imgSetPixel3f( img, ant->_position.x, ant->_position.y, 1.0f - i/(float)nAnts, (0.0f + i) / nAnts, 0.0f );
-            
-            //all ants are red
-            imgSetPixel3f( img, ant->_position.x, ant->_position.y, 1,0,0 );
-        }
-        else
-        {
-            imgSetPixel3f( img, ant->_position.x, ant->_position.y, 0.0f, 0.0f, 1.0f );
+            float lum = imgGetPixelf( img, x, y );
+//            if (lum < 0.4f) lum = 0.0f;
+//            else lum = 1.0f;
+            imgSetPixelf( img, x, y, lum );
         }
     }
+    
+//    int nAnts = _ants.size();
+//    for (int i = 0; i < nAnts; ++i)
+//    {
+//        Ant* ant = _ants[i];
+//        if (ant->isAlive())
+//        {
+//            // each ant has a color
+//            //imgSetPixel3f( img, ant->_position.x, ant->_position.y, 1.0f - i/(float)nAnts, (0.0f + i) / nAnts, 0.0f );
+//            
+//            //all ants are red
+//            imgSetPixel3f( img, ant->_position.x, ant->_position.y, 1,0,0 );
+//        }
+//        else
+//        {
+//            imgSetPixel3f( img, ant->_position.x, ant->_position.y, 0.0f, 0.0f, 1.0f );
+//        }
+//    }
+    
+//    Image* aux = imgBinOtsu( img );
+//    imgDestroy( img );
+//    img = aux;
+//    aux = 0;
 
     char filename[100];
     sprintf( filename, "/home/keoma/Dropbox/PUC/Mestrado/antColonyOptimization/zhao/build/debugImages/debugImage%04d.bmp", ++step );
