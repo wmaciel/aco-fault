@@ -130,7 +130,11 @@ void Ant::depositPheromone()
     int pathSize = _path.size();
     for (int i = 0; i < pathSize; ++i)
     {
-        _environment->addPheromone( _pheromoneConstant, _path[i] );
+        Point point = _path[i];
+        float visibility = _environment->getVisibility( point );
+        float consistency = _environment->getDirectionStrength( point.x, point.y );
+        float pheromone = ( visibility + consistency ) * _pheromoneConstant / 2.0;
+        _environment->addPheromone( pheromone, _path[i] );
     }
 }
 
