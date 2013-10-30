@@ -91,7 +91,7 @@ void Colony::distributeAntsByGamma()
 {
     int nGammaImages = _probabilityDistributions.size();
     
-    for (int a = 0; a < NUMBER_OF_ANTS; ++a)
+    for (int a = _ants.size(); a < NUMBER_OF_ANTS; ++a)
     {
         addAntInImage( _probabilityDistributions[a % nGammaImages] );
     }
