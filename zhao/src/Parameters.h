@@ -17,7 +17,7 @@
 /**
  * How much of the pheromone evaporates after each step. Must be between 0 and 1
  */
-#define EVAPORATION_RATE 0.0f
+#define EVAPORATION_RATE 0.1f
 
 /**
  * The minimum value of pheromone present at any given pixel. This is used to 
