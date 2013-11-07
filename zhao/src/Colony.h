@@ -34,6 +34,7 @@ private:
     void addAntInBlock( Point pMin, Point pMax );
     void addAntInImage( Image* probabilityImage );
     void moveAnts();
+    void moveUntilAllDead();
     void updatePheromone();
     bool available( Point point, Ant& ant );
     void printDebugImage();

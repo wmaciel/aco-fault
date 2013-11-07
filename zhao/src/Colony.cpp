@@ -214,6 +214,13 @@ void Colony::run( int nSteps )
 
 void Colony::moveAnts()
 {
+    moveUntilAllDead();
+}
+
+
+
+void Colony::moveUntilAllDead()
+{
     bool allDead = false;
     const int nAnts = _ants.size();
     
