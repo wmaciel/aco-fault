@@ -8,9 +8,9 @@ int main( int argc, char** argv )
     if (argc != 6)
     {
         printf( "ERROR: Wrong number of parameters.\n" );
-        printf( "Expecting: \npath to pfm image, "
-                "\npath to mask, \npath to output, "
-                "\ntrace to be repeated, \nfault jump\n" );
+        printf( "Expecting: \n path to .PFM image, "
+                "\n path to mask, \n path to output, "
+                "\n trace to be repeated, \n fault jump\n" );
         return 1;
     }
 
