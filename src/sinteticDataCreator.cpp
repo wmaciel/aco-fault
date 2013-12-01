@@ -1,6 +1,26 @@
 #include <stdio.h>
 #include<stdlib.h>
 #include "image.h"
+#include "CorrelationCalculator.h"
+#include "PearsonCorrelationCalculator.h"
+
+#define TRACE_SIZE 5
+
+float* buildTrace( Image* img, int x, int y, int traceSize )
+{
+    int w = imgGetWidth( img );
+    float* trace = new float[traceSize];
+    int j = 0;
+    for (int t = y - traceSize/2; t <= y + traceSize/2; ++t)
+    {
+        int i = t;
+        if (i < 0) i = 0;
+        if (i >= w) i = w;
+        trace[j] = imgGetPixelf( img, x, i );
+        j++;
+    }
+    return trace;
+}
 
 int main( int argc, char** argv )
 {
@@ -42,7 +62,7 @@ int main( int argc, char** argv )
     }
 
     // Write the output .PFM image
-    Image* output = imgCreate( outW, outH, 1 );
+    Image* amplitudeOutput = imgCreate( outW, outH, 1 );
     for (int y = 0; y < outH; ++y)
     {
         float traceValue = imgGetPixelf( input, traceId, y );
@@ -51,24 +71,55 @@ int main( int argc, char** argv )
         for (int x = 0; x < outW; ++x)
         {
             if (imgGetPixelf( mask, x, y ) > 0)
-                imgSetPixelf( output, x, y, jumpedTraceValue );
+                imgSetPixelf( amplitudeOutput, x, y, jumpedTraceValue );
             else
-                imgSetPixelf( output, x, y, traceValue );
+                imgSetPixelf( amplitudeOutput, x, y, traceValue );
         }
     }
-    imgWritePFM( outputPath, output );
+    imgWritePFM( outputPath, amplitudeOutput );
 
     // Write the .BMP version of the input image for checking
     float med = imgComputeMean( input );
     float stdDev = sqrt( imgComputeVariance( input, med ) );
     imgClipPositiveOutliers( input, med + stdDev + stdDev );
     imgNormalize( input );
-    imgWriteBMP( (char*) "inputView.bmp", input );
+    imgWriteBMP( (char*) "../data/inputView.bmp", input );
 
-    // Write the .BMP version of the output image for checking
-    med = imgComputeMean( output );
-    stdDev = sqrt( imgComputeVariance( output, med ) );
-    imgClipPositiveOutliers( output, med + stdDev + stdDev );
-    imgNormalize( output );
-    imgWriteBMP( (char*) "outputView.bmp", output );
+    // Write the .BMP version of the amplitude image for checking
+    med = imgComputeMean( amplitudeOutput );
+    stdDev = sqrt( imgComputeVariance( amplitudeOutput, med ) );
+    imgClipPositiveOutliers( amplitudeOutput, med + stdDev + stdDev );
+    imgNormalize( amplitudeOutput );
+    imgWriteBMP( (char*) "../data/outputView.bmp", amplitudeOutput );
+
+    //Apply cross correlation on the sintetic data
+    CorrelationCalculator* calculator = new PearsonCorrelationCalculator( TRACE_SIZE );
+    Image* correlationOutput = imgCreate( outW, outH, 1 );
+    for (int x = 0; x < outW - 1; ++x) //Última coluna não possui vizinho
+    {
+        for (int y = 0; y < outH; ++y)
+        {
+            float* trace = buildTrace( amplitudeOutput, x, y, TRACE_SIZE );
+            float* nextTrace = buildTrace( amplitudeOutput, x + 1, y, TRACE_SIZE );
+            float correlation = calculator->computeCorrelation( trace, nextTrace );
+
+            if (correlation > 1.0f || correlation < -1.0f)
+            {
+                printf( "%f, ", correlation );
+            }
+
+            imgSetPixelf( correlationOutput, x, y, correlation );
+        }
+    }
+
+    //Write .PFM image of the attribute image
+    imgWritePFM( (char*) "../data/attributeOutput.pfm", correlationOutput );
+
+    //Write .BMP image of the attribute image
+    //med = imgComputeMean( correlationOutput );
+    //stdDev = sqrt( imgComputeVariance( correlationOutput, med ) );
+    //imgClipPositiveOutliers( correlationOutput, med + stdDev + stdDev );
+    imgNormalize( correlationOutput );
+    imgWriteBMP( (char*) "../data/attributeOutput.bmp", correlationOutput );
+
 }

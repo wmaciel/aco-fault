@@ -971,16 +971,14 @@ Image* imgReadPFM(char *filename)
       if (min>img->buf[i])
       {
           min = img->buf[i];
-          printf("new minimium: %f\n", min);
       }
       if (max<img->buf[i])
       {
           max = img->buf[i];
-          printf("new maximum: %f\n", max);
       }
     }
 
-    fprintf(stdout,"imgReadPFM: %s successfuly loaded\n(w=%d,h=%d,dcs=%d) - min=%f max=%f\n",filename,w,h,dcs,min,max);
+    //fprintf(stdout,"imgReadPFM: %s successfuly loaded\n(w=%d,h=%d,dcs=%d) - min=%f max=%f\n",filename,w,h,dcs,min,max);
     fclose(fp);
     return img;
 }
