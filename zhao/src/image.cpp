@@ -2232,3 +2232,23 @@ Image* imgCreateGaussianKernel( int halfWidth, int halfHeight, float stdDev )
     
     return gKernel;
 }
+
+
+
+bool imgAssert( Image* img )
+{
+    int w = imgGetWidth( img );
+    int h = imgGetHeight( img );
+    
+    for (int x = 0; x < w; ++x)
+    {
+        for (int y = 0; y < h; ++y)
+        {
+            if (isnan(imgGetPixelf( img, x, y)))
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
