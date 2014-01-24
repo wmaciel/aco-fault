@@ -4,18 +4,18 @@
 #include "CorrelationCalculator.h"
 #include "PearsonCorrelationCalculator.h"
 
-#define TRACE_SIZE 5
+#define TRACE_SIZE 7
 
 float* buildTrace( Image* img, int x, int y, int traceSize )
 {
-    int w = imgGetWidth( img );
+    int h = imgGetHeight( img );
     float* trace = new float[traceSize];
     int j = 0;
     for (int t = y - traceSize/2; t <= y + traceSize/2; ++t)
     {
         int i = t;
         if (i < 0) i = 0;
-        if (i >= w) i = w;
+        if (i >= h) i = h - 1;
         trace[j] = imgGetPixelf( img, x, i );
         j++;
     }
@@ -40,6 +40,9 @@ int main( int argc, char** argv )
     char* outputPath = argv[3];
     int traceId = atoi( argv[4] );
     int jump = atoi( argv[5] );
+    
+    imgAssert(input);
+    imgAssert(mask);
 
     // Fetch the dimensions of the input and output images
     int inW = imgGetWidth( input );
@@ -76,6 +79,7 @@ int main( int argc, char** argv )
                 imgSetPixelf( amplitudeOutput, x, y, traceValue );
         }
     }
+    imgAssert(amplitudeOutput);
     imgWritePFM( outputPath, amplitudeOutput );
 
     // Write the .BMP version of the input image for checking
@@ -102,15 +106,19 @@ int main( int argc, char** argv )
             float* trace = buildTrace( amplitudeOutput, x, y, TRACE_SIZE );
             float* nextTrace = buildTrace( amplitudeOutput, x + 1, y, TRACE_SIZE );
             float correlation = calculator->computeCorrelation( trace, nextTrace );
-
-            if (correlation > 1.0f || correlation < -1.0f)
+            
+            if (isnan(correlation))
             {
                 printf( "%f, ", correlation );
+                trace = buildTrace( amplitudeOutput, x, y, TRACE_SIZE );
+                nextTrace = buildTrace( amplitudeOutput, x + 1, y, TRACE_SIZE );
+                correlation = calculator->computeCorrelation( trace, nextTrace );
             }
 
             imgSetPixelf( correlationOutput, x, y, correlation );
         }
     }
+    imgAssert(correlationOutput);
 
     //Write .PFM image of the attribute image
     imgWritePFM( (char*) "../data/attributeOutput.pfm", correlationOutput );
