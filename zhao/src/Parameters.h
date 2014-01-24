@@ -51,7 +51,7 @@
 /**
  * How many long can an ant "leap" in one step
  */
-#define STEP_LENGTH 10
+#define STEP_LENGTH 5
 
 /**
  * The amount of pheromone each ant deposits at each pixel it has traversed
@@ -90,13 +90,13 @@
  * Number of ants inserted into the environment. This value is not used if the 
  * ants a distributed by blocks.
  */
-#define NUMBER_OF_ANTS 745
+#define NUMBER_OF_ANTS 200
 
 /**
  * Path to the kernel image used for the opening and closing of the coherence 
  * mask image
  */
-#define KERNEL_PATH ((char*)"/home/keoma/Dropbox/PUC/Mestrado/antColonyOptimization/zhao/data/morphology/kernel.bmp")
+#define KERNEL_PATH ((char*)"/home/keoma/Dropbox/PUC/Mestrado/antColonyOptimization/src/zhao/data/masks/kernel3.bmp")
 
 /**
  * Width of the Gaussian window used to build the directional field
