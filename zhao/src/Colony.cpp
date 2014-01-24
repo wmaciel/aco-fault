@@ -312,7 +312,7 @@ void Colony::printDebugImage()
 //    aux = 0;
 
     char filename[100];
-    sprintf( filename, "/home/keoma/Dropbox/PUC/Mestrado/antColonyOptimization/zhao/build/debugImages/debugImage%04d.bmp", ++step );
+    sprintf( filename, "/home/keoma/Dropbox/PUC/Mestrado/antColonyOptimization/src/zhao/data/debugImages/debugImage%04d.bmp", ++step );
     imgWriteBMP( filename, img );
     imgDestroy( img );
 }
