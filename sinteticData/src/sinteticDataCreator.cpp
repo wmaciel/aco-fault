@@ -106,16 +106,8 @@ int main( int argc, char** argv )
             float* trace = buildTrace( amplitudeOutput, x, y, TRACE_SIZE );
             float* nextTrace = buildTrace( amplitudeOutput, x + 1, y, TRACE_SIZE );
             float correlation = calculator->computeCorrelation( trace, nextTrace );
-            
-            if (isnan(correlation))
-            {
-                printf( "%f, ", correlation );
-                trace = buildTrace( amplitudeOutput, x, y, TRACE_SIZE );
-                nextTrace = buildTrace( amplitudeOutput, x + 1, y, TRACE_SIZE );
-                correlation = calculator->computeCorrelation( trace, nextTrace );
-            }
 
-            imgSetPixelf( correlationOutput, x, y, correlation );
+            imgSetPixelf( correlationOutput, x, y, 1.0f - correlation );
         }
     }
     imgAssert(correlationOutput);
