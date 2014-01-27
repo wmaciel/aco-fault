@@ -372,11 +372,15 @@ void imgErode( Image* image_in, Image* kernel );
 
 void imgClipPositiveOutliers( Image* image, float clippingValue );
 
+void imgClipOutliers( Image* image, float min, float max );
+
 float imgComputeMean( Image* image );
 
 float imgComputeVariance( Image* image );
 
 float imgComputeVariance( Image* image, float mean );
+
+void imgNormalize( Image* img, float numberOfStdDev );
 
 void imgGauss( Image* img );
 
