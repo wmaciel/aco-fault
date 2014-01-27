@@ -276,17 +276,15 @@ void Colony::printDebugImage()
 {
     static int step = 0;
     Image* img = _environment->getPheromoneImage();//imgCreate( _environment->getWidth(), _environment->getHeight(), 3 );
-
-    for (int x = 0; x < _environment->getWidth(); ++x)
-    {
-        for (int y = 0; y < _environment->getHeight(); ++y)
-        {
-            float lum = imgGetPixelf( img, x, y );
-//            if (lum < 0.4f) lum = 0.0f;
-//            else lum = 1.0f;
-            imgSetPixelf( img, x, y, lum );
-        }
-    }
+    
+//    for (int x = 0; x < _environment->getWidth(); ++x)
+//    {
+//        for (int y = 0; y < _environment->getHeight(); ++y)
+//        {
+//            float lum = imgGetPixelf( img, x, y );
+//            imgSetPixelf( img, x, y, lum );
+//        }
+//    }  
     
 //    int nAnts = _ants.size();
 //    for (int i = 0; i < nAnts; ++i)
@@ -311,7 +309,7 @@ void Colony::printDebugImage()
 //    img = aux;
 //    aux = 0;
 
-    char filename[100];
+    char filename[150];
     sprintf( filename, "/home/keoma/Dropbox/PUC/Mestrado/antColonyOptimization/src/zhao/data/debugImages/debugImage%04d.bmp", ++step );
     imgWriteBMP( filename, img );
     imgDestroy( img );
