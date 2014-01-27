@@ -272,7 +272,7 @@ Image* Environment::getVisibilityImage()
     {
         for (int y = 0; y < _height; ++y)
         {
-            float visibility = 1.0f - _imageMatrix[id(x,y)];
+            float visibility = _imageMatrix[id(x,y)];
             imgSetPixelf( output, x, y, visibility );
         }
     }
