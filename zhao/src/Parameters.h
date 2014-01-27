@@ -17,7 +17,7 @@
 /**
  * How much of the pheromone evaporates after each step. Must be between 0 and 1
  */
-#define EVAPORATION_RATE 0.1f
+#define EVAPORATION_RATE 0.05f
 
 /**
  * The minimum value of pheromone present at any given pixel. This is used to 
@@ -61,7 +61,7 @@
 /**
  * How wide around the direction of the direction field can an ant see
  */
-#define FOV_ANGLE 15.0f
+#define FOV_ANGLE 30.0f
 
 /**
  * Used by the DIrectional Field to create the coherence mask. Values below the 
@@ -73,7 +73,7 @@
 /**
  * Maximum number of abnormal steps an ant can have before dying
  */
-#define MAX_ABNORMAL_STEPS 5
+#define MAX_ABNORMAL_STEPS 10
 
 /**
  * Maximum number of steps an Ant can have. It is used as a timeout for ants 
@@ -90,7 +90,7 @@
  * Number of ants inserted into the environment. This value is not used if the 
  * ants a distributed by blocks.
  */
-#define NUMBER_OF_ANTS 200
+#define NUMBER_OF_ANTS 500
 
 /**
  * Path to the kernel image used for the opening and closing of the coherence 
@@ -101,12 +101,12 @@
 /**
  * Width of the Gaussian window used to build the directional field
  */
-#define DIR_FIELD_GAUSSIAN_WINDOW_HALF_WIDTH 2
+#define DIR_FIELD_GAUSSIAN_WINDOW_HALF_WIDTH 1
 
 /**
  * Height of the Gaussian window used to build the directional field
  */
-#define DIR_FIELD_GAUSSIAN_WINDOW_HALF_HEIGHT 2
+#define DIR_FIELD_GAUSSIAN_WINDOW_HALF_HEIGHT 3
 
 #endif	/* PARAMETERS_H */
 
