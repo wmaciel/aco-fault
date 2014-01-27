@@ -1,6 +1,6 @@
 CC = g++
 
-BIN_NAME = sinteticDataCreator
+BIN_NAME = sinteticData
 
 OUTPUT_DIR = ../bin
 
