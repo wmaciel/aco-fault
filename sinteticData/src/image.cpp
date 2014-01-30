@@ -968,17 +968,11 @@ Image* imgReadPFM(char *filename)
     min=max=img->buf[0];
     for (i=1; i<dcs*w*h;i++)
     {
-      if (min>img->buf[i])
-      {
-          min = img->buf[i];
-      }
-      if (max<img->buf[i])
-      {
-          max = img->buf[i];
-      }
+      if (min>img->buf[i]) min = img->buf[i];
+      if (max<img->buf[i]) max = img->buf[i];
     }
 
-    //fprintf(stdout,"imgReadPFM: %s successfuly loaded\n(w=%d,h=%d,dcs=%d) - min=%f max=%f\n",filename,w,h,dcs,min,max);
+    fprintf(stdout,"imgReadPFM: %s successfuly loaded\n(w=%d,h=%d,dcs=%d) - min=%f max=%f\n",filename,w,h,dcs,min,max);
     fclose(fp);
     return img;
 }
@@ -990,7 +984,7 @@ int imgWritePFM(char * filename, Image* img)
   FILE * fp;
  
   if ((fp = fopen(filename, "wb")) == NULL) {
-    printf("\nNÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£o foi possivel abrir o arquivo %s\n",filename);
+    printf("\nNÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£o foi possivel abrir o arquivo %s\n",filename);
     return 0;
   }
 
@@ -1926,16 +1920,7 @@ void imgGamma( Image* img, float factor )
 
     for (int i = 0; i < n; ++i)
     {
-        float aux = array[i];
-        if (isnan(array[i]))
-        {
-            printf("NAN found before the power function!\n");
-        }
         array[i] = pow( array[i], factor );
-        if (isnan(array[i]))
-        {
-            printf("NAN found! Apparently you cant calculate %f to the power of %f\n", aux, factor);
-        }
     }
 }
 
@@ -1954,10 +1939,18 @@ void imgNormalize( Image* img )
         if (array[i] < smallest) smallest = array[i];
     }
 
-    for (int i = 0; i < size; ++i)
+    if (biggest == smallest)
     {
-        array[i] -= smallest;
-        array[i] /= biggest - smallest;
+        for (int i = 0; i < size; ++i)
+            array[i] = 0;
+    }
+    else
+    {
+        for (int i = 0; i < size; ++i)
+        {
+            array[i] -= smallest;
+            array[i] /= biggest - smallest;
+        }
     }
 }
 
@@ -2150,6 +2143,30 @@ void imgClipPositiveOutliers(Image* image, float clippingValue)
 
 
 
+void imgClipOutliers( Image* image, float min, float max )
+{
+    if (imgGetDimColorSpace( image ) != 1) return;
+    
+    int h = imgGetHeight( image );
+    int w = imgGetWidth( image );
+    for (int y = 0; y < h; ++y)
+    {
+        for (int x = 0; x < w; ++x)
+        {
+            if (imgGetPixelf( image, x, y ) > max)
+            {
+                imgSetPixelf( image, x, y, max );
+            }
+            else if (imgGetPixelf( image, x, y ) < min)
+            {
+                imgSetPixelf( image, x, y, min );
+            }
+        }
+    }
+}
+
+
+
 float imgComputeMean( Image* image )
 {
     int w = imgGetWidth( image );
@@ -2193,6 +2210,16 @@ float imgComputeVariance( Image* image, float mean )
     }
     
     return sum / ( w * h );
+}
+
+
+
+void imgNormalize(Image* img, float numberOfStdDev)
+{
+    float mean = imgComputeMean( img );
+    float stdDev = (float) sqrt( (double) imgComputeVariance( img, mean ) );
+    imgClipOutliers( img, mean - numberOfStdDev * stdDev, mean + numberOfStdDev * stdDev );
+    imgNormalize( img );
 }
 
 
