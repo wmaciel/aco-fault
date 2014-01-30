@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include<stdlib.h>
+#include <stdlib.h>
 #include "image.h"
 #include "CorrelationCalculator.h"
 #include "PearsonCorrelationCalculator.h"
@@ -73,27 +73,29 @@ int main( int argc, char** argv )
         float jumpedTraceValue = imgGetPixelf( input, traceId, jumpY );
         for (int x = 0; x < outW; ++x)
         {
+            float factor = 0.9f + 0.1f * rand() / (float)RAND_MAX;
+            
             if (imgGetPixelf( mask, x, y ) > 0)
-                imgSetPixelf( amplitudeOutput, x, y, jumpedTraceValue );
+                imgSetPixelf( amplitudeOutput, x, y, jumpedTraceValue * factor );
             else
-                imgSetPixelf( amplitudeOutput, x, y, traceValue );
+                imgSetPixelf( amplitudeOutput, x, y, traceValue * factor );
         }
     }
     imgAssert(amplitudeOutput);
     imgWritePFM( outputPath, amplitudeOutput );
 
     // Write the .BMP version of the input image for checking
-    float med = imgComputeMean( input );
-    float stdDev = sqrt( imgComputeVariance( input, med ) );
-    imgClipPositiveOutliers( input, med + stdDev + stdDev );
-    imgNormalize( input );
+//    float med = imgComputeMean( input );
+//    float stdDev = sqrt( imgComputeVariance( input, med ) );
+//    imgClipPositiveOutliers( input, med + stdDev + stdDev );
+    imgNormalize( input, 2 );
     imgWriteBMP( (char*) "../data/inputView.bmp", input );
 
     // Write the .BMP version of the amplitude image for checking
-    med = imgComputeMean( amplitudeOutput );
-    stdDev = sqrt( imgComputeVariance( amplitudeOutput, med ) );
-    imgClipPositiveOutliers( amplitudeOutput, med + stdDev + stdDev );
-    imgNormalize( amplitudeOutput );
+//    med = imgComputeMean( amplitudeOutput );
+//    stdDev = sqrt( imgComputeVariance( amplitudeOutput, med ) );
+//    imgClipPositiveOutliers( amplitudeOutput, med + stdDev + stdDev );
+    imgNormalize( amplitudeOutput, 2 );
     imgWriteBMP( (char*) "../data/outputView.bmp", amplitudeOutput );
 
     //Apply cross correlation on the sintetic data
@@ -119,7 +121,7 @@ int main( int argc, char** argv )
     //med = imgComputeMean( correlationOutput );
     //stdDev = sqrt( imgComputeVariance( correlationOutput, med ) );
     //imgClipPositiveOutliers( correlationOutput, med + stdDev + stdDev );
-    imgNormalize( correlationOutput );
+    imgNormalize( correlationOutput, 2 );
     imgWriteBMP( (char*) "../data/attributeOutput.bmp", correlationOutput );
 
 }
