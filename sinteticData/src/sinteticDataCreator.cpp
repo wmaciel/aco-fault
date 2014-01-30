@@ -85,16 +85,10 @@ int main( int argc, char** argv )
     imgWritePFM( outputPath, amplitudeOutput );
 
     // Write the .BMP version of the input image for checking
-//    float med = imgComputeMean( input );
-//    float stdDev = sqrt( imgComputeVariance( input, med ) );
-//    imgClipPositiveOutliers( input, med + stdDev + stdDev );
     imgNormalize( input, 2 );
     imgWriteBMP( (char*) "../data/inputView.bmp", input );
 
     // Write the .BMP version of the amplitude image for checking
-//    med = imgComputeMean( amplitudeOutput );
-//    stdDev = sqrt( imgComputeVariance( amplitudeOutput, med ) );
-//    imgClipPositiveOutliers( amplitudeOutput, med + stdDev + stdDev );
     imgNormalize( amplitudeOutput, 2 );
     imgWriteBMP( (char*) "../data/outputView.bmp", amplitudeOutput );
 
@@ -118,9 +112,6 @@ int main( int argc, char** argv )
     imgWritePFM( (char*) "../data/attributeOutput.pfm", correlationOutput );
 
     //Write .BMP image of the attribute image
-    //med = imgComputeMean( correlationOutput );
-    //stdDev = sqrt( imgComputeVariance( correlationOutput, med ) );
-    //imgClipPositiveOutliers( correlationOutput, med + stdDev + stdDev );
     imgNormalize( correlationOutput, 2 );
     imgWriteBMP( (char*) "../data/attributeOutput.bmp", correlationOutput );
 
