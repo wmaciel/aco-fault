@@ -306,10 +306,10 @@ void Ant::lineBresenham( Point src, Point dst, std::vector<Point>& line )
     {
         line.push_back( Point( x0, y0 ) );
         if (x0 == x1 && y0 == y1) break;
-        int e2= 2*err;
+        int e2= err + err;
         if (e2 > -dy)
         {
-            err = err - dy;
+            err -= dy;
             x0 += sx;
         }
         if (x0 == x1 && y0 == y1)
