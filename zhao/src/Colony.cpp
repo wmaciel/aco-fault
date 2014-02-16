@@ -25,10 +25,7 @@ Colony::Colony( Image* image )
     }
     
     // Normalize image
-    float mean = imgComputeMean( image );
-    float stdDev = sqrt( imgComputeVariance( image, mean ) );
-    imgClipPositiveOutliers( image, mean + stdDev + stdDev + stdDev + stdDev + stdDev );
-    imgNormalize( image );
+    imgNormalize( image, 2 );
     
     // Apply gaussian filter for noise reduction
     imgGauss( image );
@@ -309,6 +306,7 @@ void Colony::printDebugImage()
 //    img = aux;
 //    aux = 0;
 
+    imgNormalize( img, 2 );
     char filename[150];
     sprintf( filename, "/home/keoma/Dropbox/PUC/Mestrado/antColonyOptimization/src/zhao/data/debugImages/debugImage%04d.bmp", ++step );
     imgWriteBMP( filename, img );
