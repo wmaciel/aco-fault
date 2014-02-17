@@ -22,7 +22,6 @@ public:
     Colony( Image* image );
     virtual ~Colony();
     void run( int nSteps );
-    Image* getPheromoneImage();
 
 private:
     void clearAnts();

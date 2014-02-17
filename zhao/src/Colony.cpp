@@ -178,13 +178,6 @@ void Colony::updatePheromone()
 
 
 
-Image* Colony::getPheromoneImage()
-{
-    return 0;
-}
-
-
-
 bool Colony::available( Point point, Ant& ant )
 {
     return false;
