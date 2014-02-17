@@ -189,26 +189,6 @@ bool Environment::getDirectionStrengthMask( int x, int y )
 
 
 
-void Environment::evaporatePheromone()
-{
-#pragma omp parallel for
-    for (int x=0; x<_width; ++x)
-    {
-        for (int y=0; y<_height; ++y)
-        {
-            int i = id( x, y );
-            _pheromoneMatrix[i] *= ( 1 - _evaporationRate );
-
-             if (_pheromoneMatrix[i] < _minimumPheromone)
-            {
-                _pheromoneMatrix[i] = _minimumPheromone;
-            }
-        }
-    }
-}
-
-
-
 void Environment::getAdjacent( Point point, std::vector<Point>& adjacent )
 {
     for (int x = point.x-1; x <= point.x+1; ++x)

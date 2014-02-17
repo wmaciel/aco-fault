@@ -165,9 +165,7 @@ void Colony::moveUntilAllDead()
 
 
 void Colony::updatePheromone()
-{
-    _environment->evaporatePheromone();
-    
+{   
     int nAnts = _ants.size();
 
     for (int a = 0; a < nAnts; ++a)

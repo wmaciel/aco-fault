@@ -59,11 +59,6 @@ public:
     bool getDirectionStrengthMask( int x, int y );
 
     /**
-     * Creates the negative feedback of pheromone evaporation
-     */
-    void evaporatePheromone();
-
-    /**
      * Populates a vector with the position of the adjacent pixels
      */
     void getAdjacent( Point point, std::vector<Point>& adjacent );
