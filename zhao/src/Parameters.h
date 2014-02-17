@@ -29,13 +29,13 @@
  * The relative importance of the pheromone value in comparison with the 
  * visibility value
  */
-#define PHEROMONE_WEIGHT 1.0f
+#define PHEROMONE_WEIGHT 2.0f
 
 /**
  * The relative importance of the visibility value in comparison with the 
  * pheromone value
  */
-#define VISIBILITY_WEIGHT 5.0f
+#define VISIBILITY_WEIGHT 1.0f
 
 /**
  * Number of steps an ant remembers taking.
@@ -46,7 +46,7 @@
  * Used for the block wise ant distribution technique presented by Zhao. This is
  * the size of one side of the block
  */
-#define BLOCK_SIZE 11
+#define BLOCK_SIZE 42
 
 /**
  * How many long can an ant "leap" in one step
@@ -61,7 +61,7 @@
 /**
  * How wide around the direction of the direction field can an ant see
  */
-#define FOV_ANGLE 30.0f
+#define FOV_ANGLE 15.0f
 
 /**
  * Used by the DIrectional Field to create the coherence mask. Values below the 
