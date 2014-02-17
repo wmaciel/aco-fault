@@ -108,5 +108,10 @@
  */
 #define DIR_FIELD_GAUSSIAN_WINDOW_HALF_HEIGHT 3
 
+/**
+ * Pheromone balance factor
+ */
+#define PHEROMONE_FACTOR 0.02
+
 #endif	/* PARAMETERS_H */
 

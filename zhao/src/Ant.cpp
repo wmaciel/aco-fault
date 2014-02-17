@@ -135,8 +135,8 @@ void Ant::depositPheromone()
         //float consistency = _environment->getDirectionStrength( point.x, point.y );
         //float pheromone = ( visibility + consistency ) * _pheromoneConstant / 2.0;
         
-        float pheromone = _pheromoneConstant;
-        _environment->addPheromone( pheromone, _path[i] );
+        //float pheromone = _pheromoneConstant;
+        _environment->addPheromone( PHEROMONE_FACTOR*pathSize, _path[i] );
     }
 }
 
