@@ -69,14 +69,19 @@ void Colony::distributeAntsByBlock()
 {
     int nHorizontalBlocks = _environment->getWidth() / BLOCK_SIZE;
     int nVerticalBlocks   = _environment->getHeight() / BLOCK_SIZE;
-
+    
+    int nAnts = nVerticalBlocks * nHorizontalBlocks;
+    
     for (int hb = 0; hb < nHorizontalBlocks; ++hb)
     {
         for (int vb = 0; vb < nVerticalBlocks; ++vb)
         {
             Point pMin( hb * BLOCK_SIZE, vb * BLOCK_SIZE );
             Point pMax( pMin.x + BLOCK_SIZE - 1, pMin.y + BLOCK_SIZE - 1 );
-            addAntInBlock( pMin, pMax );
+            for (int a = 0; a < nAnts; ++a)
+            {
+                addAntInBlock( pMin, pMax );
+            }
         }
     }
 }
