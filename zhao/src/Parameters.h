@@ -46,7 +46,7 @@
  * Used for the block wise ant distribution technique presented by Zhao. This is
  * the size of one side of the block
  */
-#define BLOCK_SIZE 30
+#define BLOCK_SIZE 10
 
 /**
  * How many long can an ant "leap" in one step

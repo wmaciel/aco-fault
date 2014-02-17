@@ -16,6 +16,7 @@
 
 Colony::Colony( Image* image )
 {
+    // Make sure the input is a grey scale image
     if (imgGetDimColorSpace( image ) != 1)
     {
         Image* aux = imgGrey( image );
@@ -30,11 +31,10 @@ Colony::Colony( Image* image )
     // Apply gaussian filter for noise reduction
     imgGauss( image );
     
+    // Outputs the image that will actually be used on the tracking
     imgWriteBMP( (char*)"trueInput.bmp", image );
     
     _environment = new Environment( INITIAL_PHEROMONE, MIN_PHEROMONE, EVAPORATION_RATE, image );
-    
-    generateProbabilityImages();
 }
 
 
@@ -60,8 +60,7 @@ void Colony::clearAnts()
 
 void Colony::distributeAnts()
 {
-    //distributeAntsByBlock();
-    distributeAntsByGamma();
+    distributeAntsByBlock();
 }
 
 
@@ -80,67 +79,6 @@ void Colony::distributeAntsByBlock()
             addAntInBlock( pMin, pMax );
         }
     }
-}
-
-
-
-void Colony::distributeAntsByGamma()
-{
-    int nGammaImages = _probabilityDistributions.size();
-    
-    for (int a = _ants.size(); a < NUMBER_OF_ANTS; ++a)
-    {
-        addAntInImage( _probabilityDistributions[a % nGammaImages] );
-    }
-}
-
-
-
-void Colony::generateProbabilityImages()
-{
-     Image* vis = _environment->getVisibilityImage(); imgWriteBMP( (char*)"gammaone.bmp", vis );
-     
-     Image* visGammaDown = imgCopy( vis );
-     imgGamma( visGammaDown, 0.5f ); imgWriteBMP( (char*)"gammadown.bmp", visGammaDown );
-     Image* gammaDownProb = generateProbabilityImage( visGammaDown );
-     imgDestroy( visGammaDown );
-     _probabilityDistributions.push_back( gammaDownProb );
-     
-     Image* visGammaUp = imgCopy( vis );
-     imgGamma( visGammaUp, 1.5f ); imgWriteBMP( (char*)"gammaup.bmp", visGammaUp );
-     Image* gammaUpProb = generateProbabilityImage( visGammaUp );
-     imgDestroy( visGammaUp );
-     _probabilityDistributions.push_back( gammaUpProb );
-     
-     Image* prob = generateProbabilityImage( vis );
-     imgDestroy( vis );
-     _probabilityDistributions.push_back( prob );
-}
-
-
-
-Image* Colony::generateProbabilityImage( Image* input )
-{
-    if (imgGetDimColorSpace( input ) != 1) return 0;
-    
-    Image* output = imgCopy( input );
-    float* data = imgGetData( output );
-    int size = imgGetWidth( output ) * imgGetHeight( output );
-    float sum = 0;
-    for (int i = 0; i < size; ++i)
-    {
-        if (isnan(data[i]))
-        {
-            printf( "Cannot generate probability image, NAN detected! on pixel %d\n", i );
-        }
-        sum += data[i];
-    }
-    for (int i = 0; i < size; ++i)
-    {
-        data[i] /= sum;
-    }
-    
-    return output;
 }
 
 
@@ -172,21 +110,6 @@ void Colony::addAntInBlock( Point pMin, Point pMax )
 
     int pixel = Ant::pickIndex( probabilities );
     Point chosenPoint( pMin.x + pixel % blockSize, pMin.y + pixel / blockSize );
-    Ant* ant = new Ant( chosenPoint, _environment );
-    ant->setStepLength( STEP_LENGTH );
-    ant->setPheromoneWeight( PHEROMONE_WEIGHT );
-    ant->setVisibilityWeight( VISIBILITY_WEIGHT );
-    _ants.push_back( ant );
-}
-
-
-
-void Colony::addAntInImage( Image* probabilityImage )
-{
-    float* probabilities = imgGetData( probabilityImage );
-    int pixel = Ant::pickIndex( probabilities, _environment->getWidth()*_environment->getHeight() );
-    int width = imgGetWidth( probabilityImage );
-    Point chosenPoint( pixel % width, pixel / width );
     Ant* ant = new Ant( chosenPoint, _environment );
     ant->setStepLength( STEP_LENGTH );
     ant->setPheromoneWeight( PHEROMONE_WEIGHT );

@@ -28,11 +28,7 @@ private:
     void clearAnts();
     void distributeAnts();
     void distributeAntsByBlock();
-    void distributeAntsByGamma();
-    Image* generateProbabilityImage( Image* input );
-    void generateProbabilityImages();
     void addAntInBlock( Point pMin, Point pMax );
-    void addAntInImage( Image* probabilityImage );
     void moveAnts();
     void moveUntilAllDead();
     void updatePheromone();

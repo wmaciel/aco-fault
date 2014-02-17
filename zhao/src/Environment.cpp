@@ -68,8 +68,8 @@ void Environment::computeImageMatrix( Image* image )
             }
             int i = id( x, y );
             _imageMatrix[i] = luminance;
-        }
     }
+}
 }
 
 
