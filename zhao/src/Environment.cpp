@@ -243,22 +243,18 @@ int Environment::getHeight()
 
 Image* Environment::getPheromoneImage()
 {
-    float* normalizedPheromone = normalizePheromone();
+    Image* output = imgCreate( _width, _height, 1 );
 
-    Image* output = imgCreate( _width, _height, 3 );
-
-#pragma omp parallel for
+    #pragma omp parallel for
     for (int x = 0; x < _width; ++x)
     {
         for (int y = 0; y < _height; ++y)
         {
-            float luminance = normalizedPheromone[id(x,y)];
-            imgSetPixel3f( output, x, y, luminance, luminance, luminance );
+            imgSetPixelf( output, x, y, _pheromoneMatrix[id(x,y)] );
         }
     }
-
-    delete[] normalizedPheromone;
-
+    
+    imgNormalize( output );
     return output;
 }
 
@@ -279,32 +275,3 @@ Image* Environment::getVisibilityImage()
     
     return output;
 }
-
-
-
-float* Environment::normalizePheromone()
-{
-    float max = 0;
-
-    int nElements = _height * _width;
-    float* normalized = new float[nElements];
-
-    for ( int i = 0; i < nElements; ++i )
-    {
-        if (max < _pheromoneMatrix[i])
-        {
-            max = _pheromoneMatrix[i];
-        }
-    }
-
-    float factor = 1.0f / max;
-
-    #pragma omp parallel for
-    for ( int i = 0; i < nElements; ++i )
-    {
-       normalized[i] = _pheromoneMatrix[i] * factor;
-    }
-
-    return normalized;
-}
-
