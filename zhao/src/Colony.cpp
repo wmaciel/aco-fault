@@ -268,6 +268,21 @@ bool Colony::available( Point point, Ant& ant )
 }
 
 
+void Colony::postProcessing( Image** img )
+{
+    Image* binImg = imgBinOtsu( *img );
+    imgDestroy(*img);
+    *img = binImg;
+    
+    //Morphology Close
+    Image* kernel = imgReadBMP( KERNEL_PATH );
+    imgDilate( *img, kernel );
+    imgErode(  *img, kernel );
+    
+    imgDestroy( kernel );
+}
+
+
 
 void Colony::printDebugImage()
 {
@@ -306,7 +321,8 @@ void Colony::printDebugImage()
 //    img = aux;
 //    aux = 0;
 
-    imgNormalize( img, 2 );
+    imgNormalize( img );
+    postProcessing( &img );
     char filename[150];
     sprintf( filename, "/home/keoma/Dropbox/PUC/Mestrado/antColonyOptimization/src/zhao/data/debugImages/debugImage%04d.bmp", ++step );
     imgWriteBMP( filename, img );

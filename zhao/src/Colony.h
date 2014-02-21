@@ -38,6 +38,7 @@ private:
     void updatePheromone();
     bool available( Point point, Ant& ant );
     void printDebugImage();
+    void postProcessing( Image** img );
 
     std::vector<Image*> _probabilityDistributions;
     Environment* _environment;
