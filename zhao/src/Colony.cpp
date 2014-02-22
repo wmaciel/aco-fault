@@ -60,26 +60,7 @@ void Colony::clearAnts()
 
 void Colony::distributeAnts()
 {
-    //distributeAntsByBlock();
     distributeAntsByGamma();
-}
-
-
-
-void Colony::distributeAntsByBlock()
-{
-    int nHorizontalBlocks = _environment->getWidth() / BLOCK_SIZE;
-    int nVerticalBlocks   = _environment->getHeight() / BLOCK_SIZE;
-
-    for (int hb = 0; hb < nHorizontalBlocks; ++hb)
-    {
-        for (int vb = 0; vb < nVerticalBlocks; ++vb)
-        {
-            Point pMin( hb * BLOCK_SIZE, vb * BLOCK_SIZE );
-            Point pMax( pMin.x + BLOCK_SIZE - 1, pMin.y + BLOCK_SIZE - 1 );
-            addAntInBlock( pMin, pMax );
-        }
-    }
 }
 
 
@@ -141,42 +122,6 @@ Image* Colony::generateProbabilityImage( Image* input )
     }
     
     return output;
-}
-
-
-
-void Colony::addAntInBlock( Point pMin, Point pMax )
-{
-    // compute the probabilities
-    std::vector<float> probabilities;
-
-    float sum = 0.0f;
-    for (int y = pMin.y; y <= pMax.y; ++y)
-    {
-        for (int x = pMin.x; x <= pMax.x; ++x)
-        {
-            sum += _environment->getVisibility( x, y );
-        }
-    }
-
-    for (int y = pMin.y; y <= pMax.y; ++y)
-    {
-        for (int x = pMin.x; x <= pMax.x; ++x)
-        {
-            float pixelValue = _environment->getVisibility( x, y );
-            probabilities.push_back( pixelValue / sum );
-        }
-    }
-    
-    int blockSize = pMax.x - pMin.x + 1;
-
-    int pixel = Ant::pickIndex( probabilities );
-    Point chosenPoint( pMin.x + pixel % blockSize, pMin.y + pixel / blockSize );
-    Ant* ant = new Ant( chosenPoint, _environment );
-    ant->setStepLength( STEP_LENGTH );
-    ant->setPheromoneWeight( PHEROMONE_WEIGHT );
-    ant->setVisibilityWeight( VISIBILITY_WEIGHT );
-    _ants.push_back( ant );
 }
 
 
