@@ -386,6 +386,8 @@ void imgGauss( Image* img );
 
 Image* imgCreateGaussianKernel( int halfWidth, int halfHeight, float stdDev );
 
+void imgBin( Image* img, float threshold );
+
 bool imgAssert( Image* img );
 
 #endif
