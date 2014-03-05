@@ -3,6 +3,8 @@
 #include "DirectionalField.h"
 #include "image.h"
 #include "Colony.h"
+#include "GuiWindow.h"
+#include "GuiPresenter.h"
 
 //void basicTest()
 //{
@@ -120,9 +122,16 @@ void testImageMorphology()
 
 int main( int argc, char** argv )
 {
+    gtk_init( &argc, &argv );
+    gtk_gl_init( &argc, &argv );
+    GuiWindow* window = new GuiWindow();
+    GuiPresenter* presenter = new GuiPresenter();
+    window->setPresenter( presenter );
+    window->show();
+    gtk_main();
     //testImage( "../data/easy/easy.bmp", "../data/easy/dir.bmp", "../data/easy/coh.bmp", "../data/easy/mask.bmp" );
     //basicTest();
-    whoLetTheAntsOut( argc, argv );
+    //whoLetTheAntsOut( argc, argv );
     //testImageMorphology();
     return 0;
 }
