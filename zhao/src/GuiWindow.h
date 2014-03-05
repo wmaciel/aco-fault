@@ -30,6 +30,7 @@ private:
     GtkWidget* buildCanvasBox();
     GtkWidget* buildControlsBox();
     GtkWidget* buildParameterBox( const char* name, double min, double max, double step );
+    GtkWidget* buildNotebook();
     
     //CALLBACKS
     /**

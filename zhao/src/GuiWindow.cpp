@@ -93,7 +93,83 @@ GtkWidget* GuiWindow::buildCanvasBox()
     return canvasBox;
 }
 
-
+GtkWidget* GuiWindow::buildNotebook()
+{
+    GtkWidget* notebook = gtk_notebook_new();
+    
+    // Ants Page
+    GtkWidget* antsPage = gtk_vbox_new(FALSE, 3);
+    GtkWidget* antsLabel = gtk_label_new( "Formiga" );
+    
+    GtkWidget* antsBox = buildParameterBox("Quantidade:", 1, 10000, 5 );
+    gtk_box_pack_start( GTK_BOX( antsPage ), antsBox, FALSE, TRUE, 2 );
+    
+    GtkWidget* freedomBox = buildParameterBox("Ângulo Visão:", 1, 180, 1 );
+    gtk_box_pack_start( GTK_BOX( antsPage ), freedomBox, FALSE, TRUE, 2 );
+    
+    GtkWidget* alphaBox = buildParameterBox("Peso Feromônio:", 1, 10, 1 );
+    gtk_box_pack_start( GTK_BOX( antsPage ), alphaBox, FALSE, TRUE, 2 );
+    
+    GtkWidget* etaBox = buildParameterBox("Peso Atributo:", 1, 10, 1 );
+    gtk_box_pack_start( GTK_BOX( antsPage ), etaBox, FALSE, TRUE, 2 );
+    
+    GtkWidget* constantBox = buildParameterBox("Constante Feromônio:", 0.1, 100, 0.5 );
+    gtk_box_pack_start( GTK_BOX( antsPage ), constantBox, FALSE, TRUE, 2 );
+    
+    GtkWidget* stepLengthBox = buildParameterBox("Tamanho Passo:", 0.1, 100, 0.5 );
+    gtk_box_pack_start( GTK_BOX( antsPage ), stepLengthBox, FALSE, TRUE, 2 );
+    
+    GtkWidget* maxStepsBox = buildParameterBox("Número de Passos:", 0.1, 100, 0.5 );
+    gtk_box_pack_start( GTK_BOX( antsPage ), maxStepsBox, FALSE, TRUE, 2 );
+    
+    GtkWidget* maxWrongStepsBox = buildParameterBox("Número de Passos Errôneos:", 0.1, 100, 0.5 );
+    gtk_box_pack_start( GTK_BOX( antsPage ), maxWrongStepsBox, FALSE, TRUE, 2 );
+    
+    gtk_notebook_append_page( GTK_NOTEBOOK(notebook), antsPage, antsLabel );
+    
+    
+    // Pheromone Page
+    GtkWidget* pheromonePage = gtk_vbox_new(FALSE, 3);
+    GtkWidget* pheromoneLabel = gtk_label_new( "Feromônio" );
+    
+    GtkWidget* turnsBox = buildParameterBox("Turnos:", 1, 1000, 1 );
+    gtk_box_pack_start( GTK_BOX( pheromonePage ), turnsBox, FALSE, TRUE, 2 );
+    
+    GtkWidget* evaporationBox = buildParameterBox("Taxa Evaporação:", 0, 1, 0.1 );
+    gtk_box_pack_start( GTK_BOX( pheromonePage ), evaporationBox, FALSE, TRUE, 2 );
+    
+    GtkWidget* minPheromoneBox = buildParameterBox("Feromônio Mínimo:", 0, 1, 0.1 );
+    gtk_box_pack_start( GTK_BOX( pheromonePage ), minPheromoneBox, FALSE, TRUE, 2 );
+    
+    GtkWidget* maxPheromoneBox = buildParameterBox("Feromônio Máximo:", 0, 1, 0.1 );
+    gtk_box_pack_start( GTK_BOX( pheromonePage ), maxPheromoneBox, FALSE, TRUE, 2 );
+    
+    GtkWidget* startPheromoneBox = buildParameterBox("Feromônio Inicial:", 0, 1, 0.1 );
+    gtk_box_pack_start( GTK_BOX( pheromonePage ), startPheromoneBox, FALSE, TRUE, 2 );
+    
+    gtk_notebook_append_page( GTK_NOTEBOOK(notebook), pheromonePage, pheromoneLabel );
+    
+    
+    // Direction Page
+    GtkWidget* directionPage = gtk_vbox_new(FALSE, 3);
+    GtkWidget* directionLabel = gtk_label_new( "Direção" );
+    
+    GtkWidget* wGaussBox = buildParameterBox("Largura Gauss:", 0, 1, 0.1 );
+    gtk_box_pack_start( GTK_BOX( directionPage ), wGaussBox, FALSE, TRUE, 2 );
+    
+    GtkWidget* hGaussBox = buildParameterBox("Altura Gauss:", 0, 1, 0.1 );
+    gtk_box_pack_start( GTK_BOX( directionPage ), hGaussBox, FALSE, TRUE, 2 );
+    
+    GtkWidget* cohTresholdBox = buildParameterBox("Limiar Consistência:", 0, 1, 0.1 );
+    gtk_box_pack_start( GTK_BOX( directionPage ), cohTresholdBox, FALSE, TRUE, 2 );
+    
+    GtkWidget* kernelBox = buildParameterBox("Kernel Radius:", 0, 1, 0.1 );
+    gtk_box_pack_start( GTK_BOX( directionPage ), kernelBox, FALSE, TRUE, 2 );
+    
+    gtk_notebook_append_page( GTK_NOTEBOOK(notebook), directionPage, directionLabel );
+    
+    return notebook;
+}
 
 GtkWidget* GuiWindow::buildControlsBox()
 {
@@ -102,29 +178,8 @@ GtkWidget* GuiWindow::buildControlsBox()
     GtkWidget* parametersLabel = gtk_label_new( "Parâmetros:" );
     gtk_box_pack_start( GTK_BOX( controlsBox ), parametersLabel, FALSE, TRUE, 5 );
     
-    GtkWidget* separator01 = gtk_hseparator_new();
-    gtk_box_pack_start( GTK_BOX( controlsBox ), separator01, FALSE, TRUE, 5 );
-    
-    GtkWidget* turnsBox = buildParameterBox("Turnos:", 1, 1000, 1 );
-    gtk_box_pack_start( GTK_BOX( controlsBox ), turnsBox, FALSE, TRUE, 2 );
-    
-    GtkWidget* alphaBox = buildParameterBox("Peso Feromônio:", 1, 10, 1 );
-    gtk_box_pack_start( GTK_BOX( controlsBox ), alphaBox, FALSE, TRUE, 2 );
-    
-    GtkWidget* etaBox = buildParameterBox("Peso Atributo:", 1, 10, 1 );
-    gtk_box_pack_start( GTK_BOX( controlsBox ), etaBox, FALSE, TRUE, 2 );
-    
-    GtkWidget* antsBox = buildParameterBox("Formigas:", 1, 10000, 5 );
-    gtk_box_pack_start( GTK_BOX( controlsBox ), antsBox, FALSE, TRUE, 2 );
-    
-    GtkWidget* freedomBox = buildParameterBox("Ângulo Visão:", 1, 180, 1 );
-    gtk_box_pack_start( GTK_BOX( controlsBox ), freedomBox, FALSE, TRUE, 2 );
-    
-    GtkWidget* constantBox = buildParameterBox("Constante Feromônio:", 0.1, 100, 0.5 );
-    gtk_box_pack_start( GTK_BOX( controlsBox ), constantBox, FALSE, TRUE, 2 );
-    
-    GtkWidget* evaporationBox = buildParameterBox("Taxa Evaporação:", 0, 1, 0.1 );
-    gtk_box_pack_start( GTK_BOX( controlsBox ), evaporationBox, FALSE, TRUE, 2 );
+    GtkWidget* notebook = buildNotebook();
+    gtk_box_pack_start( GTK_BOX( controlsBox ), notebook, FALSE, TRUE, 5 );
     
     GtkWidget* separator02 = gtk_hseparator_new();
     gtk_box_pack_start( GTK_BOX( controlsBox ), separator02, FALSE, TRUE, 5 );
