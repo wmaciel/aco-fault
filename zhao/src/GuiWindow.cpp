@@ -57,7 +57,7 @@ GtkWidget* GuiWindow::buildMainBox()
     GtkWidget* mainBox = gtk_hbox_new( FALSE, 5 );
     
     GtkWidget* canvasBox = buildCanvasBox();
-    gtk_box_pack_start( GTK_BOX( mainBox ), canvasBox, FALSE, FALSE, 5 );
+    gtk_box_pack_start( GTK_BOX( mainBox ), canvasBox, TRUE, TRUE, 5 );
     
     GtkWidget* controlsBox = buildControlsBox();
     gtk_box_pack_start( GTK_BOX( mainBox ), controlsBox, FALSE, FALSE, 5 );
@@ -97,9 +97,59 @@ GtkWidget* GuiWindow::buildCanvasBox()
 
 GtkWidget* GuiWindow::buildControlsBox()
 {
-    GtkWidget* controlsBox = gtk_vbox_new( TRUE, 3 );
+    GtkWidget* controlsBox = gtk_vbox_new( FALSE, 3 );
+    
+    GtkWidget* parametersLabel = gtk_label_new( "Parâmetros:" );
+    gtk_box_pack_start( GTK_BOX( controlsBox ), parametersLabel, FALSE, TRUE, 5 );
+    
+    GtkWidget* separator01 = gtk_hseparator_new();
+    gtk_box_pack_start( GTK_BOX( controlsBox ), separator01, FALSE, TRUE, 5 );
+    
+    GtkWidget* turnsBox = buildParameterBox("Turnos:", 1, 1000, 1 );
+    gtk_box_pack_start( GTK_BOX( controlsBox ), turnsBox, FALSE, TRUE, 2 );
+    
+    GtkWidget* alphaBox = buildParameterBox("Peso Feromônio:", 1, 10, 1 );
+    gtk_box_pack_start( GTK_BOX( controlsBox ), alphaBox, FALSE, TRUE, 2 );
+    
+    GtkWidget* etaBox = buildParameterBox("Peso Atributo:", 1, 10, 1 );
+    gtk_box_pack_start( GTK_BOX( controlsBox ), etaBox, FALSE, TRUE, 2 );
+    
+    GtkWidget* antsBox = buildParameterBox("Formigas:", 1, 10000, 5 );
+    gtk_box_pack_start( GTK_BOX( controlsBox ), antsBox, FALSE, TRUE, 2 );
+    
+    GtkWidget* freedomBox = buildParameterBox("Ângulo Visão:", 1, 180, 1 );
+    gtk_box_pack_start( GTK_BOX( controlsBox ), freedomBox, FALSE, TRUE, 2 );
+    
+    GtkWidget* constantBox = buildParameterBox("Constante Feromônio:", 0.1, 100, 0.5 );
+    gtk_box_pack_start( GTK_BOX( controlsBox ), constantBox, FALSE, TRUE, 2 );
+    
+    GtkWidget* evaporationBox = buildParameterBox("Taxa Evaporação:", 0, 1, 0.1 );
+    gtk_box_pack_start( GTK_BOX( controlsBox ), evaporationBox, FALSE, TRUE, 2 );
+    
+    GtkWidget* separator02 = gtk_hseparator_new();
+    gtk_box_pack_start( GTK_BOX( controlsBox ), separator02, FALSE, TRUE, 5 );
+    
+    GtkWidget* loadButton = gtk_file_chooser_button_new( "Selecione faria de atributo sísmico", GTK_FILE_CHOOSER_ACTION_OPEN );
+    gtk_box_pack_start( GTK_BOX( controlsBox ), loadButton, TRUE, TRUE, 2 );
+    
+    GtkWidget* runButton = gtk_button_new_with_label( "Executar" );
+    gtk_box_pack_start( GTK_BOX( controlsBox ), runButton, TRUE, TRUE, 2 );
     
     return controlsBox;
+}
+
+
+
+GtkWidget* GuiWindow::buildParameterBox( const char* name, double min, double max, double step )
+{
+    GtkWidget* paramBox = gtk_vbox_new( FALSE, 1 );
+    GtkWidget* label = gtk_label_new( name );
+    GtkWidget* spin = gtk_spin_button_new_with_range( min, max, step );
+    
+    gtk_box_pack_start( GTK_BOX(paramBox), label, FALSE, TRUE, 1 );
+    gtk_box_pack_start( GTK_BOX(paramBox), spin,  TRUE, TRUE, 1 );
+    
+    return paramBox;
 }
 
 

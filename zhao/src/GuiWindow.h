@@ -29,6 +29,7 @@ private:
     GtkWidget* buildMainBox();
     GtkWidget* buildCanvasBox();
     GtkWidget* buildControlsBox();
+    GtkWidget* buildParameterBox( const char* name, double min, double max, double step );
     
     //CALLBACKS
     /**
@@ -58,6 +59,11 @@ private:
     
     /** Drawing Area will hold the OpenGL drawing of the input image */
     GtkWidget* _srcCanvas;
+    
+    /** Spin button defining the number of turns to run */
+    GtkWidget* _spinTurns;
+    
+    GtkWidget* _spinAlpha;
 };
 
 #endif	/* GUIWINDOW_H */
