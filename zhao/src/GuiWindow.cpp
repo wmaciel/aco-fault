@@ -197,10 +197,11 @@ GtkWidget* GuiWindow::buildControlsBox()
     
     GtkWidget* loadButton = gtk_file_chooser_button_new( "Selecione faria de atributo sísmico", GTK_FILE_CHOOSER_ACTION_OPEN );
     g_signal_connect( loadButton, "file-set", G_CALLBACK(cb_fileChosen), this );
-    gtk_box_pack_start( GTK_BOX( controlsBox ), loadButton, TRUE, TRUE, 2 );
+    gtk_box_pack_start( GTK_BOX( controlsBox ), loadButton, FALSE, TRUE, 2 );
     
     GtkWidget* runButton = gtk_button_new_with_label( "Executar" );
-    gtk_box_pack_start( GTK_BOX( controlsBox ), runButton, TRUE, TRUE, 2 );
+    g_signal_connect( runButton, "clicked", G_CALLBACK(cb_run), this );
+    gtk_box_pack_start( GTK_BOX( controlsBox ), runButton, FALSE, TRUE, 2 );
     
     return controlsBox;
 }
@@ -344,4 +345,12 @@ void GuiWindow::cb_fileChosen( GtkFileChooserButton* widget, gpointer user_data 
     GuiWindow* window = (GuiWindow*) user_data;
     window->_presenter->loadImage( (char*)fileName );
     g_free( fileName );
+}
+
+
+
+void GuiWindow::cb_run( GtkButton* widget, gpointer user_data )
+{
+    GuiWindow* window = (GuiWindow*) user_data;
+    window->_presenter->run();
 }

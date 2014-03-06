@@ -236,7 +236,7 @@ void Colony::moveUntilAllDead()
             }
         }
     }
-    printDebugImage();
+    //printDebugImage();
 }
 
 
@@ -257,7 +257,11 @@ void Colony::updatePheromone()
 
 Image* Colony::getPheromoneImage()
 {
-    return 0;
+    
+    Image* img = _environment->getPheromoneImage();
+    imgNormalize( img );
+    postProcessing( &img );
+    return img;
 }
 
 

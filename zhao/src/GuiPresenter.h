@@ -20,6 +20,7 @@ public:
     
     void showWindow();
     void loadImage( char* path );
+    void run();
     Image* getInputImage();
     Image* getOutputImage();
     

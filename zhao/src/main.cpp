@@ -94,7 +94,6 @@ void testImage( char* fileIn, char* fileDir, char* fileCoh, char* fileMask )
 
 void whoLetTheAntsOut( int argc, char** argv )
 {
-    srand( time(NULL) );
     //Image* input = imgReadPFM( (char*)"/home/keoma/Dropbox/PUC/Mestrado/antColonyOptimization/zhao/data/atributo/maxVolume_all_TimeSlice_404_TAG.pfm" );
     //Image* input = imgReadBMP( (char*)"/home/keoma/Dropbox/PUC/Mestrado/antColonyOptimization/zhao/data/sintetico/sinteticoPiece.bmp" );
     Image* input = imgReadPFM( (char*)"/home/keoma/Dropbox/PUC/Mestrado/antColonyOptimization/src/sinteticData/data/attributeOutput.pfm" );
@@ -124,6 +123,7 @@ int main( int argc, char** argv )
 {
     gtk_init( &argc, &argv );
     gtk_gl_init( &argc, &argv );
+    srand( time(NULL) );
     GuiPresenter* presenter = new GuiPresenter();
     presenter->showWindow();
     gtk_main();

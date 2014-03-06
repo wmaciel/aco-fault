@@ -7,6 +7,8 @@
 
 #include "GuiPresenter.h"
 #include "GuiWindow.h"
+#include "Parameters.h"
+#include "Colony.h"
 
 GuiPresenter::GuiPresenter()
 {
@@ -64,4 +66,24 @@ void GuiPresenter::loadImage( char* path )
     _inImg = imgReadPFM( path );
     
     _window->redraw();
+}
+
+
+
+void GuiPresenter::run()
+{
+    Image* copyInImg = imgCopy( _inImg );
+    Colony* colony = new Colony( copyInImg );
+    colony->run( Parameters::turns );
+    
+    if (_outImg)
+    {
+        imgDestroy(_outImg);
+        _outImg = 0;
+    }
+    
+    _outImg = colony->getPheromoneImage();
+    _window->redraw();
+    
+    delete colony;
 }

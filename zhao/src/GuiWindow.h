@@ -52,12 +52,10 @@ private:
      * @return TRUE if went ok, FALSE otherwise.
      */
     static gboolean cb_exposeGLCanvas( GtkWidget *canvas, GdkEventExpose *event, gpointer user_data );
-    
     static void cb_intParamChanged( GtkSpinButton* spinbutton, gpointer user_data );
-    
     static void cb_floatParamChanged( GtkSpinButton* spinbutton, gpointer user_data );
-    
     static void cb_fileChosen( GtkFileChooserButton *widget, gpointer user_data);
+    static void cb_run( GtkButton* widget, gpointer user_data );
     
     GuiPresenter* _presenter;
     
