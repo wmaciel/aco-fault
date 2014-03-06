@@ -7,6 +7,7 @@
 
 #include "GuiWindow.h"
 #include "GuiPresenter.h"
+#include "Parameters.h"
 #include <GL/gl.h>
 
 GuiWindow::GuiWindow()
@@ -101,28 +102,28 @@ GtkWidget* GuiWindow::buildNotebook()
     GtkWidget* antsPage = gtk_vbox_new(FALSE, 3);
     GtkWidget* antsLabel = gtk_label_new( "Formiga" );
     
-    GtkWidget* antsBox = buildParameterBox("Quantidade:", 1, 10000, 5 );
+    GtkWidget* antsBox = buildParameterBox("Quantidade:", 1, 10000, 5, &Parameters::numberOfAnts, true );
     gtk_box_pack_start( GTK_BOX( antsPage ), antsBox, FALSE, TRUE, 2 );
     
-    GtkWidget* freedomBox = buildParameterBox("Ângulo Visão:", 1, 180, 1 );
+    GtkWidget* freedomBox = buildParameterBox("Ângulo Visão:", 1, 180, 1, &Parameters::fov, false );
     gtk_box_pack_start( GTK_BOX( antsPage ), freedomBox, FALSE, TRUE, 2 );
     
-    GtkWidget* alphaBox = buildParameterBox("Peso Feromônio:", 1, 10, 1 );
+    GtkWidget* alphaBox = buildParameterBox("Peso Feromônio:", 1, 10, 1, &Parameters::pheromoneWeight, false );
     gtk_box_pack_start( GTK_BOX( antsPage ), alphaBox, FALSE, TRUE, 2 );
     
-    GtkWidget* etaBox = buildParameterBox("Peso Atributo:", 1, 10, 1 );
+    GtkWidget* etaBox = buildParameterBox("Peso Atributo:", 1, 10, 1, &Parameters::attributeWeight, false );
     gtk_box_pack_start( GTK_BOX( antsPage ), etaBox, FALSE, TRUE, 2 );
     
-    GtkWidget* constantBox = buildParameterBox("Constante Feromônio:", 0.1, 100, 0.5 );
+    GtkWidget* constantBox = buildParameterBox("Constante Feromônio:", 0.1, 100, 0.5, &Parameters::pheromoneConstant, false );
     gtk_box_pack_start( GTK_BOX( antsPage ), constantBox, FALSE, TRUE, 2 );
     
-    GtkWidget* stepLengthBox = buildParameterBox("Tamanho Passo:", 0.1, 100, 0.5 );
+    GtkWidget* stepLengthBox = buildParameterBox("Tamanho Passo:", 0.1, 100, 0.5, &Parameters::stepLength, true );
     gtk_box_pack_start( GTK_BOX( antsPage ), stepLengthBox, FALSE, TRUE, 2 );
     
-    GtkWidget* maxStepsBox = buildParameterBox("Número de Passos:", 0.1, 100, 0.5 );
+    GtkWidget* maxStepsBox = buildParameterBox("Número de Passos:", 0.1, 100, 0.5, &Parameters::maxSteps, true );
     gtk_box_pack_start( GTK_BOX( antsPage ), maxStepsBox, FALSE, TRUE, 2 );
     
-    GtkWidget* maxWrongStepsBox = buildParameterBox("Número de Passos Errôneos:", 0.1, 100, 0.5 );
+    GtkWidget* maxWrongStepsBox = buildParameterBox("Número de Passos Errôneos:", 0.1, 100, 0.5, &Parameters::maxAbnormalSteps, true );
     gtk_box_pack_start( GTK_BOX( antsPage ), maxWrongStepsBox, FALSE, TRUE, 2 );
     
     gtk_notebook_append_page( GTK_NOTEBOOK(notebook), antsPage, antsLabel );
@@ -132,19 +133,19 @@ GtkWidget* GuiWindow::buildNotebook()
     GtkWidget* pheromonePage = gtk_vbox_new(FALSE, 3);
     GtkWidget* pheromoneLabel = gtk_label_new( "Feromônio" );
     
-    GtkWidget* turnsBox = buildParameterBox("Turnos:", 1, 1000, 1 );
+    GtkWidget* turnsBox = buildParameterBox("Turnos:", 1, 1000, 1, &Parameters::turns, true );
     gtk_box_pack_start( GTK_BOX( pheromonePage ), turnsBox, FALSE, TRUE, 2 );
     
-    GtkWidget* evaporationBox = buildParameterBox("Taxa Evaporação:", 0, 1, 0.1 );
+    GtkWidget* evaporationBox = buildParameterBox("Taxa Evaporação:", 0, 1, 0.1, &Parameters::evaporationRate, false );
     gtk_box_pack_start( GTK_BOX( pheromonePage ), evaporationBox, FALSE, TRUE, 2 );
     
-    GtkWidget* minPheromoneBox = buildParameterBox("Feromônio Mínimo:", 0, 1, 0.1 );
+    GtkWidget* minPheromoneBox = buildParameterBox("Feromônio Mínimo:", 0, 1, 0.1, &Parameters::minPheromone, false );
     gtk_box_pack_start( GTK_BOX( pheromonePage ), minPheromoneBox, FALSE, TRUE, 2 );
     
-    GtkWidget* maxPheromoneBox = buildParameterBox("Feromônio Máximo:", 0, 1, 0.1 );
+    GtkWidget* maxPheromoneBox = buildParameterBox("Feromônio Máximo:", 0, 1, 0.1, &Parameters::maxPheromone, false );
     gtk_box_pack_start( GTK_BOX( pheromonePage ), maxPheromoneBox, FALSE, TRUE, 2 );
     
-    GtkWidget* startPheromoneBox = buildParameterBox("Feromônio Inicial:", 0, 1, 0.1 );
+    GtkWidget* startPheromoneBox = buildParameterBox("Feromônio Inicial:", 0, 1, 0.1, &Parameters::initPheromone, false );
     gtk_box_pack_start( GTK_BOX( pheromonePage ), startPheromoneBox, FALSE, TRUE, 2 );
     
     gtk_notebook_append_page( GTK_NOTEBOOK(notebook), pheromonePage, pheromoneLabel );
@@ -154,16 +155,16 @@ GtkWidget* GuiWindow::buildNotebook()
     GtkWidget* directionPage = gtk_vbox_new(FALSE, 3);
     GtkWidget* directionLabel = gtk_label_new( "Direção" );
     
-    GtkWidget* wGaussBox = buildParameterBox("Largura Gauss:", 0, 1, 0.1 );
+    GtkWidget* wGaussBox = buildParameterBox("Largura Gauss:", 0, 1, 0.1, &Parameters::widthGauss, true );
     gtk_box_pack_start( GTK_BOX( directionPage ), wGaussBox, FALSE, TRUE, 2 );
     
-    GtkWidget* hGaussBox = buildParameterBox("Altura Gauss:", 0, 1, 0.1 );
+    GtkWidget* hGaussBox = buildParameterBox("Altura Gauss:", 0, 1, 0.1, &Parameters::heightGauss, true );
     gtk_box_pack_start( GTK_BOX( directionPage ), hGaussBox, FALSE, TRUE, 2 );
     
-    GtkWidget* cohTresholdBox = buildParameterBox("Limiar Consistência:", 0, 1, 0.1 );
+    GtkWidget* cohTresholdBox = buildParameterBox("Limiar Consistência:", 0, 1, 0.1, &Parameters::cohTreshold, false );
     gtk_box_pack_start( GTK_BOX( directionPage ), cohTresholdBox, FALSE, TRUE, 2 );
     
-    GtkWidget* kernelBox = buildParameterBox("Kernel Radius:", 0, 1, 0.1 );
+    GtkWidget* kernelBox = buildParameterBox("Kernel Radius:", 0, 1, 0.1, &Parameters::kernelRadius, true );
     gtk_box_pack_start( GTK_BOX( directionPage ), kernelBox, FALSE, TRUE, 2 );
     
     gtk_notebook_append_page( GTK_NOTEBOOK(notebook), directionPage, directionLabel );
@@ -195,7 +196,7 @@ GtkWidget* GuiWindow::buildControlsBox()
 
 
 
-GtkWidget* GuiWindow::buildParameterBox( const char* name, double min, double max, double step )
+GtkWidget* GuiWindow::buildParameterBox( const char* name, double min, double max, double step, void* param, bool isInteger )
 {
     GtkWidget* paramBox = gtk_vbox_new( FALSE, 1 );
     GtkWidget* label = gtk_label_new( name );
@@ -203,6 +204,19 @@ GtkWidget* GuiWindow::buildParameterBox( const char* name, double min, double ma
     
     gtk_box_pack_start( GTK_BOX(paramBox), label, FALSE, TRUE, 1 );
     gtk_box_pack_start( GTK_BOX(paramBox), spin,  TRUE, TRUE, 1 );
+    
+    if (isInteger)
+    {
+        int* iParam = (int*) param;
+        gtk_spin_button_set_value( GTK_SPIN_BUTTON(spin), *iParam );
+        g_signal_connect( spin, "value-changed", G_CALLBACK(cb_intParamChanged), param );
+    }
+    else
+    {
+        float* fParam = (float*) param;
+        gtk_spin_button_set_value( GTK_SPIN_BUTTON(spin), *fParam );
+        g_signal_connect( spin, "value-changed", G_CALLBACK(cb_floatParamChanged), param );
+    }
     
     return paramBox;
 }
@@ -291,4 +305,22 @@ gboolean GuiWindow::cb_exposeGLCanvas( GtkWidget* canvas, GdkEventExpose* event,
     
     //everything went fine
     return TRUE;
+}
+
+
+
+void GuiWindow::cb_intParamChanged( GtkSpinButton* spinbutton, gpointer user_data )
+{
+    int* param = (int*) user_data;
+    
+    *param = gtk_spin_button_get_value_as_int( spinbutton );
+}
+
+
+
+void GuiWindow::cb_floatParamChanged( GtkSpinButton* spinbutton, gpointer user_data )
+{
+    float* param = (float*) user_data;
+    
+    *param = gtk_spin_button_get_value_as_float( spinbutton );
 }

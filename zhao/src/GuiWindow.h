@@ -29,7 +29,7 @@ private:
     GtkWidget* buildMainBox();
     GtkWidget* buildCanvasBox();
     GtkWidget* buildControlsBox();
-    GtkWidget* buildParameterBox( const char* name, double min, double max, double step );
+    GtkWidget* buildParameterBox( const char* name, double min, double max, double step, void* param, bool isInteger );
     GtkWidget* buildNotebook();
     
     //CALLBACKS
@@ -52,6 +52,10 @@ private:
      */
     static gboolean cb_exposeGLCanvas( GtkWidget *canvas, GdkEventExpose *event, gpointer user_data );
     
+    static void cb_intParamChanged( GtkSpinButton* spinbutton, gpointer user_data );
+    
+    static void cb_floatParamChanged( GtkSpinButton* spinbutton, gpointer user_data );
+    
     GuiPresenter* _presenter;
     GtkWidget* _gtkWindow;
     
@@ -60,11 +64,6 @@ private:
     
     /** Drawing Area will hold the OpenGL drawing of the input image */
     GtkWidget* _srcCanvas;
-    
-    /** Spin button defining the number of turns to run */
-    GtkWidget* _spinTurns;
-    
-    GtkWidget* _spinAlpha;
 };
 
 #endif	/* GUIWINDOW_H */
