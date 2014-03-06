@@ -23,6 +23,7 @@ public:
     virtual ~GuiWindow();
     void setPresenter( GuiPresenter* presenter );
     void show();
+    void redraw();
 
 private:
     GtkWidget* build();
@@ -56,7 +57,10 @@ private:
     
     static void cb_floatParamChanged( GtkSpinButton* spinbutton, gpointer user_data );
     
+    static void cb_fileChosen( GtkFileChooserButton *widget, gpointer user_data);
+    
     GuiPresenter* _presenter;
+    
     GtkWidget* _gtkWindow;
     
     /** Drawing Area will hold the OpenGL drawing of the output image */

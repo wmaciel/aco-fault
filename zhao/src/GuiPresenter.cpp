@@ -45,3 +45,23 @@ Image* GuiPresenter::getOutputImage()
     return _outImg;
 }
 
+
+
+void GuiPresenter::loadImage( char* path )
+{
+    if (_inImg)
+    {
+        imgDestroy( _inImg );
+        _inImg = 0;
+    }
+    
+    if (_outImg)
+    {
+        imgDestroy(_outImg);
+        _outImg = 0;
+    }
+    
+    _inImg = imgReadPFM( path );
+    
+    _window->redraw();
+}

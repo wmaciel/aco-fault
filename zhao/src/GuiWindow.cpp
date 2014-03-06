@@ -38,6 +38,16 @@ void GuiWindow::show()
     gtk_widget_show_all( _gtkWindow );
 }
 
+
+
+void GuiWindow::redraw()
+{
+    cb_exposeGLCanvas( _srcCanvas, NULL, this );
+    cb_exposeGLCanvas( _dstCanvas, NULL, this );
+}
+
+
+
 GtkWidget* GuiWindow::build()
 {
     //create window
@@ -186,6 +196,7 @@ GtkWidget* GuiWindow::buildControlsBox()
     gtk_box_pack_start( GTK_BOX( controlsBox ), separator02, FALSE, TRUE, 5 );
     
     GtkWidget* loadButton = gtk_file_chooser_button_new( "Selecione faria de atributo sísmico", GTK_FILE_CHOOSER_ACTION_OPEN );
+    g_signal_connect( loadButton, "file-set", G_CALLBACK(cb_fileChosen), this );
     gtk_box_pack_start( GTK_BOX( controlsBox ), loadButton, TRUE, TRUE, 2 );
     
     GtkWidget* runButton = gtk_button_new_with_label( "Executar" );
@@ -323,4 +334,14 @@ void GuiWindow::cb_floatParamChanged( GtkSpinButton* spinbutton, gpointer user_d
     float* param = (float*) user_data;
     
     *param = gtk_spin_button_get_value_as_float( spinbutton );
+}
+
+
+
+void GuiWindow::cb_fileChosen( GtkFileChooserButton* widget, gpointer user_data )
+{
+    gchar* fileName = gtk_file_chooser_get_filename( GTK_FILE_CHOOSER(widget) );
+    GuiWindow* window = (GuiWindow*) user_data;
+    window->_presenter->loadImage( (char*)fileName );
+    g_free( fileName );
 }
