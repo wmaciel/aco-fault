@@ -6,11 +6,14 @@
  */
 
 #include "GuiPresenter.h"
+#include "GuiWindow.h"
 
 GuiPresenter::GuiPresenter()
 {
     _inImg = 0;
     _outImg = 0;
+    _window = new GuiWindow();
+    _window->setPresenter( this );
 }
 
 
@@ -19,6 +22,13 @@ GuiPresenter::~GuiPresenter()
 {
     if (_inImg)  imgDestroy( _inImg );
     if (_outImg) imgDestroy( _outImg );
+}
+
+
+
+void GuiPresenter::showWindow()
+{
+    _window->show();
 }
 
 

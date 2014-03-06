@@ -124,10 +124,8 @@ int main( int argc, char** argv )
 {
     gtk_init( &argc, &argv );
     gtk_gl_init( &argc, &argv );
-    GuiWindow* window = new GuiWindow();
     GuiPresenter* presenter = new GuiPresenter();
-    window->setPresenter( presenter );
-    window->show();
+    presenter->showWindow();
     gtk_main();
     //testImage( "../data/easy/easy.bmp", "../data/easy/dir.bmp", "../data/easy/coh.bmp", "../data/easy/mask.bmp" );
     //basicTest();

@@ -10,16 +10,21 @@
 
 #include "image.h"
 
+class GuiWindow;
 
 class GuiPresenter
 {
 public:
     GuiPresenter();
     virtual ~GuiPresenter();
+    
+    void showWindow();
+    void loadImage( char* path );
     Image* getInputImage();
     Image* getOutputImage();
     
 private:
+    GuiWindow* _window;
     Image* _inImg;
     Image* _outImg;
 };
