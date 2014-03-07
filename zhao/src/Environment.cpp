@@ -55,7 +55,7 @@ void Environment::construct( int height, int width )
 
 void Environment::computeImageMatrix( Image* image )
 {
-//#pragma omp parallel for
+    #pragma omp parallel for
     for (int x=0; x<_width; ++x)
     {
         for (int y=0; y<_height; ++y)
@@ -76,14 +76,12 @@ void Environment::computeImageMatrix( Image* image )
 
 void Environment::clearFeromone()
 {
-#pragma omp parallel for
-    for (int x=0; x<_width; ++x)
+    int size = _width * _height;
+    
+    #pragma omp parallel for
+    for (int i = 0; i < size; ++i)
     {
-        for (int y=0; y<_height; ++y)
-        {
-            int i = id( x, y );
-            _pheromoneMatrix[i] = _initialPheromone;
-        }
+        _pheromoneMatrix[i] = _initialPheromone;
     }
 }
 
@@ -191,19 +189,21 @@ bool Environment::getDirectionStrengthMask( int x, int y )
 
 void Environment::evaporatePheromone()
 {
-#pragma omp parallel for
-    for (int x=0; x<_width; ++x)
+    int size = _width * _height;
+    
+    #pragma omp parallel for
+    for (int i = 0; i < size; ++i)
     {
-        for (int y=0; y<_height; ++y)
-        {
-            int i = id( x, y );
-            _pheromoneMatrix[i] *= ( 1 - _evaporationRate );
+        float matrixElem = _pheromoneMatrix[i];
+        
+        matrixElem *= ( 1 - _evaporationRate );
 
-             if (_pheromoneMatrix[i] < _minimumPheromone)
-            {
-                _pheromoneMatrix[i] = _minimumPheromone;
-            }
+        if (matrixElem < _minimumPheromone)
+        {
+            matrixElem = _minimumPheromone;
         }
+        
+        _pheromoneMatrix[i] = matrixElem;
     }
 }
 

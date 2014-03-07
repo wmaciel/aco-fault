@@ -50,7 +50,8 @@ void Colony::clearAnts()
     #pragma omp parallel for
     for( int a = 0; a < NUMBER_OF_ANTS; ++a)
     {
-        delete _ants[a];
+        Ant* ant = _ants[a];
+        delete ant;
     }
     
     _ants.clear();
@@ -224,6 +225,7 @@ void Colony::moveUntilAllDead()
     while (!allDead)
     {
         allDead = true;
+        
         #pragma omp parallel for
         for (int a = 0; a < nAnts; ++a)
         {
@@ -260,7 +262,7 @@ Image* Colony::getPheromoneImage()
     
     Image* img = _environment->getPheromoneImage();
     imgNormalize( img );
-    postProcessing( &img );
+    //postProcessing( &img );
     return img;
 }
 
