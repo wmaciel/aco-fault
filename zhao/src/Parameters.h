@@ -123,12 +123,6 @@ public:
 #define NUMBER_OF_ANTS (Parameters::numberOfAnts)
 
 /**
- * Path to the kernel image used for the opening and closing of the coherence 
- * mask image
- */
-#define KERNEL_PATH ((char*)"/home/keoma/Dropbox/PUC/Mestrado/antColonyOptimization/src/zhao/data/masks/kernel3.bmp")
-
-/**
  * Width of the Gaussian window used to build the directional field
  */
 #define DIR_FIELD_GAUSSIAN_WINDOW_HALF_WIDTH (Parameters::widthGauss)
