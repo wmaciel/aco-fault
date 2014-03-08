@@ -279,7 +279,7 @@ void Colony::postProcessing( Image** img )
     *img = binImg;
     
     //Morphology Close
-    Image* kernel = imgReadBMP( KERNEL_PATH );
+    Image* kernel = _environment->buildCircleImage( Parameters::kernelRadius );
     imgDilate( *img, kernel );
     imgErode(  *img, kernel );
     

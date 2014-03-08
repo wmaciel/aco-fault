@@ -81,6 +81,8 @@ public:
     Image* getPheromoneImage();
     
     Image* getVisibilityImage();
+    
+    Image* buildCircleImage( int radius );
 
 private:
 
