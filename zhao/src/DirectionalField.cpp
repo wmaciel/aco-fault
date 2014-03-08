@@ -483,10 +483,10 @@ void DirectionalField::debugImages()
             }
         }
     }
-    imgWriteBMP( (char*)"directionalFieldDebugImage.bmp", dbgImg );
+    imgWriteBMP( (char*)"debugImg/directionalFieldDebugImage.bmp", dbgImg );
     imgDestroy( dbgImg );
 
     //coherence field
-    imgWriteBMP( (char*)"coherenceFieldDebugImage.bmp", _coherence );
-    imgWriteBMP( (char*)"coherenceFieldDebugMask.bmp", _coherenceMask );
+    imgWriteBMP( (char*)"debugImg/coherenceFieldDebugImage.bmp", _coherence );
+    imgWriteBMP( (char*)"debugImg/coherenceFieldDebugMask.bmp", _coherenceMask );
 }

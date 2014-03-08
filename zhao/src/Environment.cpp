@@ -22,7 +22,7 @@ _evaporationRate(evaporationRate), _initialPheromone(initialPheromone), _minimum
     construct( imgGetHeight( image ), imgGetWidth( image ) );
     computeImageMatrix( image );
     clearFeromone();
-    Image* kernel = imgReadBMP( KERNEL_PATH );
+    Image* kernel = buildCircleImage( Parameters::kernelRadius );
     _directionalField = new DirectionalField( image, kernel );
     _directionalField->debugImages();
 }
@@ -55,17 +55,17 @@ void Environment::construct( int height, int width )
 
 void Environment::computeImageMatrix( Image* image )
 {
-//#pragma omp parallel for
+    #pragma omp parallel for
     for (int x=0; x<_width; ++x)
     {
         for (int y=0; y<_height; ++y)
         {
             float luminance = imgGetPixelf( image, x, y );
-            if (isnan(luminance))
-            {
-                printf("NAN found computing image Matrix\n");
-                luminance = imgGetPixelf( image, x, y );
-            }
+//            if (isnan(luminance))
+//            {
+//                printf("NAN found computing image Matrix\n");
+//                luminance = imgGetPixelf( image, x, y );
+//            }
             int i = id( x, y );
             _imageMatrix[i] = luminance;
         }
@@ -76,14 +76,12 @@ void Environment::computeImageMatrix( Image* image )
 
 void Environment::clearFeromone()
 {
-#pragma omp parallel for
-    for (int x=0; x<_width; ++x)
+    int size = _width * _height;
+    
+    #pragma omp parallel for
+    for (int i = 0; i < size; ++i)
     {
-        for (int y=0; y<_height; ++y)
-        {
-            int i = id( x, y );
-            _pheromoneMatrix[i] = _initialPheromone;
-        }
+        _pheromoneMatrix[i] = _initialPheromone;
     }
 }
 
@@ -191,19 +189,21 @@ bool Environment::getDirectionStrengthMask( int x, int y )
 
 void Environment::evaporatePheromone()
 {
-#pragma omp parallel for
-    for (int x=0; x<_width; ++x)
+    int size = _width * _height;
+    
+    #pragma omp parallel for
+    for (int i = 0; i < size; ++i)
     {
-        for (int y=0; y<_height; ++y)
-        {
-            int i = id( x, y );
-            _pheromoneMatrix[i] *= ( 1 - _evaporationRate );
+        float matrixElem = _pheromoneMatrix[i];
+        
+        matrixElem *= ( 1 - _evaporationRate );
 
-             if (_pheromoneMatrix[i] < _minimumPheromone)
-            {
-                _pheromoneMatrix[i] = _minimumPheromone;
-            }
+        if (matrixElem < _minimumPheromone)
+        {
+            matrixElem = _minimumPheromone;
         }
+        
+        _pheromoneMatrix[i] = matrixElem;
     }
 }
 
@@ -274,4 +274,35 @@ Image* Environment::getVisibilityImage()
     }
     
     return output;
+}
+
+
+
+Image* Environment::buildCircleImage( int radius )
+{
+    int diameter = radius + radius + 1;
+    Image* out = imgCreate( diameter, diameter, 1 );
+    float luminance = 0.0f;
+    
+    for (int x = 0; x < diameter; ++x)
+    {
+        for (int y = 0; y < diameter; ++y)
+        {
+            int dx = abs( x - radius );
+            int dy = abs( y - radius );
+            float distance = sqrt( dx * dx + dy * dy );
+            if (distance <= (float) radius)
+            {
+                luminance = 1.0f;
+            }
+            else
+            {
+                luminance = 0.0f;
+            }
+            
+            imgSetPixelf( out, x, y, luminance );
+        }
+    }
+    
+    return out;
 }

@@ -2268,7 +2268,7 @@ Image* imgCreateGaussianKernel( int halfWidth, int halfHeight, float stdDev )
 
 
 
-bool imgAssert( Image* img )
+void imgBin( Image* img, float threshold )
 {
     int w = imgGetWidth( img );
     int h = imgGetHeight( img );
@@ -2277,11 +2277,33 @@ bool imgAssert( Image* img )
     {
         for (int y = 0; y < h; ++y)
         {
-            if (isnan(imgGetPixelf( img, x, y)))
+            if (imgGetPixelf( img, x, y) >= threshold)
             {
-                return false;
+                imgSetPixelf( img, x, y, 1.0f );
+            }
+            else
+            {
+                imgSetPixelf( img, x, y, 0.0f );
             }
         }
     }
+}
+
+
+
+bool imgAssert( Image* img )
+{
+//    int w = imgGetWidth( img );
+//    int h = imgGetHeight( img );
+//    
+//    for (int x = 0; x < w; ++x)
+//    {
+//        for (int y = 0; y < h; ++y)
+//        {
+//            if (isnan(imgGetPixelf( img, x, y)))
+//            {
+//                return false;
+//        }
+//    }
     return true;
 }

@@ -30,7 +30,7 @@ Colony::Colony( Image* image )
     // Apply gaussian filter for noise reduction
     imgGauss( image );
     
-    imgWriteBMP( (char*)"trueInput.bmp", image );
+    imgWriteBMP( (char*)"debugImg/inputAfterGaussian.bmp", image );
     
     _environment = new Environment( INITIAL_PHEROMONE, MIN_PHEROMONE, EVAPORATION_RATE, image );
     
@@ -50,7 +50,8 @@ void Colony::clearAnts()
     #pragma omp parallel for
     for( int a = 0; a < NUMBER_OF_ANTS; ++a)
     {
-        delete _ants[a];
+        Ant* ant = _ants[a];
+        delete ant;
     }
     
     _ants.clear();
@@ -79,16 +80,16 @@ void Colony::distributeAntsByGamma()
 
 void Colony::generateProbabilityImages()
 {
-     Image* vis = _environment->getVisibilityImage(); imgWriteBMP( (char*)"gammaone.bmp", vis );
+     Image* vis = _environment->getVisibilityImage(); imgWriteBMP( (char*)"debugImg/gammaone.bmp", vis );
      
      Image* visGammaDown = imgCopy( vis );
-     imgGamma( visGammaDown, 0.5f ); imgWriteBMP( (char*)"gammadown.bmp", visGammaDown );
+     imgGamma( visGammaDown, 0.5f ); imgWriteBMP( (char*)"debugImg/gammadown.bmp", visGammaDown );
      Image* gammaDownProb = generateProbabilityImage( visGammaDown );
      imgDestroy( visGammaDown );
      _probabilityDistributions.push_back( gammaDownProb );
      
      Image* visGammaUp = imgCopy( vis );
-     imgGamma( visGammaUp, 1.5f ); imgWriteBMP( (char*)"gammaup.bmp", visGammaUp );
+     imgGamma( visGammaUp, 1.5f ); imgWriteBMP( (char*)"debugImg/gammaup.bmp", visGammaUp );
      Image* gammaUpProb = generateProbabilityImage( visGammaUp );
      imgDestroy( visGammaUp );
      _probabilityDistributions.push_back( gammaUpProb );
@@ -110,10 +111,10 @@ Image* Colony::generateProbabilityImage( Image* input )
     float sum = 0;
     for (int i = 0; i < size; ++i)
     {
-        if (isnan(data[i]))
-        {
-            printf( "Cannot generate probability image, NAN detected! on pixel %d\n", i );
-        }
+//        if (isnan(data[i]))
+//        {
+//            printf( "Cannot generate probability image, NAN detected! on pixel %d\n", i );
+//        }
         sum += data[i];
     }
     for (int i = 0; i < size; ++i)
@@ -169,6 +170,7 @@ void Colony::moveUntilAllDead()
     while (!allDead)
     {
         allDead = true;
+        
         #pragma omp parallel for
         for (int a = 0; a < nAnts; ++a)
         {
@@ -181,7 +183,7 @@ void Colony::moveUntilAllDead()
             }
         }
     }
-    printDebugImage();
+    //printDebugImage();
 }
 
 
@@ -202,7 +204,11 @@ void Colony::updatePheromone()
 
 Image* Colony::getPheromoneImage()
 {
-    return 0;
+    
+    Image* img = _environment->getPheromoneImage();
+    imgNormalize( img );
+    //postProcessing( &img );
+    return img;
 }
 
 
@@ -220,7 +226,7 @@ void Colony::postProcessing( Image** img )
     *img = binImg;
     
     //Morphology Close
-    Image* kernel = imgReadBMP( KERNEL_PATH );
+    Image* kernel = _environment->buildCircleImage( Parameters::kernelRadius );
     imgDilate( *img, kernel );
     imgErode(  *img, kernel );
     
