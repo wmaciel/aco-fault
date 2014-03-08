@@ -30,7 +30,7 @@ Colony::Colony( Image* image )
     // Apply gaussian filter for noise reduction
     imgGauss( image );
     
-    imgWriteBMP( (char*)"trueInput.bmp", image );
+    imgWriteBMP( (char*)"debugImg/inputAfterGaussian.bmp", image );
     
     _environment = new Environment( INITIAL_PHEROMONE, MIN_PHEROMONE, EVAPORATION_RATE, image );
     
@@ -99,16 +99,16 @@ void Colony::distributeAntsByGamma()
 
 void Colony::generateProbabilityImages()
 {
-     Image* vis = _environment->getVisibilityImage(); imgWriteBMP( (char*)"gammaone.bmp", vis );
+     Image* vis = _environment->getVisibilityImage(); imgWriteBMP( (char*)"debugImg/gammaone.bmp", vis );
      
      Image* visGammaDown = imgCopy( vis );
-     imgGamma( visGammaDown, 0.5f ); imgWriteBMP( (char*)"gammadown.bmp", visGammaDown );
+     imgGamma( visGammaDown, 0.5f ); imgWriteBMP( (char*)"debugImg/gammadown.bmp", visGammaDown );
      Image* gammaDownProb = generateProbabilityImage( visGammaDown );
      imgDestroy( visGammaDown );
      _probabilityDistributions.push_back( gammaDownProb );
      
      Image* visGammaUp = imgCopy( vis );
-     imgGamma( visGammaUp, 1.5f ); imgWriteBMP( (char*)"gammaup.bmp", visGammaUp );
+     imgGamma( visGammaUp, 1.5f ); imgWriteBMP( (char*)"debugImg/gammaup.bmp", visGammaUp );
      Image* gammaUpProb = generateProbabilityImage( visGammaUp );
      imgDestroy( visGammaUp );
      _probabilityDistributions.push_back( gammaUpProb );
