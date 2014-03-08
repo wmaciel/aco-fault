@@ -130,10 +130,10 @@ Image* Colony::generateProbabilityImage( Image* input )
     float sum = 0;
     for (int i = 0; i < size; ++i)
     {
-        if (isnan(data[i]))
-        {
-            printf( "Cannot generate probability image, NAN detected! on pixel %d\n", i );
-        }
+//        if (isnan(data[i]))
+//        {
+//            printf( "Cannot generate probability image, NAN detected! on pixel %d\n", i );
+//        }
         sum += data[i];
     }
     for (int i = 0; i < size; ++i)

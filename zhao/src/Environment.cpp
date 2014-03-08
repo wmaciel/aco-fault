@@ -61,11 +61,11 @@ void Environment::computeImageMatrix( Image* image )
         for (int y=0; y<_height; ++y)
         {
             float luminance = imgGetPixelf( image, x, y );
-            if (isnan(luminance))
-            {
-                printf("NAN found computing image Matrix\n");
-                luminance = imgGetPixelf( image, x, y );
-            }
+//            if (isnan(luminance))
+//            {
+//                printf("NAN found computing image Matrix\n");
+//                luminance = imgGetPixelf( image, x, y );
+//            }
             int i = id( x, y );
             _imageMatrix[i] = luminance;
         }
