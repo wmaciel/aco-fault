@@ -58,6 +58,13 @@ void Ant::setPosition(int x, int y)
     _position.y = y;
 }
 
+void Ant::eraseMemory()
+{
+    _abnormalSteps = 0;
+    _path.clear();
+}
+
+
 int Ant::pickIndex( std::vector<float> probabilities )
 {
     // roll a dice between [0.0, 1.0)
