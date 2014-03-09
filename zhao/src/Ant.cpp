@@ -23,7 +23,7 @@ Ant::Ant( Point point, Environment* environment )
     _abnormalSteps = 0;
     _position = point;
     _environment = environment;
-    _isAlive = true;
+    _isAlive = false;
     //_path.push_back( point );
     if (_position.x < 0 || _position.x >= _environment->getWidth()
                     || _position.y < 0 || _position.y >= _environment->getHeight())
@@ -60,6 +60,7 @@ void Ant::setPosition(int x, int y)
 
 void Ant::eraseMemory()
 {
+    _isAlive = true;
     _abnormalSteps = 0;
     _path.clear();
 }
