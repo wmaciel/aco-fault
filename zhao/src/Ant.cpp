@@ -52,6 +52,12 @@ void Ant::setPheromoneWeight( float pheromoneWeight )
     _pheromoneWeight = pheromoneWeight;
 }
 
+void Ant::setPosition(int x, int y)
+{
+    _position.x = x;
+    _position.y = y;
+}
+
 int Ant::pickIndex( std::vector<float> probabilities )
 {
     // roll a dice between [0.0, 1.0)

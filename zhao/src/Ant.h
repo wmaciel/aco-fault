@@ -50,6 +50,8 @@ public:
      */
     void setPheromoneWeight( float pheromoneWeight );
     
+    void setPosition( int x, int y );
+    
     /**
      * Moves the ant to the next pixel. If the ant is in an invalid pixel or has
      * nowhere to go, it gets flagged as dead
