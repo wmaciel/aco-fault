@@ -47,8 +47,10 @@ Colony::~Colony()
 
 void Colony::clearAnts()
 {
+    int nAnts = _ants.size();
+    
     #pragma omp parallel for
-    for( int a = 0; a < NUMBER_OF_ANTS; ++a)
+    for( int a = 0; a < nAnts; ++a)
     {
         Ant* ant = _ants[a];
         delete ant;
@@ -57,26 +59,19 @@ void Colony::clearAnts()
     _ants.clear();
 }
 
-
-
 void Colony::distributeAnts()
 {
-    distributeAntsByGamma();
-}
-
-
-
-void Colony::distributeAntsByGamma()
-{
-    int nGammaImages = _probabilityDistributions.size();
+    int nAnts = Parameters::numberOfAnts;
     
-    for (int a = _ants.size(); a < NUMBER_OF_ANTS; ++a)
-    {
-        addAntInImage( _probabilityDistributions[a % nGammaImages] );
+    //#pragma omp parallel for
+    for (int a = 0; a < nAnts; ++a)
+    {   
+        if (!_ants[a]->isAlive())
+        {
+            spawnAnt( a );
+        }
     }
 }
-
-
 
 void Colony::generateProbabilityImages()
 {
@@ -98,8 +93,6 @@ void Colony::generateProbabilityImages()
      imgDestroy( vis );
      _probabilityDistributions.push_back( prob );
 }
-
-
 
 Image* Colony::generateProbabilityImage( Image* input )
 {
@@ -127,29 +120,41 @@ Image* Colony::generateProbabilityImage( Image* input )
 
 
 
-void Colony::addAntInImage( Image* probabilityImage )
+void Colony::spawnAnt( int a )
 {
+    //chooses new spawn point for ant number "a"
+    int nGammaImages = _probabilityDistributions.size();
+    Image* probabilityImage = _probabilityDistributions[a % nGammaImages];
     float* probabilities = imgGetData( probabilityImage );
     int pixel = Ant::pickIndex( probabilities, _environment->getWidth()*_environment->getHeight() );
     int width = imgGetWidth( probabilityImage );
-    Point chosenPoint( pixel % width, pixel / width );
-    Ant* ant = new Ant( chosenPoint, _environment );
-    ant->setStepLength( STEP_LENGTH );
-    ant->setPheromoneWeight( PHEROMONE_WEIGHT );
-    ant->setVisibilityWeight( VISIBILITY_WEIGHT );
-    _ants.push_back( ant );
+    int chosenX = pixel % width;
+    int chosenY = pixel / width;
+    
+    //teleports the ant there
+    _ants[a]->setPosition( chosenX, chosenY );
+    _ants[a]->eraseMemory();
 }
 
 
 
 void Colony::run( int nSteps )
 {
+    // initialize ants
+    clearAnts();
+    Point p( 0, 0 );
+    for (int a = 0; a < Parameters::numberOfAnts; ++a)
+    {
+        Ant* ant = new Ant( p, _environment );
+        _ants.push_back( ant );
+    }
+    
+    // run simulation
     for (int currentStep = 0; currentStep < nSteps; ++currentStep)
     {
         distributeAnts();
         moveAnts();
         updatePheromone();
-        clearAnts();
     }
 }
 
@@ -157,7 +162,9 @@ void Colony::run( int nSteps )
 
 void Colony::moveAnts()
 {
-    moveUntilAllDead();
+    //moveUntilAllDead();
+    moveOneStep();
+    printDebugImage();
 }
 
 
@@ -186,21 +193,33 @@ void Colony::moveUntilAllDead()
     //printDebugImage();
 }
 
+void Colony::moveOneStep()
+{
+    int nAnts = Parameters::numberOfAnts;
+    
+    #pragma omp parallel for
+    for (int a = 0; a < nAnts; ++a)
+    {
+        //printf("moving ant #%d...\n", a);
+        Ant* ant = _ants[a];
 
+        if (ant->isAlive())
+        {
+            ant->move();
+        }
+    }
+}
 
 void Colony::updatePheromone()
 {
     _environment->evaporatePheromone();
     
     int nAnts = _ants.size();
-
     for (int a = 0; a < nAnts; ++a)
     {
         _ants[a]->depositPheromone();
     }
 }
-
-
 
 Image* Colony::getPheromoneImage()
 {
@@ -211,13 +230,10 @@ Image* Colony::getPheromoneImage()
     return img;
 }
 
-
-
 bool Colony::available( Point point, Ant& ant )
 {
     return false;
 }
-
 
 void Colony::postProcessing( Image** img )
 {
@@ -232,8 +248,6 @@ void Colony::postProcessing( Image** img )
     
     imgDestroy( kernel );
 }
-
-
 
 void Colony::printDebugImage()
 {
@@ -272,10 +286,10 @@ void Colony::printDebugImage()
 //    img = aux;
 //    aux = 0;
 
-    imgNormalize( img );
-    postProcessing( &img );
+    imgNormalize( img, 2 );
+    //postProcessing( &img );
     char filename[150];
-    sprintf( filename, "/home/keoma/Dropbox/PUC/Mestrado/antColonyOptimization/src/zhao/data/debugImages/debugImage%04d.bmp", ++step );
+    sprintf( filename, "debugImg/debugImage%04d.bmp", ++step );
     imgWriteBMP( filename, img );
     imgDestroy( img );
 }

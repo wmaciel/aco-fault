@@ -29,27 +29,6 @@ public:
      */
     virtual ~Ant();
     
-    /**
-     * Defines how much an ant can move. The stepLength corresponds to half the 
-     * width of box around the the ant in which it can move.
-     * @param stepLength Half width of the box in wich the ant can move
-     */
-    void setStepLength( int stepLength );
-    
-    /**
-     * Defines the weight of the value of the pixel visibility when deciding 
-     * which pixel to move to.
-     * @param visibilityWeight
-     */
-    void setVisibilityWeight( float visibilityWeight );
-    
-    /**
-     * Defines the weight of the value of the concentration of pheromone on the 
-     * pixel when deciding which pixel to move to
-     * @param pheromoneWeight
-     */
-    void setPheromoneWeight( float pheromoneWeight );
-    
     void setPosition( int x, int y );
     
     void eraseMemory();
@@ -149,6 +128,8 @@ public:
     
     /** Current position of the ant */
     Point _position;
+    
+    Point _lastPosition;
     
     /** The amount of pheromone deposited at each pixel by the ant. This 
      * constant is only used when the amount of pheromone deposited by the ant 

@@ -20,8 +20,13 @@ Ant::Ant( Point point, Environment* environment )
     _coherenceThreshold = COHERENCE_TRESHOLD;
     _maxAbnormalSteps = MAX_ABNORMAL_STEPS;
     _maxSteps = MAX_STEPS;
+    _stepLength = STEP_LENGTH;
+    _visibilityWeight = VISIBILITY_WEIGHT;
+    _pheromoneWeight = PHEROMONE_WEIGHT;
+    
     _abnormalSteps = 0;
     _position = point;
+    _lastPosition = point;
     _environment = environment;
     _isAlive = false;
     //_path.push_back( point );
@@ -37,25 +42,12 @@ Ant::~Ant()
     _path.clear();
 }
 
-void Ant::setStepLength( int stepLength )
-{
-    _stepLength = stepLength;
-}
-
-void Ant::setVisibilityWeight( float visibilityWeight )
-{
-    _visibilityWeight = visibilityWeight;
-}
-
-void Ant::setPheromoneWeight( float pheromoneWeight )
-{
-    _pheromoneWeight = pheromoneWeight;
-}
-
 void Ant::setPosition(int x, int y)
 {
     _position.x = x;
     _position.y = y;
+    _lastPosition.x = x;
+    _lastPosition.y = y;
 }
 
 void Ant::eraseMemory()
@@ -123,6 +115,7 @@ void Ant::move()
         Point chosenPoint = choosePixel( visiblePixels );
         std::vector<Point> line;
         lineBresenham( _position, chosenPoint, line );
+        _lastPosition = _position;
         _position = chosenPoint;
         _path.insert( _path.end(), line.begin()+1, line.end() );
         stopCriterion();
@@ -141,16 +134,16 @@ void Ant::move()
 
 void Ant::depositPheromone()
 {
-    int pathSize = _path.size();
-    for (int i = 0; i < pathSize; ++i)
+    Point p;
+    //int pathSize = _path.size();
+    int i = _path.size() - 1;
+    if (i < 0) return;
+    
+    while ( (p.x != _lastPosition.x || p.y != _lastPosition.y) && i >= 0)
     {
-        //Point point = _path[i];
-        //float visibility = _environment->getVisibility( point );
-        //float consistency = _environment->getDirectionStrength( point.x, point.y );
-        //float pheromone = ( visibility + consistency ) * _pheromoneConstant / 2.0;
-        
-        float pheromone = _pheromoneConstant;
-        _environment->addPheromone( pheromone, _path[i] );
+        p = _path[i];
+        _environment->addPheromone( _pheromoneConstant, p );
+        i--;
     }
 }
 
