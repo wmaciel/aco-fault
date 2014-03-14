@@ -252,41 +252,39 @@ void Colony::postProcessing( Image** img )
 void Colony::printDebugImage()
 {
     static int step = 0;
-    Image* img = _environment->getPheromoneImage();//imgCreate( _environment->getWidth(), _environment->getHeight(), 3 );
+    Image* imgIn = _environment->getPheromoneImage();
+    imgNormalize( imgIn, 2 );
     
-//    for (int x = 0; x < _environment->getWidth(); ++x)
-//    {
-//        for (int y = 0; y < _environment->getHeight(); ++y)
-//        {
-//            float lum = imgGetPixelf( img, x, y );
-//            imgSetPixelf( img, x, y, lum );
-//        }
-//    }  
+    Image* img = imgCreate( _environment->getWidth(), _environment->getHeight(), 3 );
     
-//    int nAnts = _ants.size();
-//    for (int i = 0; i < nAnts; ++i)
-//    {
-//        Ant* ant = _ants[i];
-//        if (ant->isAlive())
-//        {
-//            // each ant has a color
-//            //imgSetPixel3f( img, ant->_position.x, ant->_position.y, 1.0f - i/(float)nAnts, (0.0f + i) / nAnts, 0.0f );
-//            
-//            //all ants are red
-//            imgSetPixel3f( img, ant->_position.x, ant->_position.y, 1,0,0 );
-//        }
-//        else
-//        {
-//            imgSetPixel3f( img, ant->_position.x, ant->_position.y, 0.0f, 0.0f, 1.0f );
-//        }
-//    }
+    for (int x = 0; x < _environment->getWidth(); ++x)
+    {
+        for (int y = 0; y < _environment->getHeight(); ++y)
+        {
+            float lum = imgGetPixelf( imgIn, x, y );
+            imgSetPixelf( img, x, y, lum );
+        }
+    }  
     
-//    Image* aux = imgBinOtsu( img );
-//    imgDestroy( img );
-//    img = aux;
-//    aux = 0;
+    int nAnts = _ants.size();
+    for (int i = 0; i < nAnts; ++i)
+    {
+        Ant* ant = _ants[i];
+        if (ant->isAlive())
+        {
+            // each ant has a color
+            imgSetPixel3f( img, ant->_position.x, ant->_position.y, 1.0f - i/(float)nAnts, (0.0f + i) / nAnts, 0.0f );
+            
+            //all ants are red
+            //imgSetPixel3f( img, ant->_position.x, ant->_position.y, 1,0,0 );
+        }
+        else
+        {
+            imgSetPixel3f( img, ant->_position.x, ant->_position.y, 0.0f, 0.0f, 1.0f );
+        }
+    }
 
-    imgNormalize( img, 2 );
+    
     //postProcessing( &img );
     char filename[150];
     sprintf( filename, "debugImg/debugImage%04d.bmp", ++step );
