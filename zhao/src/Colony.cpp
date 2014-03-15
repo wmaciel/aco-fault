@@ -199,6 +199,35 @@ void Colony::addAntInImage( Image* probabilityImage )
 
 void Colony::run( int nSteps )
 {
+    // saves parameter list
+    FILE* paramFile = fopen( "params.txt", "rw" );
+    
+    fprintf(paramFile, "Parâmetros utilizados na última execução:\n");
+    
+    fprintf(paramFile, "Formiga:\n" );
+    fprintf(paramFile, "\tQuantidade: %d\n", Parameters::numberOfAnts);
+    fprintf(paramFile, "\tAngulo de visão: %f\n", Parameters::fov);
+    fprintf(paramFile, "\tPeso Feromônio: %f\n", Parameters::pheromoneWeight);
+    fprintf(paramFile, "\tPeso Atributo: %f\n", Parameters::attributeWeight);
+    fprintf(paramFile, "\tConstante Feromônio: %f\n", Parameters::pheromoneConstant);
+    fprintf(paramFile, "\tTamanho Passo: %d\n", Parameters::stepLength);
+    fprintf(paramFile, "\tNumero passos: %d\n", Parameters::maxSteps);
+    fprintf(paramFile, "\tNumero passos erroneos: %d\n", Parameters::maxAbnormalSteps);
+    
+    fprintf(paramFile, "Feromônio:\n");
+    fprintf(paramFile, "\tTurnos: %d\n", Parameters::turns);
+    fprintf(paramFile, "\tTaxa de Evaporação: %f\n", Parameters::evaporationRate);
+    fprintf(paramFile, "\tFeromonio minimo: %f\n", Parameters::minPheromone);
+    fprintf(paramFile, "\tFeromonio maximo: %f\n", Parameters::maxPheromone);
+    fprintf(paramFile, "\tFeromonio inicial: %f\n", Parameters::initPheromone);
+    
+    fprintf(paramFile, "Direção:\n");
+    fprintf(paramFile, "Largura Gauss: %d\n", Parameters::widthGauss);
+    fprintf(paramFile, "Altura Gauss: %d\n", Parameters::heightGauss);
+    fprintf(paramFile, "Limiar Consistencia: %f\n", Parameters::cohTreshold);
+    fprintf(paramFile, "radio do kernel: %d\n", Parameters::kernelRadius);
+    
+    // run
     for (int currentStep = 0; currentStep < nSteps; ++currentStep)
     {
         distributeAnts();
