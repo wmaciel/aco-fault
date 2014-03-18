@@ -58,6 +58,7 @@ private:
     static void cb_fileChosen( GtkFileChooserButton *widget, gpointer user_data);
     static void cb_run( GtkButton* widget, gpointer user_data );
     static void cb_checkToggled( GtkToggleButton *togglebutton, gpointer user_data );
+    static void cb_apply( GtkButton* button, gpointer user_data );
     
     GuiPresenter* _presenter;
     

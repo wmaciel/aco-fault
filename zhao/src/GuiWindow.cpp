@@ -195,6 +195,10 @@ GtkWidget* GuiWindow::buildNotebook()
     GtkWidget* useBinarization = buildParameterBox( "Binarizar", &Parameters::binarization );
     gtk_box_pack_start( GTK_BOX( visPage ), useBinarization, FALSE, TRUE, 2 );
     
+    GtkWidget* applyButton = gtk_button_new_with_label( "Aplicar" );
+    gtk_box_pack_start( GTK_BOX( visPage ), applyButton, FALSE, TRUE, 2 );
+    g_signal_connect( applyButton, "clicked", G_CALLBACK(cb_apply), this );
+    
     gtk_notebook_append_page( GTK_NOTEBOOK(notebook), visPage, visLabel );
     
     return notebook;
@@ -394,3 +398,8 @@ void GuiWindow::cb_checkToggled(GtkToggleButton* togglebutton, gpointer user_dat
     *param = gtk_toggle_button_get_active( togglebutton );
 }
 
+void GuiWindow::cb_apply(GtkButton* button, gpointer user_data)
+{
+    GuiWindow* window = (GuiWindow*) user_data;
+    window->redraw();
+}
