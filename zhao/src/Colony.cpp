@@ -47,8 +47,10 @@ Colony::~Colony()
 
 void Colony::clearAnts()
 {
+    int nAnts = _ants.size();
+    
     #pragma omp parallel for
-    for( int a = 0; a < NUMBER_OF_ANTS; ++a)
+    for( int a = 0; a < nAnts; ++a)
     {
         Ant* ant = _ants[a];
         delete ant;
@@ -57,45 +59,19 @@ void Colony::clearAnts()
     _ants.clear();
 }
 
-
-
 void Colony::distributeAnts()
 {
-    //distributeAntsByBlock();
-    distributeAntsByGamma();
-}
-
-
-
-void Colony::distributeAntsByBlock()
-{
-    int nHorizontalBlocks = _environment->getWidth() / BLOCK_SIZE;
-    int nVerticalBlocks   = _environment->getHeight() / BLOCK_SIZE;
-
-    for (int hb = 0; hb < nHorizontalBlocks; ++hb)
-    {
-        for (int vb = 0; vb < nVerticalBlocks; ++vb)
+    int nAnts = Parameters::numberOfAnts;
+    
+    //#pragma omp parallel for
+    for (int a = 0; a < nAnts; ++a)
+    {   
+        if (!_ants[a]->isAlive())
         {
-            Point pMin( hb * BLOCK_SIZE, vb * BLOCK_SIZE );
-            Point pMax( pMin.x + BLOCK_SIZE - 1, pMin.y + BLOCK_SIZE - 1 );
-            addAntInBlock( pMin, pMax );
+            spawnAnt( a );
         }
     }
 }
-
-
-
-void Colony::distributeAntsByGamma()
-{
-    int nGammaImages = _probabilityDistributions.size();
-    
-    for (int a = _ants.size(); a < NUMBER_OF_ANTS; ++a)
-    {
-        addAntInImage( _probabilityDistributions[a % nGammaImages] );
-    }
-}
-
-
 
 void Colony::generateProbabilityImages()
 {
@@ -117,8 +93,6 @@ void Colony::generateProbabilityImages()
      imgDestroy( vis );
      _probabilityDistributions.push_back( prob );
 }
-
-
 
 Image* Colony::generateProbabilityImage( Image* input )
 {
@@ -146,53 +120,20 @@ Image* Colony::generateProbabilityImage( Image* input )
 
 
 
-void Colony::addAntInBlock( Point pMin, Point pMax )
+void Colony::spawnAnt( int a )
 {
-    // compute the probabilities
-    std::vector<float> probabilities;
-
-    float sum = 0.0f;
-    for (int y = pMin.y; y <= pMax.y; ++y)
-    {
-        for (int x = pMin.x; x <= pMax.x; ++x)
-        {
-            sum += _environment->getVisibility( x, y );
-        }
-    }
-
-    for (int y = pMin.y; y <= pMax.y; ++y)
-    {
-        for (int x = pMin.x; x <= pMax.x; ++x)
-        {
-            float pixelValue = _environment->getVisibility( x, y );
-            probabilities.push_back( pixelValue / sum );
-        }
-    }
-    
-    int blockSize = pMax.x - pMin.x + 1;
-
-    int pixel = Ant::pickIndex( probabilities );
-    Point chosenPoint( pMin.x + pixel % blockSize, pMin.y + pixel / blockSize );
-    Ant* ant = new Ant( chosenPoint, _environment );
-    ant->setStepLength( STEP_LENGTH );
-    ant->setPheromoneWeight( PHEROMONE_WEIGHT );
-    ant->setVisibilityWeight( VISIBILITY_WEIGHT );
-    _ants.push_back( ant );
-}
-
-
-
-void Colony::addAntInImage( Image* probabilityImage )
-{
+    //chooses new spawn point for ant number "a"
+    int nGammaImages = _probabilityDistributions.size();
+    Image* probabilityImage = _probabilityDistributions[a % nGammaImages];
     float* probabilities = imgGetData( probabilityImage );
     int pixel = Ant::pickIndex( probabilities, _environment->getWidth()*_environment->getHeight() );
     int width = imgGetWidth( probabilityImage );
-    Point chosenPoint( pixel % width, pixel / width );
-    Ant* ant = new Ant( chosenPoint, _environment );
-    ant->setStepLength( STEP_LENGTH );
-    ant->setPheromoneWeight( PHEROMONE_WEIGHT );
-    ant->setVisibilityWeight( VISIBILITY_WEIGHT );
-    _ants.push_back( ant );
+    int chosenX = pixel % width;
+    int chosenY = pixel / width;
+    
+    //teleports the ant there
+    _ants[a]->setPosition( chosenX, chosenY );
+    _ants[a]->eraseMemory();
 }
 
 
@@ -227,13 +168,21 @@ void Colony::run( int nSteps )
     fprintf(paramFile, "Limiar Consistencia: %f\n", Parameters::cohTreshold);
     fprintf(paramFile, "radio do kernel: %d\n", Parameters::kernelRadius);
     
-    // run
+    // initialize ants
+    clearAnts();
+    Point p( 0, 0 );
+    for (int a = 0; a < Parameters::numberOfAnts; ++a)
+    {
+        Ant* ant = new Ant( p, _environment );
+        _ants.push_back( ant );
+    }
+    
+    // run simulation
     for (int currentStep = 0; currentStep < nSteps; ++currentStep)
     {
         distributeAnts();
         moveAnts();
         updatePheromone();
-        clearAnts();
     }
 }
 
@@ -241,7 +190,9 @@ void Colony::run( int nSteps )
 
 void Colony::moveAnts()
 {
-    moveUntilAllDead();
+    //moveUntilAllDead();
+    moveOneStep();
+    printDebugImage();
 }
 
 
@@ -270,21 +221,33 @@ void Colony::moveUntilAllDead()
     //printDebugImage();
 }
 
+void Colony::moveOneStep()
+{
+    int nAnts = Parameters::numberOfAnts;
+    
+    #pragma omp parallel for
+    for (int a = 0; a < nAnts; ++a)
+    {
+        //printf("moving ant #%d...\n", a);
+        Ant* ant = _ants[a];
 
+        if (ant->isAlive())
+        {
+            ant->move();
+        }
+    }
+}
 
 void Colony::updatePheromone()
 {
     _environment->evaporatePheromone();
     
     int nAnts = _ants.size();
-
     for (int a = 0; a < nAnts; ++a)
     {
         _ants[a]->depositPheromone();
     }
 }
-
-
 
 Image* Colony::getPheromoneImage()
 {
@@ -295,13 +258,10 @@ Image* Colony::getPheromoneImage()
     return img;
 }
 
-
-
 bool Colony::available( Point point, Ant& ant )
 {
     return false;
 }
-
 
 void Colony::postProcessing( Image** img )
 {
@@ -317,49 +277,45 @@ void Colony::postProcessing( Image** img )
     imgDestroy( kernel );
 }
 
-
-
 void Colony::printDebugImage()
 {
     static int step = 0;
-    Image* img = _environment->getPheromoneImage();//imgCreate( _environment->getWidth(), _environment->getHeight(), 3 );
+    Image* imgIn = _environment->getPheromoneImage();
+    imgNormalize( imgIn, 2 );
     
-//    for (int x = 0; x < _environment->getWidth(); ++x)
-//    {
-//        for (int y = 0; y < _environment->getHeight(); ++y)
-//        {
-//            float lum = imgGetPixelf( img, x, y );
-//            imgSetPixelf( img, x, y, lum );
-//        }
-//    }  
+    Image* img = imgCreate( _environment->getWidth(), _environment->getHeight(), 3 );
     
-//    int nAnts = _ants.size();
-//    for (int i = 0; i < nAnts; ++i)
-//    {
-//        Ant* ant = _ants[i];
-//        if (ant->isAlive())
-//        {
-//            // each ant has a color
-//            //imgSetPixel3f( img, ant->_position.x, ant->_position.y, 1.0f - i/(float)nAnts, (0.0f + i) / nAnts, 0.0f );
-//            
-//            //all ants are red
-//            imgSetPixel3f( img, ant->_position.x, ant->_position.y, 1,0,0 );
-//        }
-//        else
-//        {
-//            imgSetPixel3f( img, ant->_position.x, ant->_position.y, 0.0f, 0.0f, 1.0f );
-//        }
-//    }
+    for (int x = 0; x < _environment->getWidth(); ++x)
+    {
+        for (int y = 0; y < _environment->getHeight(); ++y)
+        {
+            float lum = imgGetPixelf( imgIn, x, y );
+            imgSetPixelf( img, x, y, lum );
+        }
+    }  
     
-//    Image* aux = imgBinOtsu( img );
-//    imgDestroy( img );
-//    img = aux;
-//    aux = 0;
+    int nAnts = _ants.size();
+    for (int i = 0; i < nAnts; ++i)
+    {
+        Ant* ant = _ants[i];
+        if (ant->isAlive())
+        {
+            // each ant has a color
+            imgSetPixel3f( img, ant->_position.x, ant->_position.y, 1.0f - i/(float)nAnts, (0.0f + i) / nAnts, 0.0f );
+            
+            //all ants are red
+            //imgSetPixel3f( img, ant->_position.x, ant->_position.y, 1,0,0 );
+        }
+        else
+        {
+            imgSetPixel3f( img, ant->_position.x, ant->_position.y, 0.0f, 0.0f, 1.0f );
+        }
+    }
 
-    imgNormalize( img );
-    postProcessing( &img );
+    
+    //postProcessing( &img );
     char filename[150];
-    sprintf( filename, "/home/keoma/Dropbox/PUC/Mestrado/antColonyOptimization/src/zhao/data/debugImages/debugImage%04d.bmp", ++step );
+    sprintf( filename, "debugImg/debugImage%04d.bmp", ++step );
     imgWriteBMP( filename, img );
     imgDestroy( img );
 }

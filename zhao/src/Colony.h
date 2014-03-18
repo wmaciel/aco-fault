@@ -27,14 +27,12 @@ public:
 private:
     void clearAnts();
     void distributeAnts();
-    void distributeAntsByBlock();
-    void distributeAntsByGamma();
     Image* generateProbabilityImage( Image* input );
     void generateProbabilityImages();
-    void addAntInBlock( Point pMin, Point pMax );
-    void addAntInImage( Image* probabilityImage );
+    void spawnAnt( int a );
     void moveAnts();
     void moveUntilAllDead();
+    void moveOneStep();
     void updatePheromone();
     bool available( Point point, Ant& ant );
     void printDebugImage();
