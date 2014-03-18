@@ -11,7 +11,7 @@
 class Parameters
 {
 public:
-    Parameters(){};
+    Parameters();;
     ~Parameters(){};
     
     //ants parameters
@@ -40,8 +40,8 @@ public:
     //post processing parameters
     static float stdDev;
     static float gammaFactor;
-    static float binMin;
-    static float binMax;
+    static bool binarization;
+    static float binThreshold;
 };
 
 /**

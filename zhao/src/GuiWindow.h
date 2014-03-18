@@ -31,6 +31,7 @@ private:
     GtkWidget* buildCanvasBox();
     GtkWidget* buildControlsBox();
     GtkWidget* buildParameterBox( const char* name, double min, double max, double step, void* param, bool isInteger );
+    GtkWidget* buildParameterBox( const char* name, bool* param );
     GtkWidget* buildNotebook();
     
     //CALLBACKS
@@ -56,6 +57,7 @@ private:
     static void cb_floatParamChanged( GtkSpinButton* spinbutton, gpointer user_data );
     static void cb_fileChosen( GtkFileChooserButton *widget, gpointer user_data);
     static void cb_run( GtkButton* widget, gpointer user_data );
+    static void cb_checkToggled( GtkToggleButton *togglebutton, gpointer user_data );
     
     GuiPresenter* _presenter;
     

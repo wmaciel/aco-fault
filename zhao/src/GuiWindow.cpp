@@ -189,11 +189,11 @@ GtkWidget* GuiWindow::buildNotebook()
     GtkWidget* gammaBox = buildParameterBox("Correção Gamma:", 0.0, 10.0, 0.1, &Parameters::gammaFactor, false );
     gtk_box_pack_start( GTK_BOX( visPage ), gammaBox, FALSE, TRUE, 2 );
     
-    GtkWidget* binMinBox = buildParameterBox("Binarização Limite Inferior:", 0.00, 1.00, 0.01, &Parameters::binMin, false );
-    gtk_box_pack_start( GTK_BOX( visPage ), binMinBox, FALSE, TRUE, 2 );
+    GtkWidget* binBox = buildParameterBox("Limiar de Binarização:", 0.00, 1.00, 0.01, &Parameters::binThreshold, false );
+    gtk_box_pack_start( GTK_BOX( visPage ), binBox, FALSE, TRUE, 2 );
     
-    GtkWidget* binMaxBox = buildParameterBox("Binarização Limite Superior:", 0.00, 1.00, 0.01, &Parameters::binMax, false );
-    gtk_box_pack_start( GTK_BOX( visPage ), binMaxBox, FALSE, TRUE, 2 );
+    GtkWidget* useBinarization = buildParameterBox( "Binarizar", &Parameters::binarization );
+    gtk_box_pack_start( GTK_BOX( visPage ), useBinarization, FALSE, TRUE, 2 );
     
     gtk_notebook_append_page( GTK_NOTEBOOK(notebook), visPage, visLabel );
     
@@ -224,6 +224,17 @@ GtkWidget* GuiWindow::buildControlsBox()
     return controlsBox;
 }
 
+GtkWidget* GuiWindow::buildParameterBox(const char* name, bool* param)
+{
+    GtkWidget* paramBox = gtk_hbox_new( FALSE, 1 );
+    GtkWidget* checkButton = gtk_check_button_new_with_label( name );
+    
+    gtk_box_pack_start( GTK_BOX(paramBox), checkButton, FALSE, TRUE, 1 );
+    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(checkButton), *param );
+    g_signal_connect( checkButton, "toggled", G_CALLBACK(cb_checkToggled), param );
+    
+    return paramBox;
+}
 
 
 GtkWidget* GuiWindow::buildParameterBox( const char* name, double min, double max, double step, void* param, bool isInteger )
@@ -372,3 +383,10 @@ void GuiWindow::cb_run( GtkButton* widget, gpointer user_data )
     GuiWindow* window = (GuiWindow*) user_data;
     window->_presenter->run();
 }
+
+void GuiWindow::cb_checkToggled(GtkToggleButton* togglebutton, gpointer user_data)
+{
+    bool* param = (bool*) user_data;
+    *param = gtk_toggle_button_get_active( togglebutton );
+}
+
