@@ -271,6 +271,8 @@ void imgDestroy(Image* image)
 
 Image* imgCopy(Image* image)
 {
+    if (!image) return NULL;
+    
    int w = imgGetWidth(image);
    int h = imgGetHeight(image);
    int dcs = imgGetDimColorSpace(image);
