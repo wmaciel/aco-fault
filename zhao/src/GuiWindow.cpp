@@ -311,11 +311,12 @@ gboolean GuiWindow::cb_exposeGLCanvas( GtkWidget* canvas, GdkEventExpose* event,
     
     if( canvas == window->_dstCanvas )
     {
-        image = ( Image* )window->_presenter->getOutputImage();
+        Image* rawimage = ( Image* )window->_presenter->getOutputImage();
+        image = Parameters::postProcessing( rawimage );
     }
     else
     {
-        image = ( Image* )window->_presenter->getInputImage();
+        image = imgCopy( ( Image* )window->_presenter->getInputImage() );
     }
     
     //If Image loaded OK, start drawing
@@ -343,6 +344,9 @@ gboolean GuiWindow::cb_exposeGLCanvas( GtkWidget* canvas, GdkEventExpose* event,
     
     //Tell GTK we stopped messing with OpenGL
     gdk_gl_drawable_gl_end( glDrawable );
+    
+    // release images
+    imgDestroy( image );
     
     //everything went fine
     return TRUE;
