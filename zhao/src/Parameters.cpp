@@ -28,3 +28,25 @@ float Parameters::stdDev       = 2.0f;
 float Parameters::gammaFactor  = 1.0f;
 bool  Parameters::binarization = false;
 float Parameters::binThreshold = 0.0f;
+
+Image* Parameters::postProcessing(Image* img)
+{
+    if (!img) return NULL;
+    
+    Image* out = imgCopy( img );
+    
+    // normalization
+    imgNormalize( out, stdDev );
+    
+    // gamma correction
+    imgGamma( out, gammaFactor );
+    
+    // binarization
+    if (binarization)
+    {
+        imgBin( out, binThreshold );
+    }
+    
+    return out;
+}
+

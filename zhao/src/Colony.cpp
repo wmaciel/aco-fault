@@ -263,25 +263,6 @@ bool Colony::available( Point point, Ant& ant )
     return false;
 }
 
-Image* Colony::postProcessing( Image* img )
-{
-    Image* out = imgCopy( img );
-    
-    // normalization
-    imgNormalize( out, Parameters::stdDev );
-    
-    // gamma correction
-    imgGamma( out, Parameters::gammaFactor );
-    
-    // binarization
-    if (Parameters::binarization)
-    {
-        imgBin( out, Parameters::binThreshold );
-    }
-    
-    return out;
-}
-
 void Colony::printDebugImage()
 {
     static int step = 0;

@@ -8,11 +8,15 @@
 #ifndef PARAMETERS_H
 #define	PARAMETERS_H
 
+#include "image.h"
+
 class Parameters
 {
 public:
     Parameters();;
     ~Parameters(){};
+    
+    static Image* postProcessing( Image* img );
     
     //ants parameters
     static float pheromoneWeight;
