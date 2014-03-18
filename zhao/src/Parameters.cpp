@@ -22,3 +22,9 @@ int Parameters::widthGauss    = 1;
 int Parameters::heightGauss   = 3;
 int Parameters::kernelRadius  = 1;
 float Parameters::cohTreshold = 0.5f;
+
+//post processing parameters
+float Parameters::stdDev      = 2.0f;
+float Parameters::gammaFactor = 1.0f;
+float Parameters::binMin      = 0.0f;
+float Parameters::binMax      = 1.0f;

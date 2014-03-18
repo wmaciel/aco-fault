@@ -36,6 +36,12 @@ public:
     static int heightGauss;
     static int kernelRadius;
     static float cohTreshold;
+    
+    //post processing parameters
+    static float stdDev;
+    static float gammaFactor;
+    static float binMin;
+    static float binMax;
 };
 
 /**

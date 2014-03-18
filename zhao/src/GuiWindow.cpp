@@ -179,6 +179,24 @@ GtkWidget* GuiWindow::buildNotebook()
     
     gtk_notebook_append_page( GTK_NOTEBOOK(notebook), directionPage, directionLabel );
     
+    // Visualization page
+    GtkWidget* visPage = gtk_vbox_new(FALSE, 3);
+    GtkWidget* visLabel = gtk_label_new( "Pós Proc." );
+    
+    GtkWidget* stdDevBox = buildParameterBox("Desvios Padrão:", 0.0, 10.0, 0.5, &Parameters::stdDev, false );
+    gtk_box_pack_start( GTK_BOX( visPage ), stdDevBox, FALSE, TRUE, 2 );
+    
+    GtkWidget* gammaBox = buildParameterBox("Correção Gamma:", 0.0, 10.0, 0.1, &Parameters::gammaFactor, false );
+    gtk_box_pack_start( GTK_BOX( visPage ), gammaBox, FALSE, TRUE, 2 );
+    
+    GtkWidget* binMinBox = buildParameterBox("Binarização Limite Inferior:", 0.00, 1.00, 0.01, &Parameters::binMin, false );
+    gtk_box_pack_start( GTK_BOX( visPage ), binMinBox, FALSE, TRUE, 2 );
+    
+    GtkWidget* binMaxBox = buildParameterBox("Binarização Limite Superior:", 0.00, 1.00, 0.01, &Parameters::binMax, false );
+    gtk_box_pack_start( GTK_BOX( visPage ), binMaxBox, FALSE, TRUE, 2 );
+    
+    gtk_notebook_append_page( GTK_NOTEBOOK(notebook), visPage, visLabel );
+    
     return notebook;
 }
 
