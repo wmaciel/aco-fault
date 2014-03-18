@@ -141,7 +141,7 @@ void Colony::spawnAnt( int a )
 void Colony::run( int nSteps )
 {
     // saves parameter list
-    FILE* paramFile = fopen( "params.txt", "rw" );
+    FILE* paramFile = fopen( "params.txt", "w" );
     
     fprintf(paramFile, "Parâmetros utilizados na última execução:\n");
     
@@ -163,10 +163,12 @@ void Colony::run( int nSteps )
     fprintf(paramFile, "\tFeromonio inicial: %f\n", Parameters::initPheromone);
     
     fprintf(paramFile, "Direção:\n");
-    fprintf(paramFile, "Largura Gauss: %d\n", Parameters::widthGauss);
-    fprintf(paramFile, "Altura Gauss: %d\n", Parameters::heightGauss);
-    fprintf(paramFile, "Limiar Consistencia: %f\n", Parameters::cohTreshold);
-    fprintf(paramFile, "radio do kernel: %d\n", Parameters::kernelRadius);
+    fprintf(paramFile, "\tLargura Gauss: %d\n", Parameters::widthGauss);
+    fprintf(paramFile, "\tAltura Gauss: %d\n", Parameters::heightGauss);
+    fprintf(paramFile, "\tLimiar Consistencia: %f\n", Parameters::cohTreshold);
+    fprintf(paramFile, "\tRaio do Kernel: %d\n", Parameters::kernelRadius);
+    
+    fclose( paramFile );
     
     // initialize ants
     clearAnts();
@@ -253,8 +255,6 @@ Image* Colony::getPheromoneImage()
 {
     
     Image* img = _environment->getPheromoneImage();
-    imgNormalize( img );
-    //postProcessing( &img );
     return img;
 }
 
@@ -263,18 +263,23 @@ bool Colony::available( Point point, Ant& ant )
     return false;
 }
 
-void Colony::postProcessing( Image** img )
+Image* Colony::postProcessing( Image* img )
 {
-    Image* binImg = imgBinOtsu( *img );
-    imgDestroy(*img);
-    *img = binImg;
+    Image* out = imgCopy( img );
     
-    //Morphology Close
-    Image* kernel = _environment->buildCircleImage( Parameters::kernelRadius );
-    imgDilate( *img, kernel );
-    imgErode(  *img, kernel );
+    // normalization
+    imgNormalize( out, Parameters::stdDev );
     
-    imgDestroy( kernel );
+    // gamma correction
+    imgGamma( out, Parameters::gammaFactor );
+    
+    // binarization
+    if (Parameters::binarization)
+    {
+        imgBin( out, Parameters::binThreshold );
+    }
+    
+    return out;
 }
 
 void Colony::printDebugImage()

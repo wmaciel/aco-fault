@@ -83,6 +83,7 @@ void GuiPresenter::run()
     }
     
     _outImg = colony->getPheromoneImage();
+    imgNormalize( _outImg );
     _window->redraw();
     
     delete colony;
