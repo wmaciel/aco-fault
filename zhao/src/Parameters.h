@@ -17,6 +17,7 @@ public:
     ~Parameters(){};
     
     static Image* postProcessing( Image* img );
+    static Image* buildCircleImage( unsigned int radius );
     
     //ants parameters
     static float pheromoneWeight;
@@ -46,6 +47,8 @@ public:
     static float gammaFactor;
     static bool binarization;
     static float binThreshold;
+    static int openKernelRad;
+    static int closeKernelRad;
 };
 
 /**

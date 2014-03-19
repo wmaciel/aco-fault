@@ -192,6 +192,12 @@ GtkWidget* GuiWindow::buildNotebook()
     GtkWidget* binBox = buildParameterBox("Limiar de Binarização:", 0.00, 1.00, 0.01, &Parameters::binThreshold, false );
     gtk_box_pack_start( GTK_BOX( visPage ), binBox, FALSE, TRUE, 2 );
     
+    GtkWidget* openKernelBox = buildParameterBox("Raio do kernel de abertura:", 0, 10, 1, &Parameters::openKernelRad, true );
+    gtk_box_pack_start( GTK_BOX( visPage ), openKernelBox, FALSE, TRUE, 2 );
+    
+    GtkWidget* closeKernelBox = buildParameterBox("Raio do kernel de fechamento:", 0, 10, 1, &Parameters::closeKernelRad, true );
+    gtk_box_pack_start( GTK_BOX( visPage ), closeKernelBox, FALSE, TRUE, 2 );
+    
     GtkWidget* useBinarization = buildParameterBox( "Binarizar", &Parameters::binarization );
     gtk_box_pack_start( GTK_BOX( visPage ), useBinarization, FALSE, TRUE, 2 );
     

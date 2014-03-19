@@ -22,7 +22,7 @@ _evaporationRate(evaporationRate), _initialPheromone(initialPheromone), _minimum
     construct( imgGetHeight( image ), imgGetWidth( image ) );
     computeImageMatrix( image );
     clearFeromone();
-    Image* kernel = buildCircleImage( Parameters::kernelRadius );
+    Image* kernel = Parameters::buildCircleImage( Parameters::kernelRadius );
     _directionalField = new DirectionalField( image, kernel );
     _directionalField->debugImages();
 }
@@ -274,35 +274,4 @@ Image* Environment::getVisibilityImage()
     }
     
     return output;
-}
-
-
-
-Image* Environment::buildCircleImage( int radius )
-{
-    int diameter = radius + radius + 1;
-    Image* out = imgCreate( diameter, diameter, 1 );
-    float luminance = 0.0f;
-    
-    for (int x = 0; x < diameter; ++x)
-    {
-        for (int y = 0; y < diameter; ++y)
-        {
-            int dx = abs( x - radius );
-            int dy = abs( y - radius );
-            float distance = sqrt( dx * dx + dy * dy );
-            if (distance <= (float) radius)
-            {
-                luminance = 1.0f;
-            }
-            else
-            {
-                luminance = 0.0f;
-            }
-            
-            imgSetPixelf( out, x, y, luminance );
-        }
-    }
-    
-    return out;
 }
