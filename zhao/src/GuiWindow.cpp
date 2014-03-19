@@ -401,7 +401,14 @@ void GuiWindow::cb_run( GtkButton* widget, gpointer user_data )
 void GuiWindow::cb_checkToggled(GtkToggleButton* togglebutton, gpointer user_data)
 {
     bool* param = (bool*) user_data;
-    *param = gtk_toggle_button_get_active( togglebutton );
+    if (gtk_toggle_button_get_active( togglebutton ) == TRUE)
+    {
+        *param = true;
+    }
+    else
+    {
+        *param = false;
+    }
 }
 
 void GuiWindow::cb_apply(GtkButton* button, gpointer user_data)
