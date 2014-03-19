@@ -41,3 +41,9 @@ Point operator+(Point p1, Point p2)
     Point pSum( p1.x + p2.x, p1.y + p2.y );
     return pSum;
 }
+
+Point operator-(Point p1, Point p2)
+{
+    Point pSum( p1.x - p2.x, p1.y - p2.y );
+    return pSum;
+}
