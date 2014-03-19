@@ -113,6 +113,8 @@ public:
      * @param line Vector that will hold the answer
      */
     void lineBresenham( Point src, Point dst, std::vector<Point>& line );
+    
+    float computePheromoneConstant( Point p1, Point p2, Point p3 );
 
     /** Flag signaling if the ant is still alive */
     bool _isAlive;

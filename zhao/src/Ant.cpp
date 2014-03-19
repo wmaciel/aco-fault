@@ -112,12 +112,20 @@ void Ant::move()
     getVisiblePixels( visiblePixels );
     if (visiblePixels.size() > 0)
     {
+        // choose destination
         Point chosenPoint = choosePixel( visiblePixels );
+        
+        // compute amount of pheromone for this move
+        _pheromoneConstant = computePheromoneConstant( _lastPosition, _position, chosenPoint );
+        
+        // move to destination
         std::vector<Point> line;
         lineBresenham( _position, chosenPoint, line );
         _lastPosition = _position;
         _position = chosenPoint;
         _path.insert( _path.end(), line.begin()+1, line.end() );
+        
+        // check if it should die
         stopCriterion();
         
         if (_position.x < 0 || _position.x >= _environment->getWidth()
@@ -331,3 +339,17 @@ void Ant::lineBresenham( Point src, Point dst, std::vector<Point>& line )
         }
     }
 }
+
+float Ant::computePheromoneConstant(Point p1, Point p2, Point p3)
+{
+    if (p1==p2||p1==p3||p2==p3) return 0;
+    
+    Point v1 = p2 - p1;
+    Point v2 = p3 - p2;
+    
+    float angleCos = (v1.x * v2.x + v1.y * v2.y) / sqrt( (v1.x*v1.x + v1.y*v1.y)*(v2.x*v2.x + v2.y*v2.y) );
+    float factor = (angleCos + 1) * 0.5f;
+    
+    return factor * Parameters::pheromoneConstant;
+}
+
