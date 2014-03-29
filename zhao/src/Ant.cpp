@@ -13,7 +13,9 @@
 #include "Environment.h"
 #include "Parameters.h"
 
-Ant::Ant( Point point, Environment* environment )
+Ant::Ant( Point point, Environment* environment ) : 
+    _position( point ),
+    _lastPosition( point )
 {
     _pheromoneConstant = PHEROMONE_CONSTANT;
     _fieldOfView = FOV_ANGLE;

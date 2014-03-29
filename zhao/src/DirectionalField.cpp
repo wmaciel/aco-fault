@@ -460,8 +460,6 @@ void DirectionalField::debugImages()
         {
             float dirX, dirY;
             getDirection( x, y, dirX, dirY );
-            float lumX;
-            float lumY;
 
             imgSetPixel3f( dbgImg, x, y, 1,1,1 );
 
@@ -477,8 +475,8 @@ void DirectionalField::debugImages()
                     dirX *= -1;
                 }
 
-                lumX = fabs( dirX );
-                lumY = fabs( dirY );
+                float lumX = fabs( dirX );
+                float lumY = fabs( dirY );
                 imgSetPixel3f( dbgImg, x, y, 0.0f, lumX, lumY );
             }
         }

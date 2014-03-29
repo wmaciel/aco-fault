@@ -141,6 +141,7 @@ bool PFMImage::loadPFMFile( std::string filePath )
     if (numRead != 2)
     {
         printf("\nErro de leitura do arquivo %s\n", filePath.c_str() );
+        fclose( filePointer );
         return false;
     }
     
