@@ -14,6 +14,8 @@ extern "C"
     #include <gtk/gtkgl.h>
 }
 
+#include "image.h"
+
 class GuiPresenter;
 
 class GuiWindow
@@ -33,6 +35,8 @@ private:
     GtkWidget* buildParameterBox( const char* name, double min, double max, double step, void* param, bool isInteger );
     GtkWidget* buildParameterBox( const char* name, bool* param );
     GtkWidget* buildNotebook();
+    unsigned int buildTexture( Image* img );
+    void fit( int w, int h, int canvasW, int canvasH );
     
     //CALLBACKS
     /**
@@ -69,6 +73,12 @@ private:
     
     /** Drawing Area will hold the OpenGL drawing of the input image */
     GtkWidget* _srcCanvas;
+    
+    /** texture ID for the source input image */
+    unsigned int _srcTextureID;
+    
+    /** texture ID for the output image */
+    unsigned int _dstTextureID;
 };
 
 #endif	/* GUIWINDOW_H */

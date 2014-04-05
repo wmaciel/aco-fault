@@ -14,9 +14,9 @@ GuiWindow::GuiWindow()
 {
     _gtkWindow = build();
     
-    g_signal_connect( _dstCanvas    , "configure-event", G_CALLBACK( cb_configGLCanvas )    , NULL );
+    g_signal_connect( _dstCanvas    , "configure-event", G_CALLBACK( cb_configGLCanvas )    , this );
     g_signal_connect( _dstCanvas    , "expose-event"   , G_CALLBACK( cb_exposeGLCanvas )    , this );
-    g_signal_connect( _srcCanvas    , "configure-event", G_CALLBACK( cb_configGLCanvas )    , NULL );
+    g_signal_connect( _srcCanvas    , "configure-event", G_CALLBACK( cb_configGLCanvas )    , this );
     g_signal_connect( _srcCanvas    , "expose-event"   , G_CALLBACK( cb_exposeGLCanvas )    , this );
     
     _presenter = 0;
@@ -285,10 +285,7 @@ gboolean GuiWindow::cb_configGLCanvas( GtkWidget* canvas, GdkEventConfigure* eve
         g_assert_not_reached();
     }
     
-    glLoadIdentity();
-    glViewport( 0, 0, canvas->allocation.width, canvas->allocation.height );
-    glMatrixMode( GL_PROJECTION );
-    glOrtho ( 0, canvas->allocation.width, 0, canvas->allocation.height, -10, 10 );
+    glEnable(GL_TEXTURE_2D);
     
     // end opengl commands
     gdk_gl_drawable_gl_end( glDrawable );
@@ -314,7 +311,7 @@ gboolean GuiWindow::cb_exposeGLCanvas( GtkWidget* canvas, GdkEventExpose* event,
     glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     
-    //Recover access to the image
+    //Recover access to the window
     GuiWindow* window = ( GuiWindow* )user_data;
     
     Image* image = NULL;
@@ -332,21 +329,35 @@ gboolean GuiWindow::cb_exposeGLCanvas( GtkWidget* canvas, GdkEventExpose* event,
     //If Image loaded OK, start drawing
     if( image )
     {
-        glBegin( GL_POINTS );
-            int width = imgGetWidth( image );
-            int height = imgGetHeight( image );
+        int width = imgGetWidth( image );
+        int height = imgGetHeight( image );
+        
+        // prepare matrix
+        glViewport( 0, 0, canvas->allocation.width, canvas->allocation.height );
+        glMatrixMode( GL_PROJECTION );
+        glLoadIdentity();
+        //glOrtho ( 0, canvas->allocation.width, 0, canvas->allocation.height, -1, 1 );
+        window->fit( width, height, canvas->allocation.width, canvas->allocation.height );
+        glMatrixMode( GL_MODELVIEW );
+        glLoadIdentity();
 
-            for (int w = 0; w < width; ++w)
-            {
-                for (int h = 0; h < height; ++h)
-                {
-                    float r,g,b;
-                    imgGetPixel3f( image, w, h, &r, &g, &b );
-                    glColor3f( r,g,b );
-                    glVertex2i( w, h );
-                }
-            }
+        GLuint tID = window->buildTexture( image );
+        
+        glBegin( GL_QUADS );    
+            glTexCoord2f(0,0);
+            glVertex2f(0,0);
+            
+            glTexCoord2f(1.0, 0.0);
+            glVertex2f(width, 0);
+            
+            glTexCoord2f(1.0, 1.0);
+            glVertex2f(width, height);
+            
+            glTexCoord2f(0.0, 1.0);
+            glVertex2f(0, height);
         glEnd();
+        
+        glDeleteTextures( 1, &tID );
     }
     
     //Update image
@@ -361,6 +372,69 @@ gboolean GuiWindow::cb_exposeGLCanvas( GtkWidget* canvas, GdkEventExpose* event,
     //everything went fine
     return TRUE;
 }
+
+void GuiWindow::fit(int w, int h, int canvasW, int canvasH)
+{
+    float aspectRatio = (float)canvasW / (float)canvasH;
+
+    // Computa a altura e largura da caixa envolvente
+    float width  = w;
+    float height = h;
+
+    // Computa a coordenada do centro da caixa envolvente
+    float cx = 0.5f* width;
+    float cy = 0.5f* height;
+
+
+    if (height != 0)
+    {
+        float aabbAspectRatio = width/height;
+
+        if ( aspectRatio/aabbAspectRatio < 1)
+        {
+            height = width / aspectRatio;
+        }
+        else
+        {
+            width = height * aspectRatio;
+        }
+    }
+    else
+    {
+        height = width / aspectRatio;
+    }
+
+    float xMin = cx - 0.5f*width;
+    float xMax = cx + 0.5f*width;
+    float yMin = cy - 0.5f*height;
+    float yMax = cy + 0.5f*height;
+    
+    glOrtho( xMin, xMax, yMin, yMax, -1, 1 );
+}
+
+
+unsigned int GuiWindow::buildTexture(Image* img)
+{
+    // create texture object for the image
+    GLuint textureID;
+    glGenTextures( 1, &textureID);
+    glBindTexture( GL_TEXTURE_2D, textureID );
+    
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP );
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP );
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );        
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+    glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
+    glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
+       
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_LUMINANCE, imgGetWidth( img ), imgGetHeight( img ), 0, GL_LUMINANCE, GL_FLOAT, imgGetData( img ) );
+    
+    return textureID;
+}
+
 
 
 
