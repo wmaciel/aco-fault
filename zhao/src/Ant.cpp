@@ -152,6 +152,12 @@ void Ant::depositPheromone()
     while ( (p.x != _lastPosition.x || p.y != _lastPosition.y) && i >= 0)
     {
         p = _path[i];
+        if (p.x < 0 || p.y < 0 || p.x >= _environment->getWidth() || p.y >= _environment->getHeight())
+        {
+            _isAlive = false;
+            break;
+        }
+        
         _environment->addPheromone( _pheromoneConstant, p );
         i--;
     }
