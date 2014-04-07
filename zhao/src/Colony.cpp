@@ -13,6 +13,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <iostream>
+#include <omp.h>
 
 Colony::Colony( Image* image )
 {
@@ -192,9 +194,13 @@ void Colony::run( int nSteps )
 
 void Colony::moveAnts()
 {
+    double oldTime = omp_get_wtime();
+    static unsigned int step = 0;
     //moveUntilAllDead();
     moveOneStep();
     printDebugImage();
+    double newTime = omp_get_wtime();
+    std::cout << "step " << ++step << " in " << newTime - oldTime << "seconds\n";
 }
 
 
