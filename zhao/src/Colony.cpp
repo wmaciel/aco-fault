@@ -241,7 +241,7 @@ void Colony::printDebugImage()
 //    aux = 0;
 
     imgNormalize( img );
-    postProcessing( &img );
+    //postProcessing( &img );
     char filename[150];
     sprintf( filename, "/home/keoma/Dropbox/PUC/Mestrado/antColonyOptimization/src/zhao/data/debugImages/debugImage%04d.bmp", ++step );
     imgWriteBMP( filename, img );
