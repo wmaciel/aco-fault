@@ -17,19 +17,19 @@
 /**
  * How much of the pheromone evaporates after each step. Must be between 0 and 1
  */
-#define EVAPORATION_RATE 0.05f
+#define EVAPORATION_RATE 0.1f
 
 /**
  * The minimum value of pheromone present at any given pixel. This is used to 
  * not shut down search paths
  */
-#define MIN_PHEROMONE 0.01f
+#define MIN_PHEROMONE 0.1f
 
 /**
  * The relative importance of the pheromone value in comparison with the 
  * visibility value
  */
-#define PHEROMONE_WEIGHT 2.0f
+#define PHEROMONE_WEIGHT 1.0f
 
 /**
  * The relative importance of the visibility value in comparison with the 
@@ -46,17 +46,17 @@
  * Used for the block wise ant distribution technique presented by Zhao. This is
  * the size of one side of the block
  */
-#define BLOCK_SIZE 42
+#define BLOCK_SIZE 50
 
 /**
  * How many long can an ant "leap" in one step
  */
-#define STEP_LENGTH 5
+#define STEP_LENGTH 10
 
 /**
  * The amount of pheromone each ant deposits at each pixel it has traversed
  */
-#define PHEROMONE_CONSTANT 0.02f
+#define PHEROMONE_CONSTANT 0.001f
 
 /**
  * How wide around the direction of the direction field can an ant see
@@ -84,7 +84,7 @@
 /**
  * The maximum amount of pheromone allowed to accumulate in a single pixel
  */
-#define MAX_PHEROMONE 1000.0f
+#define MAX_PHEROMONE 100.0f
 
 /**
  * Number of ants inserted into the environment. This value is not used if the 
@@ -111,7 +111,7 @@
 /**
  * Pheromone balance factor
  */
-#define PHEROMONE_FACTOR 0.02
+#define PHEROMONE_FACTOR 0.01
 
 #endif	/* PARAMETERS_H */
 

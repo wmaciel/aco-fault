@@ -7,10 +7,10 @@
 void whoLetTheAntsOut( int argc, char** argv )
 {
     srand( time(NULL) );
-    Image* input = imgReadPFM( (char*)"/home/keoma/Dropbox/PUC/Mestrado/aco-fault/zhao/data/sintetic_clean/sintetic_clean_attribute.pfm" );
+    Image* input = imgReadPFM( (char*)"/home/keoma/Dropbox/PUC/Mestrado/aco-fault/zhao/data/inline_279/variance/variance_smooth_petrel_PFMInline_279_TAG.pfm" );
     imgAssert( input );
     Colony* colony = new Colony( input );
-    colony->run( 50 );
+    colony->run( 1000 );
     imgDestroy( input );
 }
 
