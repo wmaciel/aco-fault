@@ -16,6 +16,7 @@ public:
     Parameters();;
     ~Parameters(){};
     
+    static Image* preProcessing( Image* img );
     static Image* postProcessing( Image* img );
     static Image* buildCircleImage( unsigned int radius );
     

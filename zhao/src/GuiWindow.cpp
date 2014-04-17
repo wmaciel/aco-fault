@@ -255,6 +255,10 @@ GtkWidget* GuiWindow::buildPreProcPage()
     GtkWidget* maxBox = buildParameterBox("Máximo:", 0.0, 10.0, 0.5, &Parameters::manualMax, false );
     gtk_box_pack_start( GTK_BOX( preProcPage ), maxBox, FALSE, TRUE, 2 );
     
+    GtkWidget* applyButton = gtk_button_new_with_label( "Aplicar" );
+    gtk_box_pack_start( GTK_BOX( preProcPage ), applyButton, FALSE, TRUE, 2 );
+    g_signal_connect( applyButton, "clicked", G_CALLBACK(cb_apply), this );
+    
     return preProcPage;
 }
 
@@ -372,7 +376,8 @@ gboolean GuiWindow::cb_exposeGLCanvas( GtkWidget* canvas, GdkEventExpose* event,
     }
     else
     {
-        image = imgCopy( ( Image* )window->_presenter->getInputImage() );
+        Image* rawimage = ( Image* )window->_presenter->getInputImage();
+        image = Parameters::preProcessing( rawimage );
     }
     
     //If Image loaded OK, start drawing

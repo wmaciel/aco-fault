@@ -38,6 +38,27 @@ float Parameters::manualMax          = 1.0f;
 float Parameters::manualMin          = 0.0f;
 bool Parameters::invertColors        = false;
 
+Image* Parameters::preProcessing(Image* img)
+{
+    if (!img) return NULL;
+    
+    Image* out = imgCopy( img );
+    
+    // normalize
+    if (manualNormalization)
+    {
+        imgClipOutliers( out, manualMin, manualMax );
+        imgNormalize( out );
+    }
+    else
+    {
+        imgNormalize( out, preStdDev );
+    }
+    
+    return out;
+}
+
+
 Image* Parameters::postProcessing(Image* img)
 {
     if (!img) return NULL;
