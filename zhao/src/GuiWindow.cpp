@@ -109,8 +109,33 @@ GtkWidget* GuiWindow::buildNotebook()
     GtkWidget* notebook = gtk_notebook_new();
     
     // Ants Page
-    GtkWidget* antsPage = gtk_vbox_new(FALSE, 3);
+    GtkWidget* antsPage = buildAntsPage();
     GtkWidget* antsLabel = gtk_label_new( "Formiga" );
+    gtk_notebook_append_page( GTK_NOTEBOOK(notebook), antsPage, antsLabel );
+    
+    
+    // Pheromone Page
+    GtkWidget* pheromonePage = buildPheromonePage();
+    GtkWidget* pheromoneLabel = gtk_label_new( "Feromônio" );
+    gtk_notebook_append_page( GTK_NOTEBOOK(notebook), pheromonePage, pheromoneLabel );
+    
+    
+    // Direction Page
+    GtkWidget* directionPage = buildDirectionPage();
+    GtkWidget* directionLabel = gtk_label_new( "Direção" );
+    gtk_notebook_append_page( GTK_NOTEBOOK(notebook), directionPage, directionLabel );
+    
+    // Post Processing page
+    GtkWidget* visPage = buildPostProcPage();
+    GtkWidget* visLabel = gtk_label_new( "Pós Proc." );
+    gtk_notebook_append_page( GTK_NOTEBOOK(notebook), visPage, visLabel );
+    
+    return notebook;
+}
+
+GtkWidget* GuiWindow::buildAntsPage()
+{
+    GtkWidget* antsPage = gtk_vbox_new(FALSE, 3);
     
     GtkWidget* antsBox = buildParameterBox("Quantidade:", 1, 10000, 5, &Parameters::numberOfAnts, true );
     gtk_box_pack_start( GTK_BOX( antsPage ), antsBox, FALSE, TRUE, 2 );
@@ -136,14 +161,14 @@ GtkWidget* GuiWindow::buildNotebook()
     GtkWidget* maxWrongStepsBox = buildParameterBox("Número de Passos Errôneos:", 1, 10000, 1, &Parameters::maxAbnormalSteps, true );
     gtk_box_pack_start( GTK_BOX( antsPage ), maxWrongStepsBox, FALSE, TRUE, 2 );
     
-    gtk_notebook_append_page( GTK_NOTEBOOK(notebook), antsPage, antsLabel );
-    
-    
-    // Pheromone Page
+    return antsPage;
+}
+
+GtkWidget* GuiWindow::buildPheromonePage()
+{
     GtkWidget* pheromonePage = gtk_vbox_new(FALSE, 3);
-    GtkWidget* pheromoneLabel = gtk_label_new( "Feromônio" );
     
-    GtkWidget* turnsBox = buildParameterBox("Turnos:", 1, 1000, 1, &Parameters::turns, true );
+    GtkWidget* turnsBox = buildParameterBox("Turnos:", 1, 10000, 1, &Parameters::turns, true );
     gtk_box_pack_start( GTK_BOX( pheromonePage ), turnsBox, FALSE, TRUE, 2 );
     
     GtkWidget* evaporationBox = buildParameterBox("Taxa Evaporação:", 0.01, 1.0, 0.01, &Parameters::evaporationRate, false );
@@ -157,13 +182,13 @@ GtkWidget* GuiWindow::buildNotebook()
     
     GtkWidget* startPheromoneBox = buildParameterBox("Feromônio Inicial:", 0.01, 10, 0.01, &Parameters::initPheromone, false );
     gtk_box_pack_start( GTK_BOX( pheromonePage ), startPheromoneBox, FALSE, TRUE, 2 );
-    
-    gtk_notebook_append_page( GTK_NOTEBOOK(notebook), pheromonePage, pheromoneLabel );
-    
-    
-    // Direction Page
+   
+    return pheromonePage;
+}
+
+GtkWidget* GuiWindow::buildDirectionPage()
+{
     GtkWidget* directionPage = gtk_vbox_new(FALSE, 3);
-    GtkWidget* directionLabel = gtk_label_new( "Direção" );
     
     GtkWidget* wGaussBox = buildParameterBox("Largura Gauss:", 0, 10, 1, &Parameters::widthGauss, true );
     gtk_box_pack_start( GTK_BOX( directionPage ), wGaussBox, FALSE, TRUE, 2 );
@@ -177,11 +202,12 @@ GtkWidget* GuiWindow::buildNotebook()
     GtkWidget* kernelBox = buildParameterBox("Kernel Radius:", 0, 10, 1, &Parameters::kernelRadius, true );
     gtk_box_pack_start( GTK_BOX( directionPage ), kernelBox, FALSE, TRUE, 2 );
     
-    gtk_notebook_append_page( GTK_NOTEBOOK(notebook), directionPage, directionLabel );
-    
-    // Visualization page
+    return directionPage;
+}
+
+GtkWidget* GuiWindow::buildPostProcPage()
+{
     GtkWidget* visPage = gtk_vbox_new(FALSE, 3);
-    GtkWidget* visLabel = gtk_label_new( "Pós Proc." );
     
     GtkWidget* stdDevBox = buildParameterBox("Desvios Padrão:", 0.0, 10.0, 0.5, &Parameters::stdDev, false );
     gtk_box_pack_start( GTK_BOX( visPage ), stdDevBox, FALSE, TRUE, 2 );
@@ -205,10 +231,9 @@ GtkWidget* GuiWindow::buildNotebook()
     gtk_box_pack_start( GTK_BOX( visPage ), applyButton, FALSE, TRUE, 2 );
     g_signal_connect( applyButton, "clicked", G_CALLBACK(cb_apply), this );
     
-    gtk_notebook_append_page( GTK_NOTEBOOK(notebook), visPage, visLabel );
-    
-    return notebook;
+    return visPage;
 }
+
 
 GtkWidget* GuiWindow::buildControlsBox()
 {
