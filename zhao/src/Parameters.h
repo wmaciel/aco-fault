@@ -43,12 +43,19 @@ public:
     static float cohTreshold;
     
     //post processing parameters
-    static float stdDev;
+    static float postStdDev;
     static float gammaFactor;
     static bool binarization;
     static float binThreshold;
     static int openKernelRad;
     static int closeKernelRad;
+    
+    //pre processing parameters
+    static float preStdDev;
+    static bool manualNormalization;
+    static float manualMax;
+    static float manualMin;
+    static bool invertColors;
 };
 
 /**

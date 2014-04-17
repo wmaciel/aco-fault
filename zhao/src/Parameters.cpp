@@ -24,12 +24,19 @@ int   Parameters::kernelRadius = 1;
 float Parameters::cohTreshold  = 0.5f;
 
 //post processing parameters
-float Parameters::stdDev       = 2.0f;
-float Parameters::gammaFactor  = 1.0f;
-bool  Parameters::binarization = false;
-float Parameters::binThreshold = 0.0f;
-int   Parameters::openKernelRad = 0;
+float Parameters::postStdDev     = 2.0f;
+float Parameters::gammaFactor    = 1.0f;
+bool  Parameters::binarization   = false;
+float Parameters::binThreshold   = 0.0f;
+int   Parameters::openKernelRad  = 0;
 int   Parameters::closeKernelRad = 0;
+
+//pre processing parameters
+float Parameters::preStdDev          = 2.0f;
+bool Parameters::manualNormalization = false;
+float Parameters::manualMax          = 1.0f;
+float Parameters::manualMin          = 0.0f;
+bool Parameters::invertColors        = false;
 
 Image* Parameters::postProcessing(Image* img)
 {
@@ -38,7 +45,7 @@ Image* Parameters::postProcessing(Image* img)
     Image* out = imgCopy( img );
     
     // normalization
-    imgNormalize( out, stdDev );
+    imgNormalize( out, postStdDev );
     
     // gamma correction
     imgGamma( out, gammaFactor );

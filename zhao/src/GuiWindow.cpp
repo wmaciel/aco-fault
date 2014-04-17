@@ -108,6 +108,11 @@ GtkWidget* GuiWindow::buildNotebook()
 {
     GtkWidget* notebook = gtk_notebook_new();
     
+    //Pre Processing Page
+    GtkWidget* preProcPage = buildPreProcPage();
+    GtkWidget* preProcLabel = gtk_label_new( "Pré Proc." );
+    gtk_notebook_append_page( GTK_NOTEBOOK(notebook), preProcPage, preProcLabel );
+    
     // Ants Page
     GtkWidget* antsPage = buildAntsPage();
     GtkWidget* antsLabel = gtk_label_new( "Formiga" );
@@ -209,7 +214,7 @@ GtkWidget* GuiWindow::buildPostProcPage()
 {
     GtkWidget* visPage = gtk_vbox_new(FALSE, 3);
     
-    GtkWidget* stdDevBox = buildParameterBox("Desvios Padrão:", 0.0, 10.0, 0.5, &Parameters::stdDev, false );
+    GtkWidget* stdDevBox = buildParameterBox("Desvios Padrão:", 0.0, 10.0, 0.5, &Parameters::postStdDev, false );
     gtk_box_pack_start( GTK_BOX( visPage ), stdDevBox, FALSE, TRUE, 2 );
     
     GtkWidget* gammaBox = buildParameterBox("Correção Gamma:", 0.0, 10.0, 0.1, &Parameters::gammaFactor, false );
@@ -232,6 +237,25 @@ GtkWidget* GuiWindow::buildPostProcPage()
     g_signal_connect( applyButton, "clicked", G_CALLBACK(cb_apply), this );
     
     return visPage;
+}
+
+GtkWidget* GuiWindow::buildPreProcPage()
+{
+    GtkWidget* preProcPage = gtk_vbox_new(FALSE, 3);
+    
+    GtkWidget* stdDevBox = buildParameterBox("Desvios Padrão:", 0.0, 10.0, 0.5, &Parameters::preStdDev, false );
+    gtk_box_pack_start( GTK_BOX( preProcPage ), stdDevBox, FALSE, TRUE, 2 );
+    
+    GtkWidget* useBinarization = buildParameterBox( "Manual", &Parameters::manualNormalization );
+    gtk_box_pack_start( GTK_BOX( preProcPage ), useBinarization, FALSE, TRUE, 2 );
+    
+    GtkWidget* minBox = buildParameterBox("Mínimo:", 0.0, 10.0, 0.5, &Parameters::manualMin, false );
+    gtk_box_pack_start( GTK_BOX( preProcPage ), minBox, FALSE, TRUE, 2 );
+    
+    GtkWidget* maxBox = buildParameterBox("Máximo:", 0.0, 10.0, 0.5, &Parameters::manualMax, false );
+    gtk_box_pack_start( GTK_BOX( preProcPage ), maxBox, FALSE, TRUE, 2 );
+    
+    return preProcPage;
 }
 
 
