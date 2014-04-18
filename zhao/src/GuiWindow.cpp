@@ -225,31 +225,34 @@ GtkWidget* GuiWindow::buildDirectionPage()
 
 GtkWidget* GuiWindow::buildPostProcPage()
 {
-    GtkWidget* visPage = gtk_vbox_new(FALSE, 3);
+    GtkWidget* postProcPage = gtk_vbox_new(FALSE, 3);
     
     GtkWidget* stdDevBox = buildParameterBox("Desvios Padrão:", 0.0, 10.0, 0.5, &Parameters::postStdDev, false );
-    gtk_box_pack_start( GTK_BOX( visPage ), stdDevBox, FALSE, TRUE, 2 );
+    gtk_box_pack_start( GTK_BOX( postProcPage ), stdDevBox, FALSE, TRUE, 2 );
     
     GtkWidget* gammaBox = buildParameterBox("Correção Gamma:", 0.0, 10.0, 0.1, &Parameters::gammaFactor, false );
-    gtk_box_pack_start( GTK_BOX( visPage ), gammaBox, FALSE, TRUE, 2 );
+    gtk_box_pack_start( GTK_BOX( postProcPage ), gammaBox, FALSE, TRUE, 2 );
     
     GtkWidget* binBox = buildParameterBox("Limiar de Binarização:", 0.00, 1.00, 0.01, &Parameters::binThreshold, false );
-    gtk_box_pack_start( GTK_BOX( visPage ), binBox, FALSE, TRUE, 2 );
+    gtk_box_pack_start( GTK_BOX( postProcPage ), binBox, FALSE, TRUE, 2 );
     
     GtkWidget* openKernelBox = buildParameterBox("Raio do kernel de abertura:", 0, 10, 1, &Parameters::openKernelRad, true );
-    gtk_box_pack_start( GTK_BOX( visPage ), openKernelBox, FALSE, TRUE, 2 );
+    gtk_box_pack_start( GTK_BOX( postProcPage ), openKernelBox, FALSE, TRUE, 2 );
     
     GtkWidget* closeKernelBox = buildParameterBox("Raio do kernel de fechamento:", 0, 10, 1, &Parameters::closeKernelRad, true );
-    gtk_box_pack_start( GTK_BOX( visPage ), closeKernelBox, FALSE, TRUE, 2 );
+    gtk_box_pack_start( GTK_BOX( postProcPage ), closeKernelBox, FALSE, TRUE, 2 );
     
     GtkWidget* useBinarization = buildParameterBox( "Binarizar", &Parameters::binarization );
-    gtk_box_pack_start( GTK_BOX( visPage ), useBinarization, FALSE, TRUE, 2 );
+    gtk_box_pack_start( GTK_BOX( postProcPage ), useBinarization, FALSE, TRUE, 2 );
     
     GtkWidget* applyButton = gtk_button_new_with_label( "Aplicar" );
-    gtk_box_pack_start( GTK_BOX( visPage ), applyButton, FALSE, TRUE, 2 );
+    gtk_box_pack_start( GTK_BOX( postProcPage ), applyButton, FALSE, TRUE, 2 );
     g_signal_connect( applyButton, "clicked", G_CALLBACK(cb_apply), this );
     
-    return visPage;
+    GtkWidget* exportButton = gtk_button_new_with_label( "Exportar BMP" );
+    gtk_box_pack_start( GTK_BOX( postProcPage ), exportButton, FALSE, TRUE, 2 );
+    
+    return postProcPage;
 }
 
 GtkWidget* GuiWindow::buildPreProcPage()
@@ -271,6 +274,9 @@ GtkWidget* GuiWindow::buildPreProcPage()
     GtkWidget* applyButton = gtk_button_new_with_label( "Aplicar" );
     gtk_box_pack_start( GTK_BOX( preProcPage ), applyButton, FALSE, TRUE, 2 );
     g_signal_connect( applyButton, "clicked", G_CALLBACK(cb_apply), this );
+    
+    GtkWidget* exportButton = gtk_button_new_with_label( "Exportar BMP" );
+    gtk_box_pack_start( GTK_BOX( preProcPage ), exportButton, FALSE, TRUE, 2 );
     
     return preProcPage;
 }
