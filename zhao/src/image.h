@@ -390,4 +390,6 @@ void imgBin( Image* img, float threshold );
 
 bool imgAssert( Image* img );
 
+void imgInvertColors( Image* img );
+
 #endif
