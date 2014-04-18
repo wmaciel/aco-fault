@@ -35,11 +35,12 @@ private:
     GtkWidget* buildParameterBox( const char* name, double min, double max, double step, void* param, bool isInteger );
     GtkWidget* buildParameterBox( const char* name, bool* param );
     GtkWidget* buildNotebook();
+    GtkWidget* buildPreProcPage();
+    GtkWidget* buildParametersPage();
     GtkWidget* buildAntsPage();
     GtkWidget* buildPheromonePage();
     GtkWidget* buildDirectionPage();
     GtkWidget* buildPostProcPage();
-    GtkWidget* buildPreProcPage();
     unsigned int buildTexture( Image* img );
     void fit( int w, int h, int canvasW, int canvasH );
     

@@ -114,6 +114,23 @@ GtkWidget* GuiWindow::buildNotebook()
     gtk_notebook_append_page( GTK_NOTEBOOK(notebook), preProcPage, preProcLabel );
     
     // Ants Page
+    GtkWidget* paramPage = buildParametersPage();
+    GtkWidget* paramLabel = gtk_label_new( "Params." );
+    gtk_notebook_append_page( GTK_NOTEBOOK(notebook), paramPage, paramLabel );
+    
+    // Post Processing page
+    GtkWidget* visPage = buildPostProcPage();
+    GtkWidget* visLabel = gtk_label_new( "Pós Proc." );
+    gtk_notebook_append_page( GTK_NOTEBOOK(notebook), visPage, visLabel );
+    
+    return notebook;
+}
+
+GtkWidget* GuiWindow::buildParametersPage()
+{
+    GtkWidget* notebook = gtk_notebook_new();
+    
+    // Ants Page
     GtkWidget* antsPage = buildAntsPage();
     GtkWidget* antsLabel = gtk_label_new( "Formiga" );
     gtk_notebook_append_page( GTK_NOTEBOOK(notebook), antsPage, antsLabel );
@@ -130,13 +147,9 @@ GtkWidget* GuiWindow::buildNotebook()
     GtkWidget* directionLabel = gtk_label_new( "Direção" );
     gtk_notebook_append_page( GTK_NOTEBOOK(notebook), directionPage, directionLabel );
     
-    // Post Processing page
-    GtkWidget* visPage = buildPostProcPage();
-    GtkWidget* visLabel = gtk_label_new( "Pós Proc." );
-    gtk_notebook_append_page( GTK_NOTEBOOK(notebook), visPage, visLabel );
-    
     return notebook;
 }
+
 
 GtkWidget* GuiWindow::buildAntsPage()
 {
@@ -267,8 +280,8 @@ GtkWidget* GuiWindow::buildControlsBox()
 {
     GtkWidget* controlsBox = gtk_vbox_new( FALSE, 3 );
     
-    GtkWidget* parametersLabel = gtk_label_new( "Parâmetros:" );
-    gtk_box_pack_start( GTK_BOX( controlsBox ), parametersLabel, FALSE, TRUE, 5 );
+    GtkWidget* controlsLabel = gtk_label_new( "Controles:" );
+    gtk_box_pack_start( GTK_BOX( controlsBox ), controlsLabel, FALSE, TRUE, 5 );
     
     GtkWidget* notebook = buildNotebook();
     gtk_box_pack_start( GTK_BOX( controlsBox ), notebook, FALSE, TRUE, 5 );
