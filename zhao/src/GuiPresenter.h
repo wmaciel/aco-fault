@@ -27,7 +27,9 @@ public:
 private:
     GuiWindow* _window;
     Image* _inImg;
+    //Image* _preProcImg;
     Image* _outImg;
+    //Image* _postProcImg;
 };
 
 #endif	/* GUIPRESENTER_H */

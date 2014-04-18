@@ -14,6 +14,8 @@ GuiPresenter::GuiPresenter()
 {
     _inImg = 0;
     _outImg = 0;
+    //_preProcImg = 0;
+    //_postProcImg = 0;
     _window = new GuiWindow();
     _window->setPresenter( this );
 }
@@ -37,14 +39,32 @@ void GuiPresenter::showWindow()
 
 Image* GuiPresenter::getInputImage()
 {
-    return _inImg;
+//    if (_preProcImg)
+//    {
+//        imgDestroy( _preProcImg );
+//    }
+//    
+//    _preProcImg = Parameters::preProcessing( _inImg );
+//    
+//    return _preProcImg;
+    
+    return Parameters::preProcessing( _inImg );
 }
 
 
 
 Image* GuiPresenter::getOutputImage()
 {
-    return _outImg;
+//    if (_postProcImg)
+//    {
+//        imgDestroy( _postProcImg );
+//    }
+//    
+//    _postProcImg = Parameters::postProcessing( _outImg );
+//    
+//    return _postProcImg;
+    
+    return Parameters::postProcessing( _outImg );
 }
 
 
@@ -72,9 +92,10 @@ void GuiPresenter::loadImage( char* path )
 
 void GuiPresenter::run()
 {
-    Image* copyInImg = imgCopy( _inImg );
+    Image* copyInImg = getInputImage();
     Colony* colony = new Colony( copyInImg );
     colony->run( Parameters::turns );
+    imgDestroy( copyInImg );
     
     if (_outImg)
     {
@@ -83,7 +104,7 @@ void GuiPresenter::run()
     }
     
     _outImg = colony->getPheromoneImage();
-    imgNormalize( _outImg );
+    //imgNormalize( _outImg );
     _window->redraw();
     
     delete colony;

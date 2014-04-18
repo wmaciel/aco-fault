@@ -27,7 +27,7 @@ Colony::Colony( Image* image )
     }
     
     // Normalize image
-    imgNormalize( image, 2 );
+    //imgNormalize( image, 2 );
     
     // Apply gaussian filter for noise reduction
     imgGauss( image );

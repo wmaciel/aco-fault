@@ -371,13 +371,11 @@ gboolean GuiWindow::cb_exposeGLCanvas( GtkWidget* canvas, GdkEventExpose* event,
     
     if( canvas == window->_dstCanvas )
     {
-        Image* rawimage = ( Image* )window->_presenter->getOutputImage();
-        image = Parameters::postProcessing( rawimage );
+        image = window->_presenter->getOutputImage();
     }
     else
     {
-        Image* rawimage = ( Image* )window->_presenter->getInputImage();
-        image = Parameters::preProcessing( rawimage );
+        image = window->_presenter->getInputImage();
     }
     
     //If Image loaded OK, start drawing
