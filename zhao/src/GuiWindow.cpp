@@ -249,9 +249,6 @@ GtkWidget* GuiWindow::buildPostProcPage()
     gtk_box_pack_start( GTK_BOX( postProcPage ), applyButton, FALSE, TRUE, 2 );
     g_signal_connect( applyButton, "clicked", G_CALLBACK(cb_apply), this );
     
-    GtkWidget* exportButton = gtk_button_new_with_label( "Exportar BMP" );
-    gtk_box_pack_start( GTK_BOX( postProcPage ), exportButton, FALSE, TRUE, 2 );
-    
     return postProcPage;
 }
 
@@ -274,9 +271,6 @@ GtkWidget* GuiWindow::buildPreProcPage()
     GtkWidget* applyButton = gtk_button_new_with_label( "Aplicar" );
     gtk_box_pack_start( GTK_BOX( preProcPage ), applyButton, FALSE, TRUE, 2 );
     g_signal_connect( applyButton, "clicked", G_CALLBACK(cb_apply), this );
-    
-    GtkWidget* exportButton = gtk_button_new_with_label( "Exportar BMP" );
-    gtk_box_pack_start( GTK_BOX( preProcPage ), exportButton, FALSE, TRUE, 2 );
     
     return preProcPage;
 }
@@ -302,6 +296,11 @@ GtkWidget* GuiWindow::buildControlsBox()
     GtkWidget* runButton = gtk_button_new_with_label( "Executar" );
     g_signal_connect( runButton, "clicked", G_CALLBACK(cb_run), this );
     gtk_box_pack_start( GTK_BOX( controlsBox ), runButton, FALSE, TRUE, 2 );
+    
+    GtkWidget* exportButton = gtk_button_new_with_label( "Exportar BMP" );
+    g_signal_connect( exportButton, "clicked", G_CALLBACK(cb_export), this );
+    gtk_box_pack_start( GTK_BOX( controlsBox ), exportButton, FALSE, TRUE, 2 );
+    
     
     return controlsBox;
 }
@@ -561,3 +560,17 @@ void GuiWindow::cb_apply(GtkButton* button, gpointer user_data)
     GuiWindow* window = (GuiWindow*) user_data;
     window->redraw();
 }
+
+void GuiWindow::cb_export(GtkButton* button, gpointer user_data)
+{
+    GuiWindow* window = (GuiWindow*) user_data;
+    
+    Image* input = window->_presenter->getInputImage();
+    imgWriteBMP( (char*)"input.bmp", input );
+    imgDestroy( input );
+    
+    Image* output = window->_presenter->getOutputImage();
+    imgWriteBMP( (char*)"output.bmp", output );
+    imgDestroy( output );
+}
+
