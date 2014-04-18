@@ -79,12 +79,6 @@ private:
     
     /** Drawing Area will hold the OpenGL drawing of the input image */
     GtkWidget* _srcCanvas;
-    
-    /** texture ID for the source input image */
-    unsigned int _srcTextureID;
-    
-    /** texture ID for the output image */
-    unsigned int _dstTextureID;
 };
 
 #endif	/* GUIWINDOW_H */
