@@ -566,11 +566,19 @@ void GuiWindow::cb_export(GtkButton* button, gpointer user_data)
     GuiWindow* window = (GuiWindow*) user_data;
     
     Image* input = window->_presenter->getInputImage();
-    imgWriteBMP( (char*)"input.bmp", input );
-    imgDestroy( input );
+    if (input)
+    {
+        imgInvertColors( input );
+        imgWriteBMP( (char*)"input.bmp", input );
+        imgDestroy( input );
+    }
     
     Image* output = window->_presenter->getOutputImage();
-    imgWriteBMP( (char*)"output.bmp", output );
-    imgDestroy( output );
+    if (output)
+    {
+        imgInvertColors( output );
+        imgWriteBMP( (char*)"output.bmp", output );
+        imgDestroy( output );
+    }
 }
 
