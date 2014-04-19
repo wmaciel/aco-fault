@@ -14,10 +14,10 @@ GuiWindow::GuiWindow()
 {
     _gtkWindow = build();
     
-    g_signal_connect( _dstCanvas    , "configure-event", G_CALLBACK( cb_configGLCanvas )    , this );
-    g_signal_connect( _dstCanvas    , "expose-event"   , G_CALLBACK( cb_exposeGLCanvas )    , this );
-    g_signal_connect( _srcCanvas    , "configure-event", G_CALLBACK( cb_configGLCanvas )    , this );
-    g_signal_connect( _srcCanvas    , "expose-event"   , G_CALLBACK( cb_exposeGLCanvas )    , this );
+    g_signal_connect( _dstCanvas, "configure-event", G_CALLBACK( cb_configGLCanvas ), this );
+    g_signal_connect( _dstCanvas, "expose-event"   , G_CALLBACK( cb_exposeGLCanvas ), this );
+    g_signal_connect( _srcCanvas, "configure-event", G_CALLBACK( cb_configGLCanvas ), this );
+    g_signal_connect( _srcCanvas, "expose-event"   , G_CALLBACK( cb_exposeGLCanvas ), this );
     
     _presenter = 0;
 }
