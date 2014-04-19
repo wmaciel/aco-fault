@@ -297,7 +297,7 @@ GtkWidget* GuiWindow::buildControlsBox()
     g_signal_connect( runButton, "clicked", G_CALLBACK(cb_run), this );
     gtk_box_pack_start( GTK_BOX( controlsBox ), runButton, FALSE, TRUE, 2 );
     
-    GtkWidget* exportButton = gtk_button_new_with_label( "Exportar BMP" );
+    GtkWidget* exportButton = gtk_button_new_with_label( "Exportar" );
     g_signal_connect( exportButton, "clicked", G_CALLBACK(cb_export), this );
     gtk_box_pack_start( GTK_BOX( controlsBox ), exportButton, FALSE, TRUE, 2 );
     
@@ -565,14 +565,17 @@ void GuiWindow::cb_export(GtkButton* button, gpointer user_data)
 {
     GuiWindow* window = (GuiWindow*) user_data;
     
+    // exports input image as bmp and pfm
     Image* input = window->_presenter->getInputImage();
     if (input)
     {
         imgInvertColors( input );
         imgWriteBMP( (char*)"input.bmp", input );
+        imgWritePFM( (char*)"input.pfm", input );
         imgDestroy( input );
     }
     
+    // exports output image as bmp only
     Image* output = window->_presenter->getOutputImage();
     if (output)
     {
