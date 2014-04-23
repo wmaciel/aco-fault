@@ -509,3 +509,18 @@ void DirectionalField::debugImages()
     imgWriteBMP( (char*)"debugImg/coherenceFieldDebugImage.bmp", _coherence );
     imgWriteBMP( (char*)"debugImg/coherenceFieldDebugMask.bmp", _coherenceMask );
 }
+
+Image* DirectionalField::getCoherence()
+{
+    return imgCopy( _coherence );
+}
+
+Image* DirectionalField::getCoherenceMask()
+{
+    return imgCopy(_coherenceMask);
+}
+
+Image* DirectionalField::getDirection()
+{
+    return imgCopy(_direction);
+}

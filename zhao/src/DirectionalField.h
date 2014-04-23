@@ -36,6 +36,10 @@ public:
 
     void debugImages();
     
+    Image* getCoherence();
+    Image* getDirection();
+    Image* getCoherenceMask();
+    
 private:
     /**
      * Lineariza as coordenadas do pixel
