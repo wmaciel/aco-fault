@@ -80,6 +80,12 @@ private:
     
     /** Drawing Area will hold the OpenGL drawing of the input image */
     GtkWidget* _srcCanvas;
+    
+    /** Drawing Area will hold the OpenGL drawing of the direction image  */
+    GtkWidget* _dirCanvas;
+    
+    /** Drawing Area will hold the OpenGL drawing of the consistency image  */
+    GtkWidget* _cohCanvas;
 };
 
 #endif	/* GUIWINDOW_H */

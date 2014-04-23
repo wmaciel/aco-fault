@@ -86,6 +86,10 @@ GtkWidget* GuiWindow::buildCanvasBox()
     gtk_drawing_area_size( GTK_DRAWING_AREA( _dstCanvas ), 400, 100 );
     _srcCanvas = gtk_drawing_area_new();
     gtk_drawing_area_size( GTK_DRAWING_AREA( _srcCanvas ), 400, 100 );
+    _dirCanvas = gtk_drawing_area_new();
+    gtk_drawing_area_size( GTK_DRAWING_AREA( _dirCanvas ), 400, 100 );
+    _cohCanvas = gtk_drawing_area_new();
+    gtk_drawing_area_size( GTK_DRAWING_AREA( _cohCanvas ), 400, 100 );
     
     // OpenGL configuration for the canvas
     GdkGLConfig* glconfig = gdk_gl_config_new_by_mode (static_cast<GdkGLConfigMode>
@@ -96,10 +100,23 @@ GtkWidget* GuiWindow::buildCanvasBox()
     // Define the canvas as capable of rendering OpenGL graphics
     gtk_widget_set_gl_capability( _dstCanvas, glconfig, NULL, TRUE, GDK_GL_RGBA_TYPE );
     gtk_widget_set_gl_capability( _srcCanvas, glconfig, NULL, TRUE, GDK_GL_RGBA_TYPE );
+    gtk_widget_set_gl_capability( _dirCanvas, glconfig, NULL, TRUE, GDK_GL_RGBA_TYPE );
+    gtk_widget_set_gl_capability( _cohCanvas, glconfig, NULL, TRUE, GDK_GL_RGBA_TYPE );
     
     // Add Drawing Areas to the box
-    gtk_box_pack_start_defaults( GTK_BOX( canvasBox ), _srcCanvas );
-    gtk_box_pack_start_defaults( GTK_BOX( canvasBox ), _dstCanvas );
+    GtkWidget* srcDstBox = gtk_hbox_new( TRUE, 1 );
+    gtk_box_pack_start_defaults( GTK_BOX( srcDstBox ), _srcCanvas );
+    gtk_box_pack_start_defaults( GTK_BOX( srcDstBox ), _dstCanvas );
+    
+    GtkWidget* dirCohBox = gtk_hbox_new( TRUE, 1 );
+    gtk_box_pack_start_defaults( GTK_BOX( dirCohBox ), _dirCanvas );
+    gtk_box_pack_start_defaults( GTK_BOX( dirCohBox ), _cohCanvas );
+    
+    GtkWidget* canvasNotebook = gtk_notebook_new();
+    gtk_notebook_append_page( GTK_NOTEBOOK(canvasNotebook), srcDstBox, gtk_label_new("entrada & saída") );
+    gtk_notebook_append_page( GTK_NOTEBOOK(canvasNotebook), dirCohBox, gtk_label_new("direção & consistência") );
+    
+    gtk_box_pack_start_defaults( GTK_BOX( canvasBox ), canvasNotebook );
     
     return canvasBox;
 }
