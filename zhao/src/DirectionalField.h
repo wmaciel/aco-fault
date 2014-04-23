@@ -19,15 +19,7 @@
 class DirectionalField
 {
 public:
-    /**
-     * Constructor
-     * @param data Linearized matrix representing the pixel of the image. Each
-     * value in the matrix should represent the luminance of the corresponding
-     *  pixel. The matrix must be given by line.
-     * @param width Number of pixels in each row of data
-     * @param height Number of pixels in each column of data
-     */
-    DirectionalField( Image* img, Image* kernel = 0 );
+    DirectionalField( Image* img, int openKernelRadius, int closeKernelRadius );
 
     /**
      * Destructor
@@ -43,7 +35,7 @@ public:
     void debugPrint();
 
     void debugImages();
-
+    
 private:
     /**
      * Lineariza as coordenadas do pixel
@@ -94,7 +86,9 @@ private:
 
     float _coherenceThreshold;
     
-    Image* _kernel;
+    int _openKernelRadius;
+    
+    int _closeKernelRadius;
 
     /** Componete horizontal de cada pixel */
     Image* _direction;

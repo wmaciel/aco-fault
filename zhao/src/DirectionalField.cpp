@@ -12,15 +12,16 @@
 #include <math.h>
 #include <stdio.h>
 
-DirectionalField::DirectionalField( Image* img, Image* kernel )
+DirectionalField::DirectionalField( Image* img, int openKernelRadius, int closeKernelRadius )
 {
     _width = imgGetWidth( img );
     _height = imgGetHeight( img );
     _coherence = imgCreate( _width, _height, 1 );
     _coherenceMask = imgCreate( _width, _height, 1 );
     _direction = imgCreate( _width, _height, 3 );
-    _kernel = kernel;
     _coherenceThreshold = COHERENCE_TRESHOLD;
+    _openKernelRadius = openKernelRadius;
+    _closeKernelRadius = closeKernelRadius;
     
     _gaussianKernel = imgCreateGaussianKernel( DIR_FIELD_GAUSSIAN_WINDOW_HALF_WIDTH, DIR_FIELD_GAUSSIAN_WINDOW_HALF_HEIGHT, 1.0f );
 
@@ -216,6 +217,7 @@ void DirectionalField::buildCoherenceImage()
 
 void DirectionalField::buildCoherenceMask()
 {
+    // build raw mask
     for (int x = 0; x < _width; ++x)
     {
         for (int y = 0; y < _height; ++y)
@@ -226,15 +228,18 @@ void DirectionalField::buildCoherenceMask()
         }
     }
     
-    if (_kernel)
-    {
-        // open
-        imgErode( _coherenceMask, _kernel );
-        imgDilate( _coherenceMask, _kernel );
-        //close
-        imgDilate( _coherenceMask, _kernel );
-        imgErode( _coherenceMask, _kernel );
-    }
+    // morphological treatment
+    // open
+    Image* openKernel = Parameters::buildCircleImage( _openKernelRadius );
+    imgErode( _coherenceMask, openKernel );
+    imgDilate( _coherenceMask, openKernel );
+    imgDestroy( openKernel );
+
+    //close
+    Image* closeKernel = Parameters::buildCircleImage( _closeKernelRadius );
+    imgDilate( _coherenceMask, closeKernel );
+    imgErode( _coherenceMask, closeKernel );
+    imgDestroy( closeKernel );
 }
 
 

@@ -22,8 +22,7 @@ _evaporationRate(evaporationRate), _initialPheromone(initialPheromone), _minimum
     construct( imgGetHeight( image ), imgGetWidth( image ) );
     computeImageMatrix( image );
     clearFeromone();
-    Image* kernel = Parameters::buildCircleImage( Parameters::kernelRadius );
-    _directionalField = new DirectionalField( image, kernel );
+    _directionalField = new DirectionalField( image, Parameters::kernelRadius, Parameters::kernelRadius );
     _directionalField->debugImages();
 }
 
