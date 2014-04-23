@@ -48,12 +48,28 @@ DirectionalField::DirectionalField( Image* img, int openKernelRadius, int closeK
     delete[] _gxxMatrix;
     delete[] _gyyMatrix;
     delete[] _gxyMatrix;
+    
+    _gxMatrix  = 0;
+    _gyMatrix  = 0;
+    _gxxMatrix = 0;
+    _gyyMatrix = 0;
+    _gxyMatrix = 0;
 }
 
 
 
 DirectionalField::~DirectionalField()
 {
+    imgDestroy(_coherence);
+    imgDestroy(_coherenceMask);
+    imgDestroy(_direction);
+    imgDestroy(_gaussianKernel);
+    
+    if (_gxMatrix)  delete[] _gxMatrix;
+    if (_gyMatrix)  delete[] _gyMatrix;
+    if (_gxxMatrix) delete[] _gxxMatrix;
+    if (_gyyMatrix) delete[] _gyyMatrix;
+    if (_gxyMatrix) delete[] _gxyMatrix;
 }
 
 
