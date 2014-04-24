@@ -408,9 +408,17 @@ gboolean GuiWindow::cb_exposeGLCanvas( GtkWidget* canvas, GdkEventExpose* event,
     {
         image = window->_presenter->getOutputImage();
     }
-    else
+    else if (canvas == window->_srcCanvas)
     {
         image = window->_presenter->getInputImage();
+    }
+    else if (canvas == window->_dirCanvas)
+    {
+        image = window->_presenter->getDirectionImage();
+    }
+    else //if (canvas == window->_cohCanvas)
+    {
+        image = window->_presenter->getConsistencyImage();
     }
     
     //If Image loaded OK, start drawing

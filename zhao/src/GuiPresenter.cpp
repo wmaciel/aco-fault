@@ -9,13 +9,14 @@
 #include "GuiWindow.h"
 #include "Parameters.h"
 #include "Colony.h"
+#include "DirectionalField.h"
 
 GuiPresenter::GuiPresenter()
 {
     _inImg = 0;
     _outImg = 0;
-    //_preProcImg = 0;
-    //_postProcImg = 0;
+    _dirImg = 0;
+    _cohImg = 0;
     _window = new GuiWindow();
     _window->setPresenter( this );
 }
@@ -67,7 +68,36 @@ Image* GuiPresenter::getOutputImage()
     return Parameters::postProcessing( _outImg );
 }
 
+Image* GuiPresenter::getDirectionImage()
+{
+    DirectionalField* dirField = new DirectionalField(getInputImage(), Parameters::kernelRadius, Parameters::kernelRadius);
+    Image* dirImg = dirField->getDirection();
+    delete dirField;
+    
+    for (int x = 0; x < imgGetWidth(dirImg); ++x)
+    {
+        for (int y = 0; y < imgGetHeight(dirImg); ++y)
+        {
+            float aux, dx, dy;
+            imgGetPixel3f(dirImg, x, y, &aux, &dx, &dy);
+            if (( dx == dy ) && ( dx == 0 ))
+                imgSetPixel3f( dirImg, x, y, 1.0, 0.0, 0.0 );
+            else
+                imgSetPixel3f( dirImg, x, y, aux, fabs(dx), fabs(dy) );
+        }
+    }
+    
+    return dirImg;
+}
 
+Image* GuiPresenter::getConsistencyImage()
+{
+    DirectionalField* dirField = new DirectionalField(getInputImage(), Parameters::kernelRadius, Parameters::kernelRadius);
+    Image* cohImg = dirField->getCoherence();
+    delete dirField;
+    imgNormalize( cohImg );
+    return cohImg;
+}
 
 void GuiPresenter::loadImage( char* path )
 {

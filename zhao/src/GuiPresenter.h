@@ -23,13 +23,15 @@ public:
     void run();
     Image* getInputImage();
     Image* getOutputImage();
+    Image* getDirectionImage();
+    Image* getConsistencyImage();
     
 private:
     GuiWindow* _window;
     Image* _inImg;
-    //Image* _preProcImg;
     Image* _outImg;
-    //Image* _postProcImg;
+    Image* _dirImg;
+    Image* _cohImg;
 };
 
 #endif	/* GUIPRESENTER_H */
