@@ -42,7 +42,8 @@ public:
     static int heightGauss;
     static int radiusGauss;
     static bool viewCohMask;
-    static int kernelRadius;
+    static int dirOpenKernelRadius;
+    static int dirCloseKernelRadius;
     static float cohTreshold;
     
     //post processing parameters

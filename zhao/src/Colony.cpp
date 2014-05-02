@@ -192,7 +192,8 @@ void Colony::run( int nSteps )
     fprintf(paramFile, "\tLargura Gauss: %d\n", Parameters::widthGauss);
     fprintf(paramFile, "\tAltura Gauss: %d\n", Parameters::heightGauss);
     fprintf(paramFile, "\tLimiar Consistencia: %f\n", Parameters::cohTreshold);
-    fprintf(paramFile, "\tRaio do Kernel: %d\n", Parameters::kernelRadius);
+    fprintf(paramFile, "\tRaio do Kernel de Abertura: %d\n", Parameters::dirOpenKernelRadius);
+    fprintf(paramFile, "\tRaio do Kernel de Fechamento: %d\n", Parameters::dirCloseKernelRadius);
     
     fclose( paramFile );
     

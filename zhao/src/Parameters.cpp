@@ -22,7 +22,8 @@ int   Parameters::widthGauss   = 3;
 int   Parameters::heightGauss  = 3;
 int   Parameters::radiusGauss  = 1;
 bool  Parameters::viewCohMask = false;
-int   Parameters::kernelRadius = 1;
+int   Parameters::dirOpenKernelRadius = 1;
+int   Parameters::dirCloseKernelRadius = 1;
 float Parameters::cohTreshold  = 0.5f;
 
 //post processing parameters

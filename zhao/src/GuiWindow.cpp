@@ -261,8 +261,11 @@ GtkWidget* GuiWindow::buildDirectionPage()
     GtkWidget* cohTresholdBox = buildParameterBox("Limiar Consistência:", 0.0, 1.0, 0.01, &Parameters::cohTreshold, false );
     gtk_box_pack_start( GTK_BOX( directionPage ), cohTresholdBox, FALSE, TRUE, 2 );
     
-    GtkWidget* kernelBox = buildParameterBox("Kernel Radius:", 0, 10, 1, &Parameters::kernelRadius, true );
-    gtk_box_pack_start( GTK_BOX( directionPage ), kernelBox, FALSE, TRUE, 2 );
+    GtkWidget* openKernelBox = buildParameterBox("Raio Kernel Abertura:", 0, 10, 1, &Parameters::dirOpenKernelRadius, true );
+    gtk_box_pack_start( GTK_BOX( directionPage ), openKernelBox, FALSE, TRUE, 2 );
+    
+    GtkWidget* closeKernelBox = buildParameterBox("Raio Kernel Fechamento:", 0, 10, 1, &Parameters::dirCloseKernelRadius, true );
+    gtk_box_pack_start( GTK_BOX( directionPage ), closeKernelBox, FALSE, TRUE, 2 );
     
     GtkWidget* previewButton = gtk_button_new_with_label( "Preview" );
     gtk_box_pack_start( GTK_BOX( directionPage ), previewButton, FALSE, TRUE, 2 );
