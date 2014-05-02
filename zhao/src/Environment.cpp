@@ -26,15 +26,21 @@ _evaporationRate(evaporationRate), _initialPheromone(initialPheromone), _minimum
     _directionalField->debugImages();
 }
 
-
+Environment::Environment(float initialPheromone, float minimumPheromone, float evaporationRate, Image* attributeImage, DirectionalField* directionalField) :
+_evaporationRate(evaporationRate), _initialPheromone(initialPheromone), _minimumPheromone(minimumPheromone)
+{
+    _maximumPheromone = MAX_PHEROMONE;
+    construct( imgGetHeight( attributeImage ), imgGetWidth( attributeImage ) );
+    computeImageMatrix( attributeImage );
+    clearFeromone();
+    _directionalField = directionalField;
+}
 
 Environment::~Environment()
 {
     delete[] _imageMatrix;
     delete[] _pheromoneMatrix;
 }
-
-
 
 void Environment::construct( int height, int width )
 {
@@ -49,8 +55,6 @@ void Environment::construct( int height, int width )
     memset( _imageMatrix,      0, sizeof(float)*size );
     memset( _pheromoneMatrix,  0, sizeof(float)*size );
 }
-
-
 
 void Environment::computeImageMatrix( Image* image )
 {
@@ -71,8 +75,6 @@ void Environment::computeImageMatrix( Image* image )
     }
 }
 
-
-
 void Environment::clearFeromone()
 {
     int size = _width * _height;
@@ -83,8 +85,6 @@ void Environment::clearFeromone()
         _pheromoneMatrix[i] = _initialPheromone;
     }
 }
-
-
 
 int Environment::id( int x, int y )
 {
@@ -97,21 +97,15 @@ int Environment::id( int x, int y )
     return x + _width * y;
 }
 
-
-
 float Environment::getPheromone( int x, int y )
 {
     return _pheromoneMatrix[id(x,y)];
 }
 
-
-
 float Environment::getPheromone( Point point )
 {
     return getPheromone( point.x, point.y );
 }
-
-
 
 void Environment::addPheromone( float amount, int x, int y )
 {
@@ -124,14 +118,10 @@ void Environment::addPheromone( float amount, int x, int y )
     }
 }
 
-
-
 void Environment::addPheromone( float amount, Point point )
 {
     addPheromone( amount, point.x, point.y );
 }
-
-
 
 float Environment::getMaximumPheromone()
 {
@@ -149,42 +139,30 @@ float Environment::getMaximumPheromone()
     return max;
 }
 
-
-
 float Environment::getVisibility( int x, int y )
 {
     return _imageMatrix[id(x,y)];
 }
-
-
 
 float Environment::getVisibility( Point p )
 {
     return getVisibility( p.x, p.y );
 }
 
-
-
 void Environment::getDirection( int x, int y, float& dirX, float& dirY )
 {
     _directionalField->getDirection( x, y, dirX, dirY );
 }
-
-
 
 float Environment::getDirectionStrength( int x, int y )
 {
     return _directionalField->getCoherence( x, y );
 }
 
-
-
 bool Environment::getDirectionStrengthMask( int x, int y )
 {
     return _directionalField->getCoherenceMask( x, y );
 }
-
-
 
 void Environment::evaporatePheromone()
 {
@@ -206,8 +184,6 @@ void Environment::evaporatePheromone()
     }
 }
 
-
-
 void Environment::getAdjacent( Point point, std::vector<Point>& adjacent )
 {
     for (int x = point.x-1; x <= point.x+1; ++x)
@@ -224,21 +200,15 @@ void Environment::getAdjacent( Point point, std::vector<Point>& adjacent )
     }
 }
 
-
-
 int Environment::getWidth()
 {
     return _width;
 }
 
-
-
 int Environment::getHeight()
 {
     return _height;
 }
-
-
 
 Image* Environment::getPheromoneImage()
 {
@@ -256,8 +226,6 @@ Image* Environment::getPheromoneImage()
     imgNormalize( output );
     return output;
 }
-
-
 
 Image* Environment::getVisibilityImage()
 {

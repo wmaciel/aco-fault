@@ -19,6 +19,8 @@ public:
 
     /** Constructor */
     Environment( float initialPheromone, float minimumPheromone, float evaporationRate, Image* image );
+    
+    Environment( float initialPheromone, float minimumPheromone, float evaporationRate, Image* attributeImage, DirectionalField* directionalField );
 
     /** Destructor */
     virtual ~Environment();
