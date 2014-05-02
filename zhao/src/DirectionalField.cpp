@@ -146,6 +146,7 @@ void DirectionalField::computeDirection( int pixel, float& dirX, float& dirY )
 
 void DirectionalField::buildHorizontalDerivativeMatrix( float* data )
 {
+    #pragma omp parallel for
     for (int x = 0; x < _width; ++x)
     {
         for (int y = 0; y < _height; ++y)
@@ -160,6 +161,7 @@ void DirectionalField::buildHorizontalDerivativeMatrix( float* data )
 
 void DirectionalField::buildVerticalDerivativeMatrix( float* data )
 {
+    #pragma omp parallel for
     for (int x = 0; x < _width; ++x)
     {
         for (int y = 0; y < _height; ++y)
@@ -174,6 +176,7 @@ void DirectionalField::buildVerticalDerivativeMatrix( float* data )
 
 void DirectionalField::buildHorizontalWindowedDerivativeMatrix()
 {
+    #pragma omp parallel for
     for (int x = 0; x < _width; ++x)
     {
         for (int y = 0; y < _height; ++y)
@@ -187,6 +190,7 @@ void DirectionalField::buildHorizontalWindowedDerivativeMatrix()
 
 void DirectionalField::buildVerticalWindowedDerivativeMatrix()
 {
+    #pragma omp parallel for
     for (int x = 0; x < _width; ++x)
     {
         for (int y = 0; y < _height; ++y)
@@ -200,6 +204,7 @@ void DirectionalField::buildVerticalWindowedDerivativeMatrix()
 
 void DirectionalField::buildCrossedWindowedDerivativeMatrix()
 {
+    #pragma omp parallel for
     for (int x = 0; x < _width; ++x)
     {
         for (int y = 0; y < _height; ++y)
@@ -214,6 +219,7 @@ void DirectionalField::buildCrossedWindowedDerivativeMatrix()
 void DirectionalField::buildCoherenceImage()
 {
     float max = 0.0f;
+    #pragma omp parallel for
     for (int x = 0; x < _width; ++x)
     {
         for (int y = 0; y < _height; ++y)
@@ -234,6 +240,7 @@ void DirectionalField::buildCoherenceImage()
 void DirectionalField::buildCoherenceMask()
 {
     // build raw mask
+    #pragma omp parallel for
     for (int x = 0; x < _width; ++x)
     {
         for (int y = 0; y < _height; ++y)
@@ -262,6 +269,7 @@ void DirectionalField::buildCoherenceMask()
 
 void DirectionalField::buildDirectionImage()
 {
+    #pragma omp parallel for
     for (int x = 0; x < _width; ++x)
     {
         for (int y = 0; y < _height; ++y)
