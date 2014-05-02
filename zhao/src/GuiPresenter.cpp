@@ -70,7 +70,10 @@ Image* GuiPresenter::getOutputImage()
 
 Image* GuiPresenter::getDirectionImage()
 {
-    DirectionalField* dirField = new DirectionalField(getInputImage(), Parameters::kernelRadius, Parameters::kernelRadius);
+    Image* inputImage = getInputImage();
+    if (!inputImage) return NULL;
+    
+    DirectionalField* dirField = new DirectionalField(inputImage, Parameters::kernelRadius, Parameters::kernelRadius);
     Image* dirImg = dirField->getDirection();
     delete dirField;
     
@@ -92,7 +95,10 @@ Image* GuiPresenter::getDirectionImage()
 
 Image* GuiPresenter::getConsistencyImage()
 {
-    DirectionalField* dirField = new DirectionalField(getInputImage(), Parameters::kernelRadius, Parameters::kernelRadius);
+    Image* inputImage = getInputImage();
+    if (!inputImage) return NULL;
+    
+    DirectionalField* dirField = new DirectionalField(inputImage, Parameters::kernelRadius, Parameters::kernelRadius);
     Image* cohImg = dirField->getCoherence();
     delete dirField;
     imgNormalize( cohImg );

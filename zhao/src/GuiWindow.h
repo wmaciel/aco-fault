@@ -75,6 +75,8 @@ private:
     
     GtkWidget* _gtkWindow;
     
+    GtkWidget* _canvasNotebook;
+    
     /** Drawing Area will hold the OpenGL drawing of the output image */
     GtkWidget* _dstCanvas;
     

@@ -16,8 +16,15 @@ GuiWindow::GuiWindow()
     
     g_signal_connect( _dstCanvas, "configure-event", G_CALLBACK( cb_configGLCanvas ), this );
     g_signal_connect( _dstCanvas, "expose-event"   , G_CALLBACK( cb_exposeGLCanvas ), this );
+    
     g_signal_connect( _srcCanvas, "configure-event", G_CALLBACK( cb_configGLCanvas ), this );
     g_signal_connect( _srcCanvas, "expose-event"   , G_CALLBACK( cb_exposeGLCanvas ), this );
+    
+    g_signal_connect( _dirCanvas, "configure-event", G_CALLBACK( cb_configGLCanvas ), this );
+    g_signal_connect( _dirCanvas, "expose-event"   , G_CALLBACK( cb_exposeGLCanvas ), this );
+    
+    g_signal_connect( _cohCanvas, "configure-event", G_CALLBACK( cb_configGLCanvas ), this );
+    g_signal_connect( _cohCanvas, "expose-event"   , G_CALLBACK( cb_exposeGLCanvas ), this );
     
     _presenter = 0;
 }
@@ -42,8 +49,22 @@ void GuiWindow::show()
 
 void GuiWindow::redraw()
 {
-    cb_exposeGLCanvas( _srcCanvas, NULL, this );
-    cb_exposeGLCanvas( _dstCanvas, NULL, this );
+    gint page = gtk_notebook_get_current_page( GTK_NOTEBOOK(_canvasNotebook) );
+    
+    if (page == 0)
+    {
+        cb_exposeGLCanvas( _srcCanvas, NULL, this );
+        cb_exposeGLCanvas( _dstCanvas, NULL, this );
+    }
+    else if (page == 1)
+    {
+        cb_exposeGLCanvas( _dirCanvas, NULL, this );
+        cb_exposeGLCanvas( _cohCanvas, NULL, this );
+    }
+    else
+    {
+        g_assert_not_reached();
+    }
 }
 
 
@@ -112,11 +133,11 @@ GtkWidget* GuiWindow::buildCanvasBox()
     gtk_box_pack_start_defaults( GTK_BOX( dirCohBox ), _dirCanvas );
     gtk_box_pack_start_defaults( GTK_BOX( dirCohBox ), _cohCanvas );
     
-    GtkWidget* canvasNotebook = gtk_notebook_new();
-    gtk_notebook_append_page( GTK_NOTEBOOK(canvasNotebook), srcDstBox, gtk_label_new("entrada & saída") );
-    gtk_notebook_append_page( GTK_NOTEBOOK(canvasNotebook), dirCohBox, gtk_label_new("direção & consistência") );
+    _canvasNotebook = gtk_notebook_new();
+    gtk_notebook_append_page( GTK_NOTEBOOK(_canvasNotebook), srcDstBox, gtk_label_new("entrada & saída") );
+    gtk_notebook_append_page( GTK_NOTEBOOK(_canvasNotebook), dirCohBox, gtk_label_new("direção & consistência") );
     
-    gtk_box_pack_start_defaults( GTK_BOX( canvasBox ), canvasNotebook );
+    gtk_box_pack_start_defaults( GTK_BOX( canvasBox ), _canvasNotebook );
     
     return canvasBox;
 }
@@ -525,7 +546,10 @@ unsigned int GuiWindow::buildTexture(Image* img)
     glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
     glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
        
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_LUMINANCE, imgGetWidth( img ), imgGetHeight( img ), 0, GL_LUMINANCE, GL_FLOAT, imgGetData( img ) );
+    if (imgGetDimColorSpace( img ) == 1)
+        glTexImage2D( GL_TEXTURE_2D, 0, GL_LUMINANCE, imgGetWidth( img ), imgGetHeight( img ), 0, GL_LUMINANCE, GL_FLOAT, imgGetData( img ) );
+    else
+        glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, imgGetWidth( img ), imgGetHeight( img ), 0, GL_RGB, GL_FLOAT, imgGetData( img ) );
     
     return textureID;
 }
