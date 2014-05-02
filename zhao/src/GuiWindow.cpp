@@ -252,6 +252,9 @@ GtkWidget* GuiWindow::buildDirectionPage()
     GtkWidget* hGaussBox = buildParameterBox("Altura Gauss:", 0, 10, 1, &Parameters::heightGauss, true );
     gtk_box_pack_start( GTK_BOX( directionPage ), hGaussBox, FALSE, TRUE, 2 );
     
+    GtkWidget* rGaussBox = buildParameterBox("Raio Gauss:", 1, 10, 0.5, &Parameters::radiusGauss, true );
+    gtk_box_pack_start( GTK_BOX( directionPage ), rGaussBox, FALSE, TRUE, 2 );
+    
     GtkWidget* cohTresholdBox = buildParameterBox("Limiar Consistência:", 0.0, 1.0, 0.01, &Parameters::cohTreshold, false );
     gtk_box_pack_start( GTK_BOX( directionPage ), cohTresholdBox, FALSE, TRUE, 2 );
     

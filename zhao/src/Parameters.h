@@ -40,6 +40,7 @@ public:
     //direction parameters
     static int widthGauss;
     static int heightGauss;
+    static int radiusGauss;
     static int kernelRadius;
     static float cohTreshold;
     

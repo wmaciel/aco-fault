@@ -23,7 +23,7 @@ DirectionalField::DirectionalField( Image* img, int openKernelRadius, int closeK
     _openKernelRadius = openKernelRadius;
     _closeKernelRadius = closeKernelRadius;
     
-    _gaussianKernel = imgCreateGaussianKernel( DIR_FIELD_GAUSSIAN_WINDOW_HALF_WIDTH, DIR_FIELD_GAUSSIAN_WINDOW_HALF_HEIGHT, 1.0f );
+    _gaussianKernel = imgCreateGaussianKernel( DIR_FIELD_GAUSSIAN_WINDOW_HALF_WIDTH, DIR_FIELD_GAUSSIAN_WINDOW_HALF_HEIGHT, Parameters::radiusGauss );
 
     int size = _width * _height;
     _gxMatrix = new float[size];
