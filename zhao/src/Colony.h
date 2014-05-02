@@ -11,6 +11,7 @@
 #include <vector>
 
 #include "image.h"
+#include "DirectionalField.h"
 
 class Point;
 class Ant;
@@ -20,6 +21,7 @@ class Colony
 {
 public:
     Colony( Image* image );
+    Colony( Image* image, DirectionalField* directionalFied );
     virtual ~Colony();
     void run( int nSteps );
     Image* getPheromoneImage();

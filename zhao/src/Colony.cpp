@@ -39,6 +39,30 @@ Colony::Colony( Image* image )
     generateProbabilityImages();
 }
 
+Colony::Colony(Image* image, DirectionalField* directionalFied)
+{
+    if (imgGetDimColorSpace( image ) != 1)
+    {
+        Image* aux = imgGrey( image );
+        imgDestroy( image );
+        image = aux;
+        aux = 0;
+    }
+    
+    // Normalize image
+    //imgNormalize( image, 2 );
+    
+    // Apply gaussian filter for noise reduction
+    imgGauss( image );
+    
+    imgWriteBMP( (char*)"debugImg/inputAfterGaussian.bmp", image );
+    
+    _environment = new Environment( INITIAL_PHEROMONE, MIN_PHEROMONE, EVAPORATION_RATE, image, directionalFied );
+    
+    generateProbabilityImages();
+}
+
+
 
 
 Colony::~Colony()
