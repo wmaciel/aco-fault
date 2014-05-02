@@ -105,6 +105,19 @@ Image* GuiPresenter::getConsistencyImage()
     return cohImg;
 }
 
+Image* GuiPresenter::getConsistencyMask()
+{
+    Image* inputImage = getInputImage();
+    if (!inputImage) return NULL;
+    
+    DirectionalField* dirField = new DirectionalField(inputImage, Parameters::kernelRadius, Parameters::kernelRadius);
+    Image* mskImg = dirField->getCoherenceMask();
+    delete dirField;
+    imgNormalize( mskImg );
+    return mskImg;
+}
+
+
 void GuiPresenter::loadImage( char* path )
 {
     if (_inImg)

@@ -41,6 +41,7 @@ public:
     static int widthGauss;
     static int heightGauss;
     static int radiusGauss;
+    static bool viewCohMask;
     static int kernelRadius;
     static float cohTreshold;
     

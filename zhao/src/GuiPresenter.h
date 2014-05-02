@@ -25,6 +25,7 @@ public:
     Image* getOutputImage();
     Image* getDirectionImage();
     Image* getConsistencyImage();
+    Image* getConsistencyMask();
     
 private:
     GuiWindow* _window;

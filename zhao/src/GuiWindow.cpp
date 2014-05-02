@@ -255,6 +255,9 @@ GtkWidget* GuiWindow::buildDirectionPage()
     GtkWidget* rGaussBox = buildParameterBox("Raio Gauss:", 1, 10, 0.5, &Parameters::radiusGauss, true );
     gtk_box_pack_start( GTK_BOX( directionPage ), rGaussBox, FALSE, TRUE, 2 );
     
+    GtkWidget* viewMask = buildParameterBox( "Visualizar Máscara:", &Parameters::viewCohMask );
+    gtk_box_pack_start( GTK_BOX( directionPage ), viewMask, FALSE, TRUE, 2 );
+    
     GtkWidget* cohTresholdBox = buildParameterBox("Limiar Consistência:", 0.0, 1.0, 0.01, &Parameters::cohTreshold, false );
     gtk_box_pack_start( GTK_BOX( directionPage ), cohTresholdBox, FALSE, TRUE, 2 );
     
@@ -444,7 +447,11 @@ gboolean GuiWindow::cb_exposeGLCanvas( GtkWidget* canvas, GdkEventExpose* event,
     {
         image = window->_presenter->getDirectionImage();
     }
-    else //if (canvas == window->_cohCanvas)
+    else if (Parameters::viewCohMask)
+    {
+        image = window->_presenter->getConsistencyMask();
+    }
+    else
     {
         image = window->_presenter->getConsistencyImage();
     }
