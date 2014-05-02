@@ -258,6 +258,10 @@ GtkWidget* GuiWindow::buildDirectionPage()
     GtkWidget* kernelBox = buildParameterBox("Kernel Radius:", 0, 10, 1, &Parameters::kernelRadius, true );
     gtk_box_pack_start( GTK_BOX( directionPage ), kernelBox, FALSE, TRUE, 2 );
     
+    GtkWidget* previewButton = gtk_button_new_with_label( "Preview" );
+    gtk_box_pack_start( GTK_BOX( directionPage ), previewButton, FALSE, TRUE, 2 );
+    g_signal_connect( previewButton, "clicked", G_CALLBACK(cb_apply), this );
+    
     return directionPage;
 }
 
