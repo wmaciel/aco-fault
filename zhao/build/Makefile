@@ -7,10 +7,10 @@ OUTPUT_DIR = ../bin
 SRC_DIR = ../src
 
 ifeq ($(DBG), Yes)
-  CFLAGS = -g -Wall -fopenmp -lGLU -lglut
+  CFLAGS = -g -Wall -fopenmp
   BUILD_DIR = debug
 else
-  CFLAGS = -Wall -fopenmp -lGLU -lglut
+  CFLAGS = -Wall -fopenmp
   BUILD_DIR = release
 endif
 
