@@ -29,7 +29,7 @@
  * The relative importance of the pheromone value in comparison with the 
  * visibility value
  */
-#define PHEROMONE_WEIGHT 1.0f
+#define PHEROMONE_WEIGHT 2.0f
 
 /**
  * The relative importance of the visibility value in comparison with the 
@@ -40,7 +40,7 @@
 /**
  * Number of steps an ant remembers taking.
  */
-#define MEMORY_ 100
+#define MEMORY_ 500
 
 /**
  * Used for the block wise ant distribution technique presented by Zhao. This is
@@ -68,7 +68,7 @@
  * treshold are seen as dead ends. Any ant that steps on a pixel like that will 
  * increase it's abnormal step counter
  */
-#define COHERENCE_TRESHOLD 0.5f
+#define COHERENCE_TRESHOLD 0.54f
 
 /**
  * Maximum number of abnormal steps an ant can have before dying
@@ -79,18 +79,18 @@
  * Maximum number of steps an Ant can have. It is used as a timeout for ants 
  * that may end up on an infinite loop
  */
-#define MAX_STEPS 100
+#define MAX_STEPS 500
 
 /**
  * The maximum amount of pheromone allowed to accumulate in a single pixel
  */
-#define MAX_PHEROMONE 100.0f
+#define MAX_PHEROMONE 1000.0f
 
 /**
  * Number of ants inserted into the environment. This value is not used if the 
  * ants a distributed by blocks.
  */
-#define NUMBER_OF_ANTS 500
+#define NUMBER_OF_ANTS 1000
 
 /**
  * Path to the kernel image used for the opening and closing of the coherence 
@@ -101,12 +101,12 @@
 /**
  * Width of the Gaussian window used to build the directional field
  */
-#define DIR_FIELD_GAUSSIAN_WINDOW_HALF_WIDTH 1
+#define DIR_FIELD_GAUSSIAN_WINDOW_HALF_WIDTH 6
 
 /**
  * Height of the Gaussian window used to build the directional field
  */
-#define DIR_FIELD_GAUSSIAN_WINDOW_HALF_HEIGHT 3
+#define DIR_FIELD_GAUSSIAN_WINDOW_HALF_HEIGHT 6
 
 /**
  * Pheromone balance factor
