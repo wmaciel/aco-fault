@@ -388,4 +388,6 @@ Image* imgCreateGaussianKernel( int halfWidth, int halfHeight, float stdDev );
 
 bool imgAssert( Image* img );
 
+void imgInvertColors( Image* img );
+
 #endif

@@ -2285,3 +2285,40 @@ bool imgAssert( Image* img )
     }
     return true;
 }
+
+void imgInvertColors( Image* img )
+{
+    int w = imgGetWidth( img );
+    int h = imgGetHeight( img );
+    
+    if (imgGetDimColorSpace( img ) == 1)
+    {
+        float max = imgGetPixelf( img, 0, 0 );
+        float min = max;
+        
+        for (int x = 0; x < w; ++x)
+        {
+            for (int y = 0; y < h; ++y)
+            {
+                float pixel = imgGetPixelf( img, x, y );
+                if (max < pixel)
+                {
+                    max = pixel;
+                }
+                else if (min > pixel)
+                {
+                    min = pixel;
+                }
+            }
+        }
+        
+        for (int x = 0; x < w; ++x)
+        {
+            for (int y = 0; y < h; ++y)
+            {
+                float pixel = imgGetPixelf( img, x, y );
+                imgSetPixelf( img, x, y, max - ( pixel - min ) );
+            }
+        }
+    }
+}
