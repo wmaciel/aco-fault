@@ -45,4 +45,6 @@ Point operator+ (Point p1, Point p2);
 
 Point operator- (Point p1, Point p2);
 
+float dot( Point& p1, Point& p2 );
+
 #endif	/* POINT_H */
