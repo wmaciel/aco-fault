@@ -436,6 +436,13 @@ float DirectionalField::getCoherence( int x, int y )
     return imgGetPixelf( _coherence, x, y );
 }
 
+void DirectionalField::getGrandientDirection(int x, int y, float& dirX, float& dirY)
+{
+    float aux;
+    imgGetPixel3f( _ortho, x, y, &aux, &dirX, &dirY );
+}
+
+
 bool DirectionalField::getCoherenceMask(int x, int y)
 {
     // The values on the mask images should only be 0 or 1. I test against 0.5 

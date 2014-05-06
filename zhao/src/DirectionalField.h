@@ -31,6 +31,8 @@ public:
     float getCoherence( int x, int y );
 
     bool getCoherenceMask( int x, int y );
+    
+    void getGrandientDirection( int x, int y, float& dirX, float& dirY );
 
     void debugPrint();
 
