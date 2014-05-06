@@ -569,3 +569,8 @@ Image* DirectionalField::getDirection()
 {
     return imgCopy(_direction);
 }
+
+Image* DirectionalField::getGrandientDirection()
+{
+    return imgCopy( _ortho );
+}

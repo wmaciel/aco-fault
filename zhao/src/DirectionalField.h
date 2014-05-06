@@ -39,6 +39,7 @@ public:
     Image* getCoherence();
     Image* getDirection();
     Image* getCoherenceMask();
+    Image* getGrandientDirection();
     
 private:
     /**
