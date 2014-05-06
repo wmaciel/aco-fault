@@ -42,6 +42,7 @@ DirectionalField::DirectionalField( Image* img, int openKernelRadius, int closeK
     buildCoherenceImage();
     buildCoherenceMask();
     buildDirectionImage();
+    buildGradientDirectionImage();
     
     delete[] _gxMatrix;
     delete[] _gyMatrix;
@@ -140,9 +141,19 @@ void DirectionalField::computeDirection( int pixel, float& dirX, float& dirY )
     float gxxMinusGyy = _gxxMatrix[pixel] - _gyyMatrix[pixel];
     float hxy = gxxMinusGyy * gxxMinusGyy + 4 * _gxyMatrix[pixel] * _gxyMatrix[pixel];
 
-    dirX = 0.5 * ( _gxxMatrix[pixel] - _gyyMatrix[pixel] ) - 0.5 * sqrt( hxy );
+    dirX = 0.5 * ( gxxMinusGyy ) - 0.5 * sqrt( hxy );
     dirY = _gxyMatrix[pixel];
 }
+
+void DirectionalField::computeGradientDirection(int pixel, float& dirX, float& dirY)
+{
+    float gxxMinusGyy = _gxxMatrix[pixel] - _gyyMatrix[pixel];
+    float hxy = gxxMinusGyy * gxxMinusGyy + 4 * _gxyMatrix[pixel] * _gxyMatrix[pixel];
+
+    dirX = 0.5 * ( gxxMinusGyy ) + 0.5 * sqrt( hxy );
+    dirY = _gxyMatrix[pixel];
+}
+
 
 void DirectionalField::buildHorizontalDerivativeMatrix( float* data )
 {
@@ -295,7 +306,33 @@ void DirectionalField::buildDirectionImage()
     }
 }
 
+void DirectionalField::buildGradientDirectionImage()
+{
+    #pragma omp parallel for
+    for (int x = 0; x < _width; ++x)
+    {
+        for (int y = 0; y < _height; ++y)
+        {
+            float dirX, dirY;
+            computeGradientDirection( pixel(x,y), dirX, dirY );
 
+            // normalize directions
+            float lenght = sqrt( dirX * dirX + dirY * dirY );
+            if (lenght > 0)
+            {
+                dirX /= lenght;
+                dirY /= lenght;
+            }
+            if (dirY < 0)
+            {
+                dirX = -dirX;
+                dirY = -dirY;
+            }
+
+            imgSetPixel3f( _direction, x, y, 0.0f, dirX, dirY );
+        }
+    }
+}
 
 float DirectionalField::getHorizontalWindowedDerivative( int px, int py )
 {

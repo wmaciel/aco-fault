@@ -57,6 +57,8 @@ private:
     float dy( int x, int y, float* data );
 
     void computeDirection( int pixel, float& dirX, float& dirY );
+    
+    void computeGradientDirection( int pixel, float& dirX, float& dirY );
 
     float computeCoherence( int pixel );
 
@@ -75,7 +77,9 @@ private:
     void buildCoherenceMask();
 
     void buildDirectionImage();
-
+    
+    void buildGradientDirectionImage();
+    
     float getHorizontalWindowedDerivative( int px, int py );
 
     float getVerticalWindowedDerivative( int px, int py );
@@ -94,8 +98,11 @@ private:
     
     int _closeKernelRadius;
 
-    /** Componete horizontal de cada pixel */
+    /** Direction image. */
     Image* _direction;
+    
+    /** Orthogonal directional image */
+    Image* _ortho;
 
     float* _gxMatrix;
 
