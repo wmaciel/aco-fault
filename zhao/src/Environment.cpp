@@ -164,6 +164,11 @@ bool Environment::getDirectionStrengthMask( int x, int y )
     return _directionalField->getCoherenceMask( x, y );
 }
 
+void Environment::getOrthogonalDirection(int x, int y, float& dirX, float& dirY)
+{
+    _directionalField->getGrandientDirection( x, y, dirX, dirY );
+}
+
 void Environment::evaporatePheromone()
 {
     int size = _width * _height;
