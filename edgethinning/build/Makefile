@@ -1,6 +1,6 @@
 CC = g++
 
-BIN_NAME = zhao
+BIN_NAME = thin
 
 OUTPUT_DIR = ../bin
 
@@ -13,10 +13,10 @@ else
 endif
 
 ifeq ($(DBG), Yes)
-  CFLAGS = -g -Wall -fopenmp `pkg-config --cflags --libs gl gtk+-2.0 gtkglext-1.0 $(GLEXT)`
+  CFLAGS = -g -Wall -fopenmp
   BUILD_DIR = debug
 else
-  CFLAGS = -Wall -fopenmp `pkg-config --cflags --libs gtk+-2.0 gtkglext-1.0 $(GLEXT)`
+  CFLAGS = -Wall -fopenmp
   BUILD_DIR = release
 endif
 
