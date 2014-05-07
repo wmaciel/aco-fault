@@ -19,6 +19,7 @@ DirectionalField::DirectionalField( Image* img, int openKernelRadius, int closeK
     _coherence = imgCreate( _width, _height, 1 );
     _coherenceMask = imgCreate( _width, _height, 1 );
     _direction = imgCreate( _width, _height, 3 );
+    _ortho = imgCreate( _width, _height, 3 );
     _coherenceThreshold = COHERENCE_TRESHOLD;
     _openKernelRadius = openKernelRadius;
     _closeKernelRadius = closeKernelRadius;
@@ -329,7 +330,7 @@ void DirectionalField::buildGradientDirectionImage()
                 dirY = -dirY;
             }
 
-            imgSetPixel3f( _direction, x, y, 0.0f, dirX, dirY );
+            imgSetPixel3f( _ortho, x, y, 0.0f, dirX, dirY );
         }
     }
 }
@@ -532,7 +533,7 @@ void DirectionalField::debugImages()
         for (int y = 0; y < _height; ++y)
         {
             float dirX, dirY;
-            getDirection( x, y, dirX, dirY );
+            getGrandientDirection( x, y, dirX, dirY );
 
             imgSetPixel3f( dbgImg, x, y, 1,1,1 );
 
@@ -554,12 +555,8 @@ void DirectionalField::debugImages()
             }
         }
     }
-    imgWriteBMP( (char*)"debugImg/directionalFieldDebugImage.bmp", dbgImg );
+    imgWriteBMP( (char*)"directionalFieldDebugImage.bmp", dbgImg );
     imgDestroy( dbgImg );
-
-    //coherence field
-    imgWriteBMP( (char*)"debugImg/coherenceFieldDebugImage.bmp", _coherence );
-    imgWriteBMP( (char*)"debugImg/coherenceFieldDebugMask.bmp", _coherenceMask );
 }
 
 Image* DirectionalField::getCoherence()
