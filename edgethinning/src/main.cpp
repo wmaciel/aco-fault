@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <stdlib.h>
+#include <vector>
 
 #include "image.h"
 #include "Parameters.h"
@@ -7,12 +8,15 @@
 
 #define MAX(a, b)  (((a) > (b)) ? (a) : (b))
 
+int scale = 1;
+
 bool isLocalMaximum( Image* img, int x, int y, float dx, float dy )
-{
-    if (x <= 0 ||
-        x >= imgGetWidth(img)-1 ||
-        y <= 0 ||
-        y >= imgGetHeight(img)-1)
+{   
+    if (x - scale <= 0 ||
+        x + scale >= imgGetWidth(img)-1 ||
+        y - scale <= 0 ||
+        y + scale >= imgGetHeight(img)-1 ||
+        (dx == 0 && dy == 0) )
     {
         return false;
     }
@@ -30,40 +34,40 @@ bool isLocalMaximum( Image* img, int x, int y, float dx, float dy )
     float maxCos = MAX( cosN, MAX(cosE, MAX(cosNE, cosNW)));
     
     float p  = imgGetPixelf( img, x, y );
+    if (p==0) return false;
+    
+    std::vector<float> pixels;
+    
     if (cosN == maxCos)
-    {    
-        float pN = imgGetPixelf( img, x, y + 1 );
-        float pS = imgGetPixelf( img, x, y - 1 );
-        if (p > pN && p > pS)
+    {   
+        for ( int s = scale; s > 0; --s )
         {
-            return true;
+            pixels.push_back( imgGetPixelf( img, x, y+s ) );
+            pixels.push_back( imgGetPixelf( img, x, y-s ) );
         }
     }
     else if(cosE == maxCos)
     {
-        float pE = imgGetPixelf( img, x+1, y );
-        float pW = imgGetPixelf( img, x-1, y );
-        if (p > pE && p > pW)
+        for ( int s = scale; s > 0; --s )
         {
-            return true;
+            pixels.push_back( imgGetPixelf( img, x+s, y ) );
+            pixels.push_back( imgGetPixelf( img, x-s, y ) );
         }
     }
     else if(cosNE == maxCos)
     {
-        float pNE = imgGetPixelf( img, x+1, y+1 );
-        float pSW = imgGetPixelf( img, x-1, y-1 );
-        if (p > pNE && p > pSW)
+        for ( int s = scale; s > 0; --s )
         {
-            return true;
+            pixels.push_back( imgGetPixelf( img, x+s, y+s ) );
+            pixels.push_back( imgGetPixelf( img, x-s, y-s ) );
         }
     }
     else if(cosNW == maxCos)
     {
-        float pNW = imgGetPixelf( img, x-1, y+1 );
-        float pSE = imgGetPixelf( img, x+1, y-1 );
-        if (p > pNW && p > pSE)
+        for ( int s = scale; s > 0; --s )
         {
-            return true;
+            pixels.push_back( imgGetPixelf( img, x-s, y+s ) );
+            pixels.push_back( imgGetPixelf( img, x+s, y-s ) );
         }
     }
     else
@@ -72,7 +76,15 @@ bool isLocalMaximum( Image* img, int x, int y, float dx, float dy )
         exit(-1);
     }
     
-    return false;
+    for (unsigned int i = 0; i < pixels.size(); ++i)
+    {
+        if (pixels[i] >= p)
+        {
+            return false;
+        }
+    }
+    
+    return true;
 }
 
 Image* applyEdgeThinnig( Image* imgIn )
@@ -104,7 +116,7 @@ Image* applyEdgeThinnig( Image* imgIn )
 
 int main(int argc, char** argv)
 {
-    if (argc != 6)
+    if (argc != 7)
     {
         printf( "Wrong usage\n" );
         printf( "Expecting:\n" );
@@ -113,13 +125,25 @@ int main(int argc, char** argv)
         printf( "- gauss width\n" );//3
         printf( "- gauss height\n" );//4
         printf( "- gauss radius\n" );//5
+	printf( "- edge half width\n" );//6
         exit( 0 );
     }
     
-    Image* img = imgReadBMP( argv[1] );
+    std::string inputPath = argv[1];
+    Image* img = 0;
+    if (std::string::npos == inputPath.find(".pfm"))
+    {
+        img = imgReadBMP( argv[1] );
+    }
+    else
+    {
+        img = imgReadPFM( argv[1] );
+    }
+    
     Parameters::widthGauss = atoi( argv[3] );
     Parameters::heightGauss = atoi( argv[4] );
     Parameters::radiusGauss = atoi( argv[5] );
+    scale = atoi( argv[6] );
     
     if(imgGetDimColorSpace(img)!= 1)
     {
@@ -128,8 +152,10 @@ int main(int argc, char** argv)
         img = grey;
     }
     
-    Image* out = applyEdgeThinnig( img );
+    //imgInvertColors( img );
     
+    Image* out = applyEdgeThinnig( img );
+    imgDestroy( img );
     imgWriteBMP( argv[2], out );
     
     return 0;

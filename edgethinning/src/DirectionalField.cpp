@@ -93,14 +93,14 @@ float DirectionalField::dx( int x, int y, float* data )
     {
         return data[center] - data[back];
     }
-    else if ( x == 0 )  // forward difference
+    else //if ( x == 0 )  // forward difference
     {
         return data[front] - data[center];
     }
-    else                 // central difference
-    {
-        return ( data[front] - data[back] ) / 2.0f;
-    }
+//    else                 // central difference
+//    {
+//        return ( data[front] - data[back] ) / 2.0f;
+//    }
 }
 
 float DirectionalField::dy( int x, int y, float* data )
@@ -113,14 +113,14 @@ float DirectionalField::dy( int x, int y, float* data )
     {
         return data[center] - data[bottom];
     }
-    else if ( y == 0 )    // forward difference
+    else //if ( y == 0 )    // forward difference
     {
         return data[top] - data[center];
     }
-    else                  // central difference
-    {
-        return ( data[top] - data[bottom] ) / 2.0f;
-    }
+//    else                  // central difference
+//    {
+//        return ( data[top] - data[bottom] ) / 2.0f;
+//    }
 }
 
 float DirectionalField::computeCoherence( int pixel )
