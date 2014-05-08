@@ -116,7 +116,7 @@ Image* applyEdgeThinnig( Image* imgIn )
 
 int main(int argc, char** argv)
 {
-    if (argc != 7)
+    if (argc != 8)
     {
         printf( "Wrong usage\n" );
         printf( "Expecting:\n" );
@@ -126,6 +126,7 @@ int main(int argc, char** argv)
         printf( "- gauss height\n" );//4
         printf( "- gauss radius\n" );//5
 	printf( "- edge half width\n" );//6
+        printf( "- black fault(0), white fault(1)\n");//7
         exit( 0 );
     }
     
@@ -152,7 +153,13 @@ int main(int argc, char** argv)
         img = grey;
     }
     
-    //imgInvertColors( img );
+    if (atoi(argv[7]) == 0)
+    {
+        imgInvertColors( img );
+    }
+    
+    imgGauss( img );
+    imgGauss( img );
     
     Image* out = applyEdgeThinnig( img );
     imgDestroy( img );
