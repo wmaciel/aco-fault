@@ -42,7 +42,6 @@ DirectionalField::DirectionalField( Image* img, int openKernelRadius, int closeK
     buildCoherenceImage();
     buildCoherenceMask();
     buildDirectionImage();
-    buildGradientDirectionImage();
     
     delete[] _gxMatrix;
     delete[] _gyMatrix;
@@ -329,7 +328,7 @@ void DirectionalField::buildGradientDirectionImage()
                 dirY = -dirY;
             }
 
-            imgSetPixel3f( _direction, x, y, 0.0f, dirX, dirY );
+            imgSetPixel3f( _ortho, x, y, 0.0f, dirX, dirY );
         }
     }
 }
@@ -542,12 +541,6 @@ void DirectionalField::debugImages()
             }
             else
             {
-                if (dirY < 0)
-                {
-                    dirY *= -1;
-                    dirX *= -1;
-                }
-
                 float lumX = fabs( dirX );
                 float lumY = fabs( dirY );
                 imgSetPixel3f( dbgImg, x, y, 0.0f, lumX, lumY );

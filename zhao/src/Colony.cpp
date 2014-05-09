@@ -30,7 +30,7 @@ Colony::Colony( Image* image )
     //imgNormalize( image, 2 );
     
     // Apply gaussian filter for noise reduction
-    imgGauss( image );
+    //imgGauss( image );
     
     imgWriteBMP( (char*)"debugImg/inputAfterGaussian.bmp", image );
     
@@ -53,7 +53,7 @@ Colony::Colony(Image* image, DirectionalField* directionalFied)
     //imgNormalize( image, 2 );
     
     // Apply gaussian filter for noise reduction
-    imgGauss( image );
+    //imgGauss( image );
     
     imgWriteBMP( (char*)"debugImg/inputAfterGaussian.bmp", image );
     

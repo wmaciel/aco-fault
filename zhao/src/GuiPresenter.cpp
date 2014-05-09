@@ -101,7 +101,7 @@ Image* GuiPresenter::getConsistencyImage()
     DirectionalField* dirField = new DirectionalField(inputImage, Parameters::dirOpenKernelRadius, Parameters::dirCloseKernelRadius);
     Image* cohImg = dirField->getCoherence();
     delete dirField;
-    imgNormalize( cohImg );
+    //imgNormalize( cohImg );
     return cohImg;
 }
 
@@ -113,7 +113,7 @@ Image* GuiPresenter::getConsistencyMask()
     DirectionalField* dirField = new DirectionalField(inputImage, Parameters::dirOpenKernelRadius, Parameters::dirCloseKernelRadius);
     Image* mskImg = dirField->getCoherenceMask();
     delete dirField;
-    imgNormalize( mskImg );
+    //imgNormalize( mskImg );
     return mskImg;
 }
 
